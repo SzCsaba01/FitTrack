@@ -1,0 +1,113 @@
+# ====================
+# .NET / C# / Visual Studio
+# ====================
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+*.csproj.user
+*.pidb
+*.log
+*.pdb
+*.cache
+*.dbmdl
+*.dbproj.schemaview
+*.svclog
+*.vsp
+*.psess
+*.tmp
+*.tmp_proj
+*.lock.json
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+TestResults/
+*.coverage
+*.coveragexml
+*.code-workspace
+
+# Rider & JetBrains
+.idea/
+
+# ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# ASP.NET scaffolding
+ScaffoldingReadMe.txt
+
+# LocalDB, SQL, and EF
+*.mdf
+*.ldf
+*.ndf
+*.bak
+Migrations/
+
+# Publish
+publish/
+*.publish.xml
+*.azurePubxml
+*.pubxml
+*.publishproj
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Azure
+csx/
+*.build.csdef
+ServiceFabricBackup/
+PublishScripts/
+
+# ================
+# Angular / Node / Frontend
+# ================
+node_modules/
+dist/
+tmp/
+out-tsc/
+.angular/
+.angular/cache/
+.bazel-out/
+coverage/
+libpeerconnection.log
+testem.log
+npm-debug.log*
+yarn-error.log*
+
+# Angular IDE
+.project
+.classpath
+.settings/
+.c9/
+.history/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ================
+# System/OS
+# ================
+.DS_Store
+Thumbs.db
+
+# ================
+# Others
+# ================
+*.bak
+*.swp
+~$*
+*~
