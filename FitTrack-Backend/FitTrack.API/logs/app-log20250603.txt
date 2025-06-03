@@ -1,0 +1,1445 @@
+2025-06-03 14:05:35.891 +03:00 [INF] Executed DbCommand (252ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [FitTrack];
+2025-06-03 14:05:36.014 +03:00 [INF] Executed DbCommand (88ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [FitTrack] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2025-06-03 14:05:36.031 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 14:05:36.035 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-03 14:05:36.069 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-06-03 14:05:36.127 +03:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-06-03 14:05:36.136 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 14:05:36.139 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-06-03 14:05:36.157 +03:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-06-03 14:05:36.166 +03:00 [INF] Applying migration '20250603110315_InitialCreate'.
+2025-06-03 14:05:36.231 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Equipments] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Equipments] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.237 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_FoodCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.240 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Ingredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Ingredients] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.246 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IngredientUnits] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(15) NOT NULL,
+    CONSTRAINT [PK_IngredientUnits] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.249 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Muscles] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Muscles] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.252 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Permissions] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Permissions] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.255 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_RecipeCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.261 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [RoleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-06-03 14:05:36.267 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Exercises] (
+    [Id] uniqueidentifier NOT NULL,
+    [EquipmentId] uniqueidentifier NOT NULL,
+    [Level] nvarchar(max) NOT NULL,
+    [Mechanic] nvarchar(max) NULL,
+    [Force] nvarchar(max) NULL,
+    [Category] nvarchar(max) NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [imagesUrl] nvarchar(max) NULL,
+    [videoUrl] nvarchar(max) NULL,
+    CONSTRAINT [PK_Exercises] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Exercises_Equipments_EquipmentId] FOREIGN KEY ([EquipmentId]) REFERENCES [Equipments] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.273 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Foods] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [QuantityG] int NOT NULL,
+    [Calories] int NOT NULL,
+    CONSTRAINT [PK_Foods] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Foods_FoodCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [FoodCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.276 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Recipes] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [PreperationTime] time NOT NULL,
+    [CookTime] time NOT NULL,
+    [AdditionalTime] time NOT NULL,
+    [TotalTime] time NOT NULL,
+    [Servings] int NOT NULL,
+    CONSTRAINT [PK_Recipes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Recipes_RecipeCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [RecipeCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.280 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RolePermissionMappings] (
+    [RoleId] uniqueidentifier NOT NULL,
+    [PermissionId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_RolePermissionMappings] PRIMARY KEY ([RoleId], [PermissionId]),
+    CONSTRAINT [FK_RolePermissionMappings_Permissions_PermissionId] FOREIGN KEY ([PermissionId]) REFERENCES [Permissions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RolePermissionMappings_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.287 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Username] nvarchar(30) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    [ResetPasswordToken] nvarchar(max) NULL,
+    [ResetPasswordTokenExpirationDate] datetime2 NULL,
+    [Email] nvarchar(50) NOT NULL,
+    [RegistrationDate] datetime2 NOT NULL,
+    [RegistrationToken] nvarchar(max) NULL,
+    [isEmailConfirmed] bit NOT NULL,
+    [RoleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.291 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExercisePrimaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExercisePrimaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.298 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExerciseSecondaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExerciseSecondaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.303 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Instructions] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [Instruction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_Instructions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Instructions_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.309 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    [LessThan] bit NOT NULL,
+    [MoreThan] bit NOT NULL,
+    CONSTRAINT [PK_FoodNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FoodNutritions_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.315 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeDirections] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Direction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_RecipeDirections] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeDirections_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.321 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeIngredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [IngredientId] uniqueidentifier NOT NULL,
+    [IngredientUnitId] uniqueidentifier NULL,
+    [Quantity] float NULL,
+    CONSTRAINT [PK_RecipeIngredients] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_IngredientUnits_IngredientUnitId] FOREIGN KEY ([IngredientUnitId]) REFERENCES [IngredientUnits] ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_Ingredients_IngredientId] FOREIGN KEY ([IngredientId]) REFERENCES [Ingredients] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RecipeIngredients_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.325 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_RecipeNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeNutritions_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.332 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserMeals] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Type] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserMeals] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserMeals_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.337 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserPreferences] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightUnit] nvarchar(max) NOT NULL,
+    [DistanceUnit] nvarchar(max) NOT NULL,
+    [VolumeUnit] nvarchar(max) NOT NULL,
+    [AppTheme] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserPreferences] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserPreferences_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.342 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserProfiles] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [FirstName] nvarchar(100) NOT NULL,
+    [LastName] nvarchar(100) NOT NULL,
+    [Gender] nvarchar(max) NULL,
+    [DateOfBirth] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserProfiles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserProfiles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.346 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWeightLogs] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightKg] float NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Note] nvarchar(255) NULL,
+    CONSTRAINT [PK_UserWeightLogs] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWeightLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.350 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWorkouts] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_UserWorkouts] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWorkouts_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.356 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MealItems] (
+    [Id] uniqueidentifier NOT NULL,
+    [MealId] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NULL,
+    [RecipeId] uniqueidentifier NULL,
+    [Quantity] float NOT NULL,
+    CONSTRAINT [PK_MealItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MealItems_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]),
+    CONSTRAINT [FK_MealItems_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]),
+    CONSTRAINT [FK_MealItems_UserMeals_MealId] FOREIGN KEY ([MealId]) REFERENCES [UserMeals] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.360 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutCardioExercise] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [Duration] time NOT NULL,
+    [Distance] float NULL,
+    [CaloriesBurned] float NULL,
+    [AverageHeartRate] float NULL,
+    CONSTRAINT [PK_WorkoutCardioExercise] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutCardioExercise_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.364 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutExerciseSets] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [SetNumber] int NOT NULL,
+    [Repetitions] int NOT NULL,
+    [Weight] float NOT NULL,
+    CONSTRAINT [PK_WorkoutExerciseSets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutExerciseSets_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 14:05:36.372 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExercisePrimaryMuscleMappings_MuscleId] ON [ExercisePrimaryMuscleMappings] ([MuscleId]);
+2025-06-03 14:05:36.375 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_EquipmentId] ON [Exercises] ([EquipmentId]);
+2025-06-03 14:05:36.379 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExerciseSecondaryMuscleMappings_MuscleId] ON [ExerciseSecondaryMuscleMappings] ([MuscleId]);
+2025-06-03 14:05:36.381 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_FoodNutritions_FoodId] ON [FoodNutritions] ([FoodId]);
+2025-06-03 14:05:36.384 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Foods_CategoryId] ON [Foods] ([CategoryId]);
+2025-06-03 14:05:36.387 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Instructions_ExerciseId] ON [Instructions] ([ExerciseId]);
+2025-06-03 14:05:36.391 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_FoodId] ON [MealItems] ([FoodId]);
+2025-06-03 14:05:36.394 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_MealId] ON [MealItems] ([MealId]);
+2025-06-03 14:05:36.397 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_RecipeId] ON [MealItems] ([RecipeId]);
+2025-06-03 14:05:36.400 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeDirections_RecipeId] ON [RecipeDirections] ([RecipeId]);
+2025-06-03 14:05:36.405 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientId] ON [RecipeIngredients] ([IngredientId]);
+2025-06-03 14:05:36.408 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientUnitId] ON [RecipeIngredients] ([IngredientUnitId]);
+2025-06-03 14:05:36.415 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_RecipeId] ON [RecipeIngredients] ([RecipeId]);
+2025-06-03 14:05:36.418 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeNutritions_RecipeId] ON [RecipeNutritions] ([RecipeId]);
+2025-06-03 14:05:36.421 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Recipes_CategoryId] ON [Recipes] ([CategoryId]);
+2025-06-03 14:05:36.423 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RolePermissionMappings_PermissionId] ON [RolePermissionMappings] ([PermissionId]);
+2025-06-03 14:05:36.426 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserMeals_UserId] ON [UserMeals] ([UserId]);
+2025-06-03 14:05:36.431 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserPreferences_UserId] ON [UserPreferences] ([UserId]);
+2025-06-03 14:05:36.434 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserProfiles_UserId] ON [UserProfiles] ([UserId]);
+2025-06-03 14:05:36.438 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_RoleId] ON [Users] ([RoleId]);
+2025-06-03 14:05:36.443 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWeightLogs_UserId] ON [UserWeightLogs] ([UserId]);
+2025-06-03 14:05:36.445 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWorkouts_UserId] ON [UserWorkouts] ([UserId]);
+2025-06-03 14:05:36.448 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_UserWorkoutId] ON [WorkoutCardioExercise] ([UserWorkoutId]);
+2025-06-03 14:05:36.450 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_UserWorkoutId] ON [WorkoutExerciseSets] ([UserWorkoutId]);
+2025-06-03 14:05:36.459 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250603110315_InitialCreate', N'9.0.5');
+2025-06-03 14:05:36.467 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2025-06-03 17:47:13.679 +03:00 [INF] Executed DbCommand (157ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [FitTrack];
+2025-06-03 17:47:13.762 +03:00 [INF] Executed DbCommand (47ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [FitTrack] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2025-06-03 17:47:13.779 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 17:47:13.784 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-03 17:47:13.811 +03:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-06-03 17:47:13.856 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-06-03 17:47:13.867 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 17:47:13.873 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-06-03 17:47:13.882 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-06-03 17:47:13.895 +03:00 [INF] Applying migration '20250603144704_InitialCreate'.
+2025-06-03 17:47:13.950 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Equipments] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Equipments] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.954 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_FoodCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.957 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Ingredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Ingredients] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.959 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IngredientUnits] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(15) NOT NULL,
+    CONSTRAINT [PK_IngredientUnits] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.965 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Muscles] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Muscles] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.968 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Permissions] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Permissions] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.971 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_RecipeCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.973 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [RoleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-06-03 17:47:13.977 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Exercises] (
+    [Id] uniqueidentifier NOT NULL,
+    [EquipmentId] uniqueidentifier NOT NULL,
+    [Level] nvarchar(max) NOT NULL,
+    [Mechanic] nvarchar(max) NULL,
+    [Force] nvarchar(max) NULL,
+    [Category] nvarchar(max) NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [imagesUrl] nvarchar(max) NULL,
+    [videoUrl] nvarchar(max) NULL,
+    CONSTRAINT [PK_Exercises] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Exercises_Equipments_EquipmentId] FOREIGN KEY ([EquipmentId]) REFERENCES [Equipments] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:13.981 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Foods] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [QuantityG] int NOT NULL,
+    [Calories] int NOT NULL,
+    CONSTRAINT [PK_Foods] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Foods_FoodCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [FoodCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:13.985 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Recipes] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [PreperationTime] time NOT NULL,
+    [CookTime] time NOT NULL,
+    [AdditionalTime] time NOT NULL,
+    [TotalTime] time NOT NULL,
+    [Servings] int NOT NULL,
+    CONSTRAINT [PK_Recipes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Recipes_RecipeCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [RecipeCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:13.990 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RolePermissionMappings] (
+    [RoleId] uniqueidentifier NOT NULL,
+    [PermissionId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_RolePermissionMappings] PRIMARY KEY ([RoleId], [PermissionId]),
+    CONSTRAINT [FK_RolePermissionMappings_Permissions_PermissionId] FOREIGN KEY ([PermissionId]) REFERENCES [Permissions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RolePermissionMappings_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:13.994 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Username] nvarchar(30) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    [ResetPasswordToken] nvarchar(max) NULL,
+    [ResetPasswordTokenExpirationDate] datetime2 NULL,
+    [Email] nvarchar(50) NOT NULL,
+    [RegistrationDate] datetime2 NOT NULL,
+    [RegistrationToken] nvarchar(max) NULL,
+    [isEmailConfirmed] bit NOT NULL,
+    [RoleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:13.997 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExercisePrimaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExercisePrimaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.005 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExerciseSecondaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExerciseSecondaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.009 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Instructions] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [Instruction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_Instructions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Instructions_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.016 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    [LessThan] bit NOT NULL,
+    [MoreThan] bit NOT NULL,
+    CONSTRAINT [PK_FoodNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FoodNutritions_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.020 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeDirections] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Direction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_RecipeDirections] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeDirections_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.025 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeIngredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [IngredientId] uniqueidentifier NOT NULL,
+    [IngredientUnitId] uniqueidentifier NULL,
+    [Quantity] float NULL,
+    CONSTRAINT [PK_RecipeIngredients] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_IngredientUnits_IngredientUnitId] FOREIGN KEY ([IngredientUnitId]) REFERENCES [IngredientUnits] ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_Ingredients_IngredientId] FOREIGN KEY ([IngredientId]) REFERENCES [Ingredients] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RecipeIngredients_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.028 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_RecipeNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeNutritions_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.031 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserMeals] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Type] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserMeals] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserMeals_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.037 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserPreferences] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightUnit] nvarchar(max) NOT NULL,
+    [DistanceUnit] nvarchar(max) NOT NULL,
+    [VolumeUnit] nvarchar(max) NOT NULL,
+    [AppTheme] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserPreferences] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserPreferences_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.040 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserProfiles] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [FirstName] nvarchar(100) NOT NULL,
+    [LastName] nvarchar(100) NOT NULL,
+    [Gender] nvarchar(max) NULL,
+    [DateOfBirth] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserProfiles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserProfiles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.043 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWeightLogs] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightKg] float NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Note] nvarchar(255) NULL,
+    CONSTRAINT [PK_UserWeightLogs] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWeightLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.051 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWorkouts] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_UserWorkouts] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWorkouts_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.055 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MealItems] (
+    [Id] uniqueidentifier NOT NULL,
+    [MealId] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NULL,
+    [RecipeId] uniqueidentifier NULL,
+    [Quantity] float NOT NULL,
+    CONSTRAINT [PK_MealItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MealItems_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]),
+    CONSTRAINT [FK_MealItems_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]),
+    CONSTRAINT [FK_MealItems_UserMeals_MealId] FOREIGN KEY ([MealId]) REFERENCES [UserMeals] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.062 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutCardioExercise] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [Duration] time NOT NULL,
+    [Distance] float NULL,
+    [CaloriesBurned] float NULL,
+    [AverageHeartRate] float NULL,
+    CONSTRAINT [PK_WorkoutCardioExercise] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutCardioExercise_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.066 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutExerciseSets] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [SetNumber] int NOT NULL,
+    [Repetitions] int NOT NULL,
+    [Weight] float NOT NULL,
+    CONSTRAINT [PK_WorkoutExerciseSets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutExerciseSets_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 17:47:14.069 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExercisePrimaryMuscleMappings_MuscleId] ON [ExercisePrimaryMuscleMappings] ([MuscleId]);
+2025-06-03 17:47:14.074 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_EquipmentId] ON [Exercises] ([EquipmentId]);
+2025-06-03 17:47:14.076 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExerciseSecondaryMuscleMappings_MuscleId] ON [ExerciseSecondaryMuscleMappings] ([MuscleId]);
+2025-06-03 17:47:14.079 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_FoodNutritions_FoodId] ON [FoodNutritions] ([FoodId]);
+2025-06-03 17:47:14.081 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Foods_CategoryId] ON [Foods] ([CategoryId]);
+2025-06-03 17:47:14.086 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Instructions_ExerciseId] ON [Instructions] ([ExerciseId]);
+2025-06-03 17:47:14.088 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_FoodId] ON [MealItems] ([FoodId]);
+2025-06-03 17:47:14.091 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_MealId] ON [MealItems] ([MealId]);
+2025-06-03 17:47:14.094 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_RecipeId] ON [MealItems] ([RecipeId]);
+2025-06-03 17:47:14.097 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeDirections_RecipeId] ON [RecipeDirections] ([RecipeId]);
+2025-06-03 17:47:14.100 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientId] ON [RecipeIngredients] ([IngredientId]);
+2025-06-03 17:47:14.102 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientUnitId] ON [RecipeIngredients] ([IngredientUnitId]);
+2025-06-03 17:47:14.105 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_RecipeId] ON [RecipeIngredients] ([RecipeId]);
+2025-06-03 17:47:14.109 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeNutritions_RecipeId] ON [RecipeNutritions] ([RecipeId]);
+2025-06-03 17:47:14.111 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Recipes_CategoryId] ON [Recipes] ([CategoryId]);
+2025-06-03 17:47:14.114 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RolePermissionMappings_PermissionId] ON [RolePermissionMappings] ([PermissionId]);
+2025-06-03 17:47:14.116 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserMeals_UserId] ON [UserMeals] ([UserId]);
+2025-06-03 17:47:14.120 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserPreferences_UserId] ON [UserPreferences] ([UserId]);
+2025-06-03 17:47:14.123 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserProfiles_UserId] ON [UserProfiles] ([UserId]);
+2025-06-03 17:47:14.125 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_RoleId] ON [Users] ([RoleId]);
+2025-06-03 17:47:14.128 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWeightLogs_UserId] ON [UserWeightLogs] ([UserId]);
+2025-06-03 17:47:14.133 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWorkouts_UserId] ON [UserWorkouts] ([UserId]);
+2025-06-03 17:47:14.135 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_UserWorkoutId] ON [WorkoutCardioExercise] ([UserWorkoutId]);
+2025-06-03 17:47:14.138 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_UserWorkoutId] ON [WorkoutExerciseSets] ([UserWorkoutId]);
+2025-06-03 17:47:14.152 +03:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250603144704_InitialCreate', N'9.0.5');
+2025-06-03 17:47:14.160 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2025-06-03 18:06:11.721 +03:00 [INF] Executed DbCommand (113ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [FitTrack];
+2025-06-03 18:06:11.796 +03:00 [INF] Executed DbCommand (40ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [FitTrack] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2025-06-03 18:06:11.811 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:06:11.818 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-03 18:06:11.831 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-06-03 18:06:11.874 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-06-03 18:06:11.883 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:06:11.887 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-06-03 18:06:11.895 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-06-03 18:06:11.907 +03:00 [INF] Applying migration '20250603150601_InitialCreate'.
+2025-06-03 18:06:11.962 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Equipments] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Equipments] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.966 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_FoodCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.970 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Ingredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Ingredients] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.975 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IngredientUnits] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(15) NOT NULL,
+    CONSTRAINT [PK_IngredientUnits] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.979 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Muscles] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Muscles] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.982 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Permissions] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Permissions] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.987 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_RecipeCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.990 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [RoleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-06-03 18:06:11.994 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Exercises] (
+    [Id] uniqueidentifier NOT NULL,
+    [EquipmentId] uniqueidentifier NOT NULL,
+    [Level] nvarchar(max) NOT NULL,
+    [Mechanic] nvarchar(max) NULL,
+    [Force] nvarchar(max) NULL,
+    [Category] nvarchar(max) NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [imagesUrl] nvarchar(max) NULL,
+    [videoUrl] nvarchar(max) NULL,
+    CONSTRAINT [PK_Exercises] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Exercises_Equipments_EquipmentId] FOREIGN KEY ([EquipmentId]) REFERENCES [Equipments] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:11.999 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Foods] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [QuantityG] int NOT NULL,
+    [Calories] int NOT NULL,
+    CONSTRAINT [PK_Foods] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Foods_FoodCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [FoodCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.003 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Recipes] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [PreperationTime] time NOT NULL,
+    [CookTime] time NOT NULL,
+    [AdditionalTime] time NOT NULL,
+    [TotalTime] time NOT NULL,
+    [Servings] int NOT NULL,
+    CONSTRAINT [PK_Recipes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Recipes_RecipeCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [RecipeCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.007 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RolePermissionMappings] (
+    [RoleId] uniqueidentifier NOT NULL,
+    [PermissionId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_RolePermissionMappings] PRIMARY KEY ([RoleId], [PermissionId]),
+    CONSTRAINT [FK_RolePermissionMappings_Permissions_PermissionId] FOREIGN KEY ([PermissionId]) REFERENCES [Permissions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RolePermissionMappings_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.013 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Username] nvarchar(30) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    [ResetPasswordToken] nvarchar(max) NULL,
+    [ResetPasswordTokenExpirationDate] datetime2 NULL,
+    [Email] nvarchar(50) NOT NULL,
+    [RegistrationDate] datetime2 NOT NULL,
+    [RegistrationToken] nvarchar(max) NULL,
+    [isEmailConfirmed] bit NOT NULL,
+    [RefreshToken] nvarchar(max) NULL,
+    [RoleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.017 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExercisePrimaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExercisePrimaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.021 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExerciseSecondaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExerciseSecondaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.028 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Instructions] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [Instruction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_Instructions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Instructions_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.031 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    [LessThan] bit NOT NULL,
+    [MoreThan] bit NOT NULL,
+    CONSTRAINT [PK_FoodNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FoodNutritions_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.035 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeDirections] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Direction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_RecipeDirections] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeDirections_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.043 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeIngredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [IngredientId] uniqueidentifier NOT NULL,
+    [IngredientUnitId] uniqueidentifier NULL,
+    [Quantity] float NULL,
+    CONSTRAINT [PK_RecipeIngredients] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_IngredientUnits_IngredientUnitId] FOREIGN KEY ([IngredientUnitId]) REFERENCES [IngredientUnits] ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_Ingredients_IngredientId] FOREIGN KEY ([IngredientId]) REFERENCES [Ingredients] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RecipeIngredients_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.047 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_RecipeNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeNutritions_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.060 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserMeals] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Type] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserMeals] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserMeals_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.065 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserPreferences] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightUnit] nvarchar(max) NOT NULL,
+    [DistanceUnit] nvarchar(max) NOT NULL,
+    [VolumeUnit] nvarchar(max) NOT NULL,
+    [AppTheme] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserPreferences] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserPreferences_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.069 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserProfiles] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [FirstName] nvarchar(100) NOT NULL,
+    [LastName] nvarchar(100) NOT NULL,
+    [Gender] nvarchar(max) NOT NULL,
+    [DateOfBirth] datetime2 NOT NULL,
+    [HeightCm] float NOT NULL,
+    [WeightKg] float NOT NULL,
+    CONSTRAINT [PK_UserProfiles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserProfiles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.073 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWeightLogs] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightKg] float NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Note] nvarchar(255) NULL,
+    CONSTRAINT [PK_UserWeightLogs] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWeightLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.079 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWorkouts] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [StartDate] datetime2 NOT NULL,
+    [EndDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserWorkouts] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWorkouts_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.094 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MealItems] (
+    [Id] uniqueidentifier NOT NULL,
+    [MealId] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NULL,
+    [RecipeId] uniqueidentifier NULL,
+    [Quantity] float NOT NULL,
+    CONSTRAINT [PK_MealItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MealItems_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]),
+    CONSTRAINT [FK_MealItems_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]),
+    CONSTRAINT [FK_MealItems_UserMeals_MealId] FOREIGN KEY ([MealId]) REFERENCES [UserMeals] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.102 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutCardioExercise] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [CardioNumber] int NOT NULL,
+    [Duration] time NOT NULL,
+    [Distance] float NULL,
+    [CaloriesBurned] float NULL,
+    [AverageHeartRate] float NULL,
+    CONSTRAINT [PK_WorkoutCardioExercise] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutCardioExercise_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_WorkoutCardioExercise_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.107 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutExerciseSets] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [SetNumber] int NOT NULL,
+    [Repetitions] int NOT NULL,
+    [Weight] float NOT NULL,
+    CONSTRAINT [PK_WorkoutExerciseSets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutExerciseSets_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_WorkoutExerciseSets_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:06:12.113 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExercisePrimaryMuscleMappings_MuscleId] ON [ExercisePrimaryMuscleMappings] ([MuscleId]);
+2025-06-03 18:06:12.116 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_EquipmentId] ON [Exercises] ([EquipmentId]);
+2025-06-03 18:06:12.119 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExerciseSecondaryMuscleMappings_MuscleId] ON [ExerciseSecondaryMuscleMappings] ([MuscleId]);
+2025-06-03 18:06:12.124 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_FoodNutritions_FoodId] ON [FoodNutritions] ([FoodId]);
+2025-06-03 18:06:12.127 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Foods_CategoryId] ON [Foods] ([CategoryId]);
+2025-06-03 18:06:12.129 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Instructions_ExerciseId] ON [Instructions] ([ExerciseId]);
+2025-06-03 18:06:12.132 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_FoodId] ON [MealItems] ([FoodId]);
+2025-06-03 18:06:12.136 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_MealId] ON [MealItems] ([MealId]);
+2025-06-03 18:06:12.139 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_RecipeId] ON [MealItems] ([RecipeId]);
+2025-06-03 18:06:12.142 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeDirections_RecipeId] ON [RecipeDirections] ([RecipeId]);
+2025-06-03 18:06:12.144 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientId] ON [RecipeIngredients] ([IngredientId]);
+2025-06-03 18:06:12.149 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientUnitId] ON [RecipeIngredients] ([IngredientUnitId]);
+2025-06-03 18:06:12.152 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_RecipeId] ON [RecipeIngredients] ([RecipeId]);
+2025-06-03 18:06:12.154 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeNutritions_RecipeId] ON [RecipeNutritions] ([RecipeId]);
+2025-06-03 18:06:12.156 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Recipes_CategoryId] ON [Recipes] ([CategoryId]);
+2025-06-03 18:06:12.161 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RolePermissionMappings_PermissionId] ON [RolePermissionMappings] ([PermissionId]);
+2025-06-03 18:06:12.164 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserMeals_UserId] ON [UserMeals] ([UserId]);
+2025-06-03 18:06:12.166 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserPreferences_UserId] ON [UserPreferences] ([UserId]);
+2025-06-03 18:06:12.170 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserProfiles_UserId] ON [UserProfiles] ([UserId]);
+2025-06-03 18:06:12.175 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_RoleId] ON [Users] ([RoleId]);
+2025-06-03 18:06:12.177 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWeightLogs_UserId] ON [UserWeightLogs] ([UserId]);
+2025-06-03 18:06:12.179 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWorkouts_UserId] ON [UserWorkouts] ([UserId]);
+2025-06-03 18:06:12.182 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_ExerciseId] ON [WorkoutCardioExercise] ([ExerciseId]);
+2025-06-03 18:06:12.187 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_UserWorkoutId] ON [WorkoutCardioExercise] ([UserWorkoutId]);
+2025-06-03 18:06:12.190 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_ExerciseId] ON [WorkoutExerciseSets] ([ExerciseId]);
+2025-06-03 18:06:12.192 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_UserWorkoutId] ON [WorkoutExerciseSets] ([UserWorkoutId]);
+2025-06-03 18:06:12.196 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250603150601_InitialCreate', N'9.0.5');
+2025-06-03 18:06:12.202 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+2025-06-03 18:26:02.287 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:26:02.333 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-03 18:26:02.349 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-06-03 18:26:02.404 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-06-03 18:26:02.415 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:26:02.418 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-06-03 18:26:02.423 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-06-03 18:26:02.432 +03:00 [INF] Applying migration '20250603152528_InitialCreate'.
+2025-06-03 18:26:02.499 +03:00 [ERR] Failed executing DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Equipments] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Equipments] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.461 +03:00 [INF] Executed DbCommand (130ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+CREATE DATABASE [FitTrack];
+2025-06-03 18:26:30.540 +03:00 [INF] Executed DbCommand (45ms) [Parameters=[], CommandType='"Text"', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [FitTrack] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2025-06-03 18:26:30.555 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:26:30.561 +03:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-06-03 18:26:30.574 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+2025-06-03 18:26:30.622 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+2025-06-03 18:26:30.633 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-06-03 18:26:30.639 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-06-03 18:26:30.648 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-06-03 18:26:30.658 +03:00 [INF] Applying migration '20250603152528_InitialCreate'.
+2025-06-03 18:26:30.713 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Equipments] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Equipments] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.716 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_FoodCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.719 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Ingredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_Ingredients] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.722 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [IngredientUnits] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(15) NOT NULL,
+    CONSTRAINT [PK_IngredientUnits] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.727 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Muscles] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Muscles] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.730 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Permissions] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    CONSTRAINT [PK_Permissions] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.732 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeCategories] (
+    [Id] uniqueidentifier NOT NULL,
+    [Name] nvarchar(50) NOT NULL,
+    CONSTRAINT [PK_RecipeCategories] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.735 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] uniqueidentifier NOT NULL,
+    [RoleName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-06-03 18:26:30.741 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Exercises] (
+    [Id] uniqueidentifier NOT NULL,
+    [EquipmentId] uniqueidentifier NOT NULL,
+    [Level] nvarchar(max) NOT NULL,
+    [Mechanic] nvarchar(450) NULL,
+    [Force] nvarchar(450) NULL,
+    [Category] nvarchar(450) NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [imagesUrl] nvarchar(max) NULL,
+    [videoUrl] nvarchar(max) NULL,
+    CONSTRAINT [PK_Exercises] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Exercises_Equipments_EquipmentId] FOREIGN KEY ([EquipmentId]) REFERENCES [Equipments] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.744 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Foods] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [QuantityG] int NOT NULL,
+    [Calories] int NOT NULL,
+    CONSTRAINT [PK_Foods] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Foods_FoodCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [FoodCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.747 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Recipes] (
+    [Id] uniqueidentifier NOT NULL,
+    [CategoryId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(100) NOT NULL,
+    [PreperationTime] time NOT NULL,
+    [CookTime] time NOT NULL,
+    [AdditionalTime] time NOT NULL,
+    [TotalTime] time NOT NULL,
+    [Servings] int NOT NULL,
+    CONSTRAINT [PK_Recipes] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Recipes_RecipeCategories_CategoryId] FOREIGN KEY ([CategoryId]) REFERENCES [RecipeCategories] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.753 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RolePermissionMappings] (
+    [RoleId] uniqueidentifier NOT NULL,
+    [PermissionId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_RolePermissionMappings] PRIMARY KEY ([RoleId], [PermissionId]),
+    CONSTRAINT [FK_RolePermissionMappings_Permissions_PermissionId] FOREIGN KEY ([PermissionId]) REFERENCES [Permissions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RolePermissionMappings_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.756 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] uniqueidentifier NOT NULL,
+    [Username] nvarchar(30) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    [ResetPasswordToken] nvarchar(max) NULL,
+    [ResetPasswordTokenExpirationDate] datetime2 NULL,
+    [Email] nvarchar(50) NOT NULL,
+    [RegistrationDate] datetime2 NOT NULL,
+    [RegistrationToken] nvarchar(max) NULL,
+    [isEmailConfirmed] bit NOT NULL,
+    [RefreshToken] nvarchar(450) NULL,
+    [RoleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.759 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExercisePrimaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExercisePrimaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExercisePrimaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.766 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ExerciseSecondaryMuscleMappings] (
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [MuscleId] uniqueidentifier NOT NULL,
+    CONSTRAINT [PK_ExerciseSecondaryMuscleMappings] PRIMARY KEY ([ExerciseId], [MuscleId]),
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ExerciseSecondaryMuscleMappings_Muscles_MuscleId] FOREIGN KEY ([MuscleId]) REFERENCES [Muscles] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.769 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Instructions] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [Instruction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_Instructions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Instructions_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.776 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [FoodNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    [LessThan] bit NOT NULL,
+    [MoreThan] bit NOT NULL,
+    CONSTRAINT [PK_FoodNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FoodNutritions_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.780 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeDirections] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Direction] nvarchar(200) NOT NULL,
+    CONSTRAINT [PK_RecipeDirections] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeDirections_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.785 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeIngredients] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [IngredientId] uniqueidentifier NOT NULL,
+    [IngredientUnitId] uniqueidentifier NULL,
+    [Quantity] float NULL,
+    CONSTRAINT [PK_RecipeIngredients] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_IngredientUnits_IngredientUnitId] FOREIGN KEY ([IngredientUnitId]) REFERENCES [IngredientUnits] ([Id]),
+    CONSTRAINT [FK_RecipeIngredients_Ingredients_IngredientId] FOREIGN KEY ([IngredientId]) REFERENCES [Ingredients] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RecipeIngredients_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.795 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [RecipeNutritions] (
+    [Id] uniqueidentifier NOT NULL,
+    [RecipeId] uniqueidentifier NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Quantity] float NOT NULL,
+    [Unit] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_RecipeNutritions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RecipeNutritions_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.798 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserMeals] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Type] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserMeals] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserMeals_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.804 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserPreferences] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightUnit] nvarchar(max) NOT NULL,
+    [DistanceUnit] nvarchar(max) NOT NULL,
+    [VolumeUnit] nvarchar(max) NOT NULL,
+    [AppTheme] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserPreferences] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserPreferences_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.809 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserProfiles] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [FirstName] nvarchar(100) NOT NULL,
+    [LastName] nvarchar(100) NOT NULL,
+    [Gender] nvarchar(max) NOT NULL,
+    [DateOfBirth] datetime2 NOT NULL,
+    [HeightCm] float NOT NULL,
+    [WeightKg] float NOT NULL,
+    CONSTRAINT [PK_UserProfiles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserProfiles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.811 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWeightLogs] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [WeightKg] float NOT NULL,
+    [Date] datetime2 NOT NULL,
+    [Note] nvarchar(255) NULL,
+    CONSTRAINT [PK_UserWeightLogs] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWeightLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.814 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserWorkouts] (
+    [Id] uniqueidentifier NOT NULL,
+    [UserId] uniqueidentifier NOT NULL,
+    [StartDate] datetime2 NOT NULL,
+    [EndDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserWorkouts] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserWorkouts_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.819 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [MealItems] (
+    [Id] uniqueidentifier NOT NULL,
+    [MealId] uniqueidentifier NOT NULL,
+    [FoodId] uniqueidentifier NULL,
+    [RecipeId] uniqueidentifier NULL,
+    [Quantity] float NOT NULL,
+    CONSTRAINT [PK_MealItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MealItems_Foods_FoodId] FOREIGN KEY ([FoodId]) REFERENCES [Foods] ([Id]),
+    CONSTRAINT [FK_MealItems_Recipes_RecipeId] FOREIGN KEY ([RecipeId]) REFERENCES [Recipes] ([Id]),
+    CONSTRAINT [FK_MealItems_UserMeals_MealId] FOREIGN KEY ([MealId]) REFERENCES [UserMeals] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.823 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutCardioExercise] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [CardioNumber] int NOT NULL,
+    [Duration] time NOT NULL,
+    [Distance] float NULL,
+    [CaloriesBurned] float NULL,
+    [AverageHeartRate] float NULL,
+    CONSTRAINT [PK_WorkoutCardioExercise] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutCardioExercise_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_WorkoutCardioExercise_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.826 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [WorkoutExerciseSets] (
+    [Id] uniqueidentifier NOT NULL,
+    [ExerciseId] uniqueidentifier NOT NULL,
+    [UserWorkoutId] uniqueidentifier NOT NULL,
+    [SetNumber] int NOT NULL,
+    [Repetitions] int NOT NULL,
+    [Weight] float NOT NULL,
+    CONSTRAINT [PK_WorkoutExerciseSets] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkoutExerciseSets_Exercises_ExerciseId] FOREIGN KEY ([ExerciseId]) REFERENCES [Exercises] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_WorkoutExerciseSets_UserWorkouts_UserWorkoutId] FOREIGN KEY ([UserWorkoutId]) REFERENCES [UserWorkouts] ([Id]) ON DELETE CASCADE
+);
+2025-06-03 18:26:30.832 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExercisePrimaryMuscleMappings_MuscleId] ON [ExercisePrimaryMuscleMappings] ([MuscleId]);
+2025-06-03 18:26:30.844 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_Category] ON [Exercises] ([Category]);
+2025-06-03 18:26:30.847 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_EquipmentId] ON [Exercises] ([EquipmentId]);
+2025-06-03 18:26:30.851 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_Force] ON [Exercises] ([Force]);
+2025-06-03 18:26:30.855 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Exercises_Mechanic] ON [Exercises] ([Mechanic]);
+2025-06-03 18:26:30.858 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Exercises_Name] ON [Exercises] ([Name]);
+2025-06-03 18:26:30.860 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ExerciseSecondaryMuscleMappings_MuscleId] ON [ExerciseSecondaryMuscleMappings] ([MuscleId]);
+2025-06-03 18:26:30.862 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_FoodNutritions_FoodId] ON [FoodNutritions] ([FoodId]);
+2025-06-03 18:26:30.866 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Foods_CategoryId] ON [Foods] ([CategoryId]);
+2025-06-03 18:26:30.868 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Foods_Name] ON [Foods] ([Name]);
+2025-06-03 18:26:30.870 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Instructions_ExerciseId] ON [Instructions] ([ExerciseId]);
+2025-06-03 18:26:30.873 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_FoodId] ON [MealItems] ([FoodId]);
+2025-06-03 18:26:30.875 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_MealId] ON [MealItems] ([MealId]);
+2025-06-03 18:26:30.879 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_MealItems_RecipeId] ON [MealItems] ([RecipeId]);
+2025-06-03 18:26:30.881 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeDirections_RecipeId] ON [RecipeDirections] ([RecipeId]);
+2025-06-03 18:26:30.884 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientId] ON [RecipeIngredients] ([IngredientId]);
+2025-06-03 18:26:30.886 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_IngredientUnitId] ON [RecipeIngredients] ([IngredientUnitId]);
+2025-06-03 18:26:30.891 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeIngredients_RecipeId] ON [RecipeIngredients] ([RecipeId]);
+2025-06-03 18:26:30.894 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RecipeNutritions_RecipeId] ON [RecipeNutritions] ([RecipeId]);
+2025-06-03 18:26:30.897 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Recipes_CategoryId] ON [Recipes] ([CategoryId]);
+2025-06-03 18:26:30.899 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Recipes_Name] ON [Recipes] ([Name]);
+2025-06-03 18:26:30.905 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_RolePermissionMappings_PermissionId] ON [RolePermissionMappings] ([PermissionId]);
+2025-06-03 18:26:30.908 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserMeals_UserId] ON [UserMeals] ([UserId]);
+2025-06-03 18:26:30.910 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserPreferences_UserId] ON [UserPreferences] ([UserId]);
+2025-06-03 18:26:30.912 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserProfiles_UserId] ON [UserProfiles] ([UserId]);
+2025-06-03 18:26:30.917 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2025-06-03 18:26:30.922 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_RefreshToken] ON [Users] ([RefreshToken]) WHERE [RefreshToken] IS NOT NULL;
+2025-06-03 18:26:30.926 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Users_RoleId] ON [Users] ([RoleId]);
+2025-06-03 18:26:30.932 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Username] ON [Users] ([Username]);
+2025-06-03 18:26:30.935 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWeightLogs_UserId] ON [UserWeightLogs] ([UserId]);
+2025-06-03 18:26:30.938 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserWorkouts_UserId] ON [UserWorkouts] ([UserId]);
+2025-06-03 18:26:30.941 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_ExerciseId] ON [WorkoutCardioExercise] ([ExerciseId]);
+2025-06-03 18:26:30.947 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutCardioExercise_UserWorkoutId] ON [WorkoutCardioExercise] ([UserWorkoutId]);
+2025-06-03 18:26:30.949 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_ExerciseId] ON [WorkoutExerciseSets] ([ExerciseId]);
+2025-06-03 18:26:30.952 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_WorkoutExerciseSets_UserWorkoutId] ON [WorkoutExerciseSets] ([UserWorkoutId]);
+2025-06-03 18:26:30.959 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250603152528_InitialCreate', N'9.0.5');
+2025-06-03 18:26:30.964 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
