@@ -23,6 +23,7 @@ public class UserProfileEntity
     [MinLength(2, ErrorMessage = "Last name cannot be shorter than 2 characters")]
     public required string LastName { get; set; }
 
+    [MaxLength(10, ErrorMessage = "Gender cannot be longer than 100 characters")]
     public GenderEnum Gender { get; set; }
 
     public DateTime DateOfBirth { get; set; }
@@ -36,5 +37,5 @@ public class UserProfileEntity
     public double WeightKg { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity? User { get; set; }
+    public UserEntity User { get; set; }
 }

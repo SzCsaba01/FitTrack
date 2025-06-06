@@ -21,10 +21,10 @@ public class RecipeIngredientEntity
     public double? Quantity { get; set; }
 
     [ForeignKey("RecipeId")]
-    public RecipeEntity? Recipe { get; set; }
+    public RecipeEntity Recipe { get; set; }
 
     [ForeignKey("IngredientId")]
-    public IngredientEntity? Ingredient { get; set; }
+    public IngredientEntity Ingredient { get; set; }
 
     [ForeignKey("IngredientUnitId")]
     public IngredientUnitEntity? Unit { get; set; }

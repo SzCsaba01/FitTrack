@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FitTrack.Data.Object.Enums;
 
 namespace FitTrack.Data.Object.Entities;
 
@@ -18,15 +19,18 @@ public class FoodEntity
     public required string Name { get; set; }
 
     [Range(0.0001, int.MaxValue, ErrorMessage = "Quantity should be a positive number")]
-    public int QuantityG { get; set; }
+    public int Quantity { get; set; }
+
+    [MaxLength(10, ErrorMessage = "Unit cannot be longer than 10 characters")]
+    public FoodUnitEnum Unit { get; set; }
 
     [Range(1, int.MaxValue, ErrorMessage = "Calories should be a positive number")]
     public int Calories { get; set; }
 
     [ForeignKey("CategoryId")]
-    public FoodCategoryEntity? Category { get; set; }
+    public FoodCategoryEntity Category { get; set; }
 
-    public ICollection<FoodNutritionEntity>? Nutritions { get; set; }
+    public ICollection<FoodNutritionEntity> Nutritions { get; set; }
 
-    public ICollection<MealItemEntity>? MealItems { get; set; }
+    public ICollection<MealItemEntity> MealItems { get; set; }
 }

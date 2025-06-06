@@ -13,14 +13,17 @@ public class UserEntity
     [MaxLength(30, ErrorMessage = "Username cannot be longer than 30 characters")]
     [MinLength(5, ErrorMessage = "Username cannot be shorter than 5 characters")]
     [RegularExpression("[a-zA-Z0-9._]+", ErrorMessage = "Username can contain only lower and upper case characters and numbers")]
-    public string? Username { get; set; }
+    public required string Username { get; set; }
 
     [Required(ErrorMessage = "Password is required")]
-    public required string Password { get; set; }
+    public required byte[] HashedPassword { get; set; }
 
-    public string? ResetPasswordToken { get; set; }
+    [Required(ErrorMessage = "Salt is required")]
+    public required byte[] Salt { get; set; }
 
-    public DateTime? ResetPasswordTokenExpirationDate { get; set; }
+    public byte[]? ChangePasswordToken { get; set; }
+
+    public DateTime? ChangePasswordTokenExpiration { get; set; }
 
     [Required(ErrorMessage = "Email is required")]
     [MaxLength(50, ErrorMessage = "Email cannot be longer than 50 characters")]
@@ -30,18 +33,24 @@ public class UserEntity
     [Required(ErrorMessage = "Registration date is required")]
     public DateTime RegistrationDate { get; set; }
 
-    public string? RegistrationToken { get; set; }
+    public byte[]? EmailVerificationToken { get; set; }
+
+    public DateTime? EmailVerificationExpiration { get; set; }
 
     [Required(ErrorMessage = "Is email confirmed is required")]
     public bool isEmailConfirmed { get; set; }
 
-    public string? RefreshToken { get; set; }
+    public byte[]? RefreshToken { get; set; }
+
+    public DateTime? RefreshTokenExpiration { get; set; }
 
     [Required(ErrorMessage = "Role id is required")]
     public Guid RoleId { get; set; }
 
     [ForeignKey("RoleId")]
-    public RoleEntity? Role { get; set; }
+    public RoleEntity Role { get; set; }
 
-    public UserProfileEntity? UserProfile { get; set; }
+    public UserProfileEntity UserProfile { get; set; }
+
+    public UserPreferenceEntity UserPreference { get; set; }
 }

@@ -18,5 +18,5 @@ public class InstructionEntity
     public required string Instruction { get; set; }
 
     [ForeignKey("ExerciseId")]
-    public ExerciseEntity? Exercise { get; set; }
+    public ExerciseEntity Exercise { get; set; }
 }

@@ -1,7 +1,7 @@
 namespace FitTrack.Data.Object.Enums;
 
-public enum VolumeUnitEnum
+public enum FoodUnitEnum
 {
+    G,
     Ml,
-    Oz
 }

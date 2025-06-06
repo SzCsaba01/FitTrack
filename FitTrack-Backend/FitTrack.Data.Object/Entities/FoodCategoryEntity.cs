@@ -14,5 +14,5 @@ public class FoodCategoryEntity
     [MinLength(2, ErrorMessage = "Name cannot be shorter than 2 characters")]
     public required string Name { get; set; }
 
-    public ICollection<FoodEntity>? Foods { get; set; }
+    public ICollection<FoodEntity> Foods { get; set; }
 }

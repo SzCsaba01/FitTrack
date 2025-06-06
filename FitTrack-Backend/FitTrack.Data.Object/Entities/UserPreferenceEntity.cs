@@ -13,18 +13,12 @@ public class UserPreferenceEntity
     [Required(ErrorMessage = "UserId is required")]
     public Guid UserId { get; set; }
 
-    [Required(ErrorMessage = "Weight unit is required")]
-    public WeightUnitEnum WeightUnit { get; set; }
+    [MaxLength(30, ErrorMessage = "UnitSystem cannot be longer than 30 characters")]
+    public UnitSystemEnum UnitSystem { get; set; }
 
-    [Required(ErrorMessage = "Distance unit is required")]
-    public DistanceUnitEnum DistanceUnit { get; set; }
-
-    [Required(ErrorMessage = "Volume unit is required")]
-    public VolumeUnitEnum VolumeUnit { get; set; }
-
-    [Required(ErrorMessage = "Application Theme is required")]
+    [MaxLength(30, ErrorMessage = "AppTheme cannot be longer than 30 characters")]
     public AppThemeEnum AppTheme { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity? User { get; set; }
+    public UserEntity User { get; set; }
 }

@@ -29,13 +29,13 @@ public class RecipeEntity
     public required int Servings { get; set; }
 
     [ForeignKey("CategoryId")]
-    public RecipeCategoryEntity? Category { get; set; }
+    public RecipeCategoryEntity Category { get; set; }
 
-    public ICollection<RecipeIngredientEntity>? Ingredients { get; set; }
+    public ICollection<RecipeIngredientEntity> Ingredients { get; set; }
 
-    public ICollection<MealItemEntity>? MealItems { get; set; }
+    public ICollection<MealItemEntity> MealItems { get; set; }
 
-    public ICollection<RecipeDirectionEntity>? Directions { get; set; }
+    public ICollection<RecipeDirectionEntity> Directions { get; set; }
 
-    public ICollection<RecipeNutritionEntity>? Nutritions { get; set; }
+    public ICollection<RecipeNutritionEntity> Nutritions { get; set; }
 }

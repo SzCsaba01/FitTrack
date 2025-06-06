@@ -25,8 +25,8 @@ public class WorkoutExerciseSetEntity
     public double Weight { get; set; }
 
     [ForeignKey("UserWorkoutId")]
-    public UserWorkoutEntity? UserWorkout { get; set; }
+    public UserWorkoutEntity UserWorkout { get; set; }
 
     [ForeignKey("ExerciseId")]
-    public ExerciseEntity? Exercise { get; set; }
+    public ExerciseEntity Exercise { get; set; }
 }

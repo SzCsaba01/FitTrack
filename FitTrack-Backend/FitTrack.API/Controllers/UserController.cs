@@ -1,0 +1,64 @@
+using FitTrack.Data.Contract.Helpers.Requests;
+using FitTrack.Data.Contract.Helpers.Responses;
+using FitTrack.Service.Contract;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FitTrack.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterAsync([FromBody] RegistrationRequest request)
+    {
+        await _userService.RegisterUserAsync(request);
+
+        var message = new SuccessMessageResponse("You have successfully registered! Verify your email to be able to log in!");
+
+        return Ok(message);
+    }
+
+    [AllowAnonymous]
+    [HttpPut("verify-registration-token")]
+    public async Task<IActionResult> VerifyEmailVerificationToken([FromQuery] string emailVerificationToken)
+    {
+        await _userService.VerifyEmailVerificationTokenAsync(emailVerificationToken);
+
+        var message = new SuccessMessageResponse("You have successfully verified your email");
+
+        return Ok(message);
+    }
+
+    [AllowAnonymous]
+    [HttpPut("send-forgot-password-email")]
+    public async Task<IActionResult> SendForgotPasswordEmail([FromQuery] string email)
+    {
+        await _userService.SendForgotPasswordEmailAsync(email);
+
+        var message = new SuccessMessageResponse("We have sent you an email with which you can reset your password!");
+
+        return Ok(message);
+    }
+
+    [AllowAnonymous]
+    [HttpPut("change-password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        await _userService.ChangePasswordAsync(request);
+
+        var message = new SuccessMessageResponse("You have successfully changed your password");
+
+        return Ok(message);
+    }
+}

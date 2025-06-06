@@ -14,11 +14,8 @@ public class FitTrackContext : DbContext
         //Enum conversions
         modelBuilder.Entity<UserPreferenceEntity>(entity =>
         {
-            entity.Property(e => e.WeightUnit).HasConversion<string>();
-            entity.Property(e => e.DistanceUnit).HasConversion<string>();
-            entity.Property(e => e.VolumeUnit).HasConversion<string>();
             entity.Property(e => e.AppTheme).HasConversion<string>();
-
+            entity.Property(e => e.UnitSystem).HasConversion<string>();
         });
 
         modelBuilder.Entity<UserProfileEntity>(entity =>
@@ -104,6 +101,8 @@ public class FitTrackContext : DbContext
             entity.HasIndex(u => u.Username).IsUnique();
             entity.HasIndex(u => u.Email).IsUnique();
             entity.HasIndex(u => u.RefreshToken).IsUnique();
+            entity.HasIndex(u => u.ChangePasswordToken).IsUnique();
+            entity.HasIndex(u => u.EmailVerificationToken).IsUnique();
         });
 
         modelBuilder.Entity<ExerciseEntity>(entity =>
@@ -112,6 +111,7 @@ public class FitTrackContext : DbContext
             entity.HasIndex(e => e.Category);
             entity.HasIndex(e => e.Mechanic);
             entity.HasIndex(e => e.Force);
+            entity.HasIndex(e => e.Level);
         });
 
         modelBuilder.Entity<FoodEntity>(entity =>

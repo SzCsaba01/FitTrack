@@ -23,5 +23,5 @@ public class UserWeightLogEntity
     public string? Note { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity? User { get; set; }
+    public UserEntity User { get; set; }
 }
