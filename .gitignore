@@ -23,6 +23,7 @@ obj/
 *.lock.json
 *.nupkg
 *.snupkg
+logs/
 project.lock.json
 project.fragment.lock.json
 artifacts/

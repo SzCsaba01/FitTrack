@@ -7,6 +7,7 @@ using FitTrack.Data.Object.Entities;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace FitTrack.Service.Business;
 
@@ -17,31 +18,38 @@ public class AuthenticationService : IAuthenticationService
     private readonly IEncryptionService _encryptionService;
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ILogger<AuthenticationService> _logger;
 
     public AuthenticationService(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         IEncryptionService encryptionService,
         IJwtService jwtService,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ILogger<AuthenticationService> logger)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _encryptionService = encryptionService;
         _jwtService = jwtService;
         _httpContextAccessor = httpContextAccessor;
+        _logger = logger;
     }
     public async Task LoginAsync(LoginRequest request)
     {
+        _logger.LogInformation("Login attempt for: {Credential}", request.Credential);
+
         var user = await _userRepository.GetUserByUsernameOrEmailAsync(request.Credential);
 
         if (user == null)
         {
+            _logger.LogWarning("Login failed: User not found");
             throw new ModelNotFoundException("Invalid credentials!");
         }
 
         if (!user.isEmailConfirmed)
         {
+            _logger.LogWarning("Login failed: Email not confirmed for user {UserId}", user.Id);
             throw new ValidationException("Email is not confirmed!");
         }
 
@@ -49,6 +57,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (!user.HashedPassword.SequenceEqual(hashedPassword))
         {
+            _logger.LogWarning("Login failed: Invalid password for user {UserId}", user.Id);
             throw new ModelNotFoundException("Invalid credentials");
         }
 
@@ -69,6 +78,8 @@ public class AuthenticationService : IAuthenticationService
         await _unitOfWork.SaveChangesAsync();
 
         SetTokenCookies(accessToken, accessTokenExpiration, refreshToken, refreshTokenExpiration);
+
+        _logger.LogInformation("User {UserId} successfully logged in", user.Id);
     }
 
     public async Task LogoutAsync()
@@ -82,6 +93,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (String.IsNullOrEmpty(refreshToken))
         {
+            _logger.LogInformation("Logout completed: no refresh token found.");
             return;
         }
 
@@ -90,6 +102,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
         {
+            _logger.LogInformation("Logout: no user found with provided refresh token.");
             return;
         }
 
@@ -99,6 +112,8 @@ public class AuthenticationService : IAuthenticationService
 
         await _userRepository.UpdateUserAsync(user);
         await _unitOfWork.SaveChangesAsync();
+
+        _logger.LogInformation("User {UserId} logged out successfully", user.Id);
     }
 
     public async Task RefreshTokenAsync()
@@ -107,9 +122,9 @@ public class AuthenticationService : IAuthenticationService
 
         if (!httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))
         {
+            _logger.LogWarning("RefreshToken failed: Refresh token cookie missing");
             httpContext.Response.Cookies.Delete("AccessToken");
             httpContext.Response.Cookies.Delete("RefreshToken");
-
             return;
         }
 
@@ -119,9 +134,9 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null || user.RefreshTokenExpiration > DateTime.UtcNow)
         {
+            _logger.LogWarning("RefreshToken failed: Invalid or expired token");
             httpContext.Response.Cookies.Delete("AccessToken");
             httpContext.Response.Cookies.Delete("RefreshToken");
-
             return;
         }
 
@@ -143,6 +158,8 @@ public class AuthenticationService : IAuthenticationService
         await _unitOfWork.SaveChangesAsync();
 
         SetTokenCookies(accessToken, accessTokenExpiration, newRefreshToken, refreshTokenExpiration);
+
+        _logger.LogInformation("User {UserId} successfully refreshed token", user.Id);
     }
 
     private ClaimsIdentity BuildUserClaims(UserEntity user)
@@ -175,5 +192,8 @@ public class AuthenticationService : IAuthenticationService
             SameSite = SameSiteMode.Strict,
             Expires = refreshTokenExpiration
         });
+
+        _logger.LogDebug("Token cookies set: AccessToken (expires at {AccessTokenExp}), RefreshToken (expires at {RefreshTokenExp})",
+            accessTokenExpiration, refreshTokenExpiration);
     }
 }

@@ -3,6 +3,7 @@ using System.Net.Mail;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace FitTrack.Service.Business;
 
@@ -10,14 +11,18 @@ public class EmailService : IEmailService
 {
     private readonly string _fromMail;
     private readonly string _passKey;
+    private readonly ILogger<EmailService> _logger;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
     {
+        _logger = logger;
+
         var fromMail = configuration["EmailCredentials:Email"];
         var passKey = configuration["EmailCredentials:PassKey"];
 
         if (String.IsNullOrEmpty(fromMail) || String.IsNullOrEmpty(passKey))
         {
+            _logger.LogCritical("Email credentials missing from configuration.");
             throw new ConfigurationException();
         }
 
@@ -42,11 +47,22 @@ public class EmailService : IEmailService
             EnableSsl = true,
         };
 
-        await smtpClient.SendMailAsync(message);
+        try
+        {
+            _logger.LogInformation("Attempting to send email to {Recipient} with subject '{Subject}'", to, subject);
+            await smtpClient.SendMailAsync(message);
+            _logger.LogInformation("Email sent successfully to {Recipient}", to);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send email to {Recipient}. Subject: {Subject}", to, subject);
+            throw;
+        }
     }
 
     public string CreateRegistrationEmailBody(string url, string username)
     {
+        _logger.LogDebug("Creating registration email body for user: {Username}", username);
         return $@"
 			<html>
 			<head>
@@ -94,6 +110,7 @@ public class EmailService : IEmailService
 
     public string CreateForgotPasswordEmailBody(string url, string username)
     {
+        _logger.LogDebug("Creating forgot password email body for user: {Username}", username);
         return $@"
         <html>
         <head>

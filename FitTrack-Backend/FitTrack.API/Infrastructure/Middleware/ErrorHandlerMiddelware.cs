@@ -8,10 +8,12 @@ namespace FitTrack.API.Infrastructure.Middleware;
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ErrorHandlerMiddleware> _logger;
 
-    public ErrorHandlerMiddleware(RequestDelegate next)
+    public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -30,6 +32,8 @@ public class ErrorHandlerMiddleware
                 ApiExceptionBase apiEx => ((int)apiEx.StatusCode, apiEx.Title, apiEx.Message),
                 _ => ((int)HttpStatusCode.InternalServerError, "Unexpected Error", exception.Message)
             };
+
+            _logger.LogError(exception, "Unhandled exception caught by middleware. Status: {StatusCode}, Path: {Path}", statusCode, context.Request.Path);
 
             response.StatusCode = statusCode;
 
