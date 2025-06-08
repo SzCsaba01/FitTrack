@@ -2,6 +2,7 @@ using System.Text;
 using FitTrack.API.Infrastructure;
 using FitTrack.API.Infrastructure.Middleware;
 using FitTrack.Data.Access.Data;
+using FitTrack.Service.Business.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +27,10 @@ builder.Services.AddDbContext<FitTrackContext>(options =>
 
 builder.Services.AddServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationActionFilter>();
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
@@ -7,6 +6,7 @@ using FitTrack.Data.Object.Entities;
 using FitTrack.Data.Object.Enums;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -131,7 +131,7 @@ public class UserService : IUserService
         userEntity.EmailVerificationToken = hashedToken;
         userEntity.EmailVerificationExpiration = expirationDate;
 
-        var url = Path.Combine(_frontendUrl, AppConstants.EMAIL_VERIFICATION_SUBJECT, emailVerificationToken);
+        var url = new Uri(new Uri(_frontendUrl), $"{AppConstants.EMAIL_VERIFICATION_SUBJECT}/{emailVerificationToken}").ToString();
 
         var transaction = await _unitOfWork.BeginTransactionAsync();
 
@@ -171,7 +171,7 @@ public class UserService : IUserService
         var user = await _userRepository.GetUserByEmailVerificationTokenAsync(hashedToken);
 
         if (user == null ||
-                (user.ChangePasswordTokenExpiration != null && user.ChangePasswordTokenExpiration < DateTime.UtcNow))
+                (user.EmailVerificationExpiration != null && user.EmailVerificationExpiration < DateTime.UtcNow))
         {
             _logger.LogWarning("Invalid or expired email verification token.");
             throw new ModelNotFoundException("Url is invalid or expired!");
@@ -206,7 +206,7 @@ public class UserService : IUserService
         user.ChangePasswordToken = hashedToken;
         user.ChangePasswordTokenExpiration = changePasswordTokenExpiration;
 
-        var url = Path.Combine(_frontendUrl, AppConstants.CHANGE_PASSWORD_URL, changePasswordToken);
+        var url = new Uri(new Uri(_frontendUrl), $"{AppConstants.CHANGE_PASSWORD_URL}/{changePasswordToken}").ToString();
 
         var emailBody = _emailService.CreateForgotPasswordEmailBody(url, user.Username);
 

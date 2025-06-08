@@ -48,5 +48,4 @@ public class JwtService : IJwtService
 
         return tokenHandler.WriteToken(token);
     }
-
 }

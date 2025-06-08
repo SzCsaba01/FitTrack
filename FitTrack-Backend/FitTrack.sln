@@ -3,31 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.API", "FitTrack.API\FitTrack.API.csproj", "{2DDFA7C2-1BDB-4EA5-AC15-09714C4277EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.API", "FitTrack.API\FitTrack.API.csproj", "{2DDFA7C2-1BDB-4EA5-AC15-09714C4277EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{CFFAE1ED-7178-4830-BB6F-B9FEC53F25D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Service.Quartz", "FitTrack.Service.Quartz\FitTrack.Service.Quartz.csproj", "{97B6EC7D-202C-4070-9828-F2EB14D0A362}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Service.Quartz", "FitTrack.Service.Quartz\FitTrack.Service.Quartz.csproj", "{97B6EC7D-202C-4070-9828-F2EB14D0A362}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{9925CD3B-BCE1-4057-95FF-121B7F2AC147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Data.Access", "FitTrack.Data.Access\FitTrack.Data.Access.csproj", "{D9AED5F9-C854-48F5-83EC-ADFF3167933F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Data.Access", "FitTrack.Data.Access\FitTrack.Data.Access.csproj", "{D9AED5F9-C854-48F5-83EC-ADFF3167933F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Data.Contract", "FitTrack.Data.Contract\FitTrack.Data.Contract.csproj", "{85D810E5-55EB-435F-95D5-513FF9658C31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Data.Contract", "FitTrack.Data.Contract\FitTrack.Data.Contract.csproj", "{85D810E5-55EB-435F-95D5-513FF9658C31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Data.Object", "FitTrack.Data.Object\FitTrack.Data.Object.csproj", "{1C8D3FCB-C4FB-4079-913F-CDE894E88368}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Data.Object", "FitTrack.Data.Object\FitTrack.Data.Object.csproj", "{1C8D3FCB-C4FB-4079-913F-CDE894E88368}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Service.Business", "FitTrack.Service.Business\FitTrack.Service.Business.csproj", "{F283A263-3ECA-483C-8354-2E8AAA5962E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Service.Business", "FitTrack.Service.Business\FitTrack.Service.Business.csproj", "{F283A263-3ECA-483C-8354-2E8AAA5962E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTrack.Service.Contract", "FitTrack.Service.Contract\FitTrack.Service.Contract.csproj", "{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Service.Contract", "FitTrack.Service.Contract\FitTrack.Service.Contract.csproj", "{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16E10DED-28FB-4850-B6ED-BF6B41F0C3FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTrack.Test.Unit", "FitTrack.Test.Unit\FitTrack.Test.Unit.csproj", "{1BB20927-B318-4C10-9C6A-EE94D284259C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2DDFA7C2-1BDB-4EA5-AC15-09714C4277EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -58,6 +59,13 @@ Global
 		{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BB20927-B318-4C10-9C6A-EE94D284259C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BB20927-B318-4C10-9C6A-EE94D284259C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BB20927-B318-4C10-9C6A-EE94D284259C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BB20927-B318-4C10-9C6A-EE94D284259C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{97B6EC7D-202C-4070-9828-F2EB14D0A362} = {CFFAE1ED-7178-4830-BB6F-B9FEC53F25D0}
@@ -66,5 +74,6 @@ Global
 		{1C8D3FCB-C4FB-4079-913F-CDE894E88368} = {9925CD3B-BCE1-4057-95FF-121B7F2AC147}
 		{F283A263-3ECA-483C-8354-2E8AAA5962E4} = {CFFAE1ED-7178-4830-BB6F-B9FEC53F25D0}
 		{2B35603D-06C6-40F2-A1A5-B39A8DF3EC7A} = {CFFAE1ED-7178-4830-BB6F-B9FEC53F25D0}
+		{1BB20927-B318-4C10-9C6A-EE94D284259C} = {16E10DED-28FB-4850-B6ED-BF6B41F0C3FB}
 	EndGlobalSection
 EndGlobal

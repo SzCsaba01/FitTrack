@@ -3,7 +3,9 @@ using FitTrack.Data.Access;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
 using FitTrack.Service.Business;
+using FitTrack.Service.Business.Validators;
 using FitTrack.Service.Contract;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FitTrack.API.Infrastructure;
@@ -31,6 +33,10 @@ public static class ServiceExtensions
         services.AddAutoMapper(typeof(Mapper));
 
         services.AddHttpContextAccessor();
+
+        services.AddValidatorsFromAssemblyContaining<RegistrationRequestValidator>();
+
+        services.AddScoped<ValidationActionFilter>();
 
         services.AddCors(options => options.AddPolicy(
             name: "Origins",

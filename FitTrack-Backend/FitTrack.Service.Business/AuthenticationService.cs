@@ -93,6 +93,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (String.IsNullOrEmpty(refreshToken))
         {
+            Console.WriteLine("test1");
             _logger.LogInformation("Logout completed: no refresh token found.");
             return;
         }
@@ -102,6 +103,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
         {
+            Console.WriteLine("test2");
             _logger.LogInformation("Logout: no user found with provided refresh token.");
             return;
         }
@@ -111,6 +113,7 @@ public class AuthenticationService : IAuthenticationService
         user.Role = null;
 
         await _userRepository.UpdateUserAsync(user);
+        Console.WriteLine("test3");
         await _unitOfWork.SaveChangesAsync();
 
         _logger.LogInformation("User {UserId} logged out successfully", user.Id);
@@ -132,7 +135,7 @@ public class AuthenticationService : IAuthenticationService
 
         var user = await _userRepository.GetUserByRefreshTokenAsync(hashedRefreshToken);
 
-        if (user == null || user.RefreshTokenExpiration > DateTime.UtcNow)
+        if (user == null || user.RefreshTokenExpiration < DateTime.UtcNow)
         {
             _logger.LogWarning("RefreshToken failed: Invalid or expired token");
             httpContext.Response.Cookies.Delete("AccessToken");

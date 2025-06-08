@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using FitTrack.Service.Business.Exceptions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FitTrack.API.Infrastructure.Middleware;
@@ -29,6 +30,7 @@ public class ErrorHandlerMiddleware
 
             var (statusCode, title, detail) = exception switch
             {
+                ValidationException valEx => ((int)HttpStatusCode.BadRequest, "Validation Error", valEx.Message),
                 ApiExceptionBase apiEx => ((int)apiEx.StatusCode, apiEx.Title, apiEx.Message),
                 _ => ((int)HttpStatusCode.InternalServerError, "Unexpected Error", exception.Message)
             };
