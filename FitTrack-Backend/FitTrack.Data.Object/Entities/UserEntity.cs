@@ -53,4 +53,10 @@ public class UserEntity
     public UserProfileEntity UserProfile { get; set; }
 
     public UserPreferenceEntity UserPreference { get; set; }
+
+    public ICollection<MealEntity> Meals { get; set; }
+
+    public ICollection<WeightLogEntity> WeightLogs { get; set; }
+
+    public ICollection<WorkoutEntity> Workouts { get; set; }
 }

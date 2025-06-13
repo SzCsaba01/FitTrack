@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitTrack.Data.Object.Entities;
 
-[Table("UserWeightLogs")]
-public class UserWeightLogEntity
+[Table("WeightLogs")]
+public class WeightLogEntity
 {
     [Key]
     public Guid Id { get; set; }

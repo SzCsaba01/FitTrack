@@ -26,6 +26,7 @@ public class UserProfileEntity
     [MaxLength(10, ErrorMessage = "Gender cannot be longer than 100 characters")]
     public GenderEnum Gender { get; set; }
 
+    [Required(ErrorMessage = "Date of birth is requried")]
     public DateTime DateOfBirth { get; set; }
 
     [Required(ErrorMessage = "Height is required")]

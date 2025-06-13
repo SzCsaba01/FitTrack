@@ -68,7 +68,7 @@ public static class TestHelpers
         {
             Id = id ?? Guid.NewGuid(),
             RoleName = roleName,
-            Permissions = new List<RolePermissionMapping>(),
+            PermissionMappings = new List<RolePermissionMapping>(),
             Users = new List<UserEntity>()
         };
     }
@@ -81,7 +81,7 @@ public static class TestHelpers
         {
             Id = id ?? Guid.NewGuid(),
             Name = name ?? "DefaultPermission",
-            Roles = new List<RolePermissionMapping>()
+            RoleMappings = new List<RolePermissionMapping>()
         };
     }
 

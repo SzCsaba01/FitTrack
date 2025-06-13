@@ -24,7 +24,7 @@ public class MealItemEntity
     public MealItemUnitEnum Unit { get; set; }
 
     [ForeignKey("MealId")]
-    public UserMealEntity Meal { get; set; }
+    public MealEntity Meal { get; set; }
 
     [ForeignKey("FoodId")]
     public FoodEntity? Food { get; set; }

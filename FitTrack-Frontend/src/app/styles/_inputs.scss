@@ -1,0 +1,39 @@
+.input {
+  padding: 0.5rem 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  border: 0.01rem solid var(--color-border);
+  border-radius: 0.3rem;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary-focus);
+    box-shadow: 0 0 0 0.1rem rgba(var(--color-primary-focus-rgb), 0.25);
+  }
+
+  &.input-error {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 0.1rem rgba(var(--color-danger-focus-rgb), 0.2);
+  }
+}
+
+input[type="number"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -25,4 +25,6 @@ public class RegistrationRequest
     public GenderEnum Gender { get; set; }
 
     public UnitSystemEnum UnitSystem { get; set; }
+
+    public AppThemeEnum AppTheme { get; set; }
 }

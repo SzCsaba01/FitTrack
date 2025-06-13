@@ -43,7 +43,7 @@ public class UserRepository : IUserRepository
         return await _context.Users
             .Where(u => u.Username == credential || u.Email == credential)
             .Include(u => u.Role)
-                .ThenInclude(u => u.Permissions)
+                .ThenInclude(u => u.PermissionMappings)
                     .ThenInclude(u => u.Permission)
             .AsNoTracking()
             .FirstOrDefaultAsync();
@@ -54,7 +54,7 @@ public class UserRepository : IUserRepository
         return await _context.Users
             .Where(u => u.RefreshToken.SequenceEqual(refreshToken))
             .Include(u => u.Role)
-                .ThenInclude(u => u.Permissions)
+                .ThenInclude(u => u.PermissionMappings)
                     .ThenInclude(u => u.Permission)
             .AsNoTracking()
             .FirstOrDefaultAsync();

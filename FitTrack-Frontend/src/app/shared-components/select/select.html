@@ -1,0 +1,48 @@
+<div class="select-wrapper"
+  [class.disabled]="isDisabledSignal()"
+>
+  @if (!multiple()) {
+    <div class="selected-options" (click)="onToggleDropdown()">
+      {{ selectedOptionSignal()?.label || placeholder() }}
+    </div>
+
+    @if (isDropdownOpenSignal()) {
+      <div class="options-container">
+        <ul>
+          @for (option of options(); track option.value) {
+            <li
+              [class.selected]="option.value === selectedOptionSignal()?.value"
+              (click)="onSingleOptionClick(option)"
+            >
+              {{ option.label }}
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  } @else {
+    <div class="selected-options" (click)="onToggleDropdown()">
+      {{ selectedOptionsString() || placeholder() }}
+    </div>
+
+    @if (isDropdownOpenSignal()) {
+      <div class="options-container">
+        <ul>
+          @for (option of options(); track option.value) {
+            <li [class.selected]="isSelected(option)">
+              <label class="option-item">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(option)"
+                  (change)="onMultiOptionClick(option)"
+                />
+                <span class="custom-checkbox"></span>
+                {{ option.label }}
+              </label>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  }
+</div>

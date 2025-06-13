@@ -1,6 +1,6 @@
 namespace FitTrack.Data.Object.Enums;
 
-public enum LevelEnum
+public enum DifficultyEnum
 {
     Beginner,
     Intermediate,

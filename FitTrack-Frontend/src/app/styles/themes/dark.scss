@@ -1,0 +1,46 @@
+:root {
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #1e1e1e;
+  --color-border: #19191f;
+
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #a3a3a3;
+
+  --color-primary: #636ae8;
+  --color-primary-hover: #7a80f0;
+  --color-primary-focus: #4e54c8;
+  --color-primary-focus-rgb: 78, 84, 200;
+
+  --color-secondary: #e8618c;
+  --color-secondary-hover: #f07aa0;
+  --color-secondary-focus: #bf5473;
+
+  --color-success: #1dd75b;
+  --color-success-hover: #2adb6d;
+  --color-success-focus: #17b048;
+
+  --color-warning: #efb034;
+  --color-warning-hover: #f0b540;
+  --color-warning-focus: #c7910e;
+
+  --color-danger: #de3b40;
+  --color-danger-hover: #e95d5f;
+  --color-danger-focus: #991b1b;
+  --color-danger-focus-rgb: 153, 27, 27;
+
+  --color-info: #379ae6;
+  --color-info-hover: #4ea9f0;
+  --color-info-focus: #1f78c9;
+
+  --color-primary-focus-rgb: 122, 78, 219;
+  --color-danger-focus-rgb: 153, 27, 27;
+
+  --color-text-btn: #ffffff;
+
+  --color-select-bg-hover: #222222;
+  --color-select-bg-selected: #444444;
+
+  --shadow:
+    0 0.25rem 0.625rem rgba(255, 255, 255, 0.04),
+    0 1.25rem 3.125rem rgba(0, 0, 0, 0.3);
+}

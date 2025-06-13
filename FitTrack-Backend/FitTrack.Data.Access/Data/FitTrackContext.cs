@@ -26,7 +26,7 @@ public class FitTrackContext : DbContext
         modelBuilder.Entity<ExerciseEntity>(entity =>
         {
             entity.Property(e => e.Force).HasConversion<string>();
-            entity.Property(e => e.Level).HasConversion<string>();
+            entity.Property(e => e.Difficulty).HasConversion<string>();
             entity.Property(e => e.Mechanic).HasConversion<string>();
             entity.Property(e => e.Category).HasConversion<string>();
         });
@@ -43,8 +43,7 @@ public class FitTrackContext : DbContext
             entity.Property(e => e.Name).HasConversion<string>();
         });
 
-
-        modelBuilder.Entity<UserMealEntity>(entity =>
+        modelBuilder.Entity<MealEntity>(entity =>
         {
             entity.Property(e => e.Type).HasConversion<string>();
         });
@@ -59,41 +58,15 @@ public class FitTrackContext : DbContext
         modelBuilder.Entity<RolePermissionMapping>()
             .HasKey(rp => new { rp.RoleId, rp.PermissionId });
 
-        modelBuilder.Entity<RolePermissionMapping>()
-            .HasOne(rp => rp.Role)
-            .WithMany(r => r.Permissions)
-            .HasForeignKey(rp => rp.RoleId);
-
-        modelBuilder.Entity<RolePermissionMapping>()
-            .HasOne(rp => rp.Permission)
-            .WithMany(r => r.Roles)
-            .HasForeignKey(rp => rp.PermissionId);
+        modelBuilder.Entity<RecipeCategoryMapping>()
+            .HasKey(rc => new { rc.RecipeId, rc.CategoryId });
 
         modelBuilder.Entity<ExercisePrimaryMuscleMapping>()
             .HasKey(epm => new { epm.ExerciseId, epm.MuscleId });
 
-        modelBuilder.Entity<ExercisePrimaryMuscleMapping>()
-            .HasOne(epm => epm.Exercise)
-            .WithMany(e => e.PrimaryMuscles)
-            .HasForeignKey(epm => epm.ExerciseId);
-
-        modelBuilder.Entity<ExercisePrimaryMuscleMapping>()
-            .HasOne(epm => epm.Muscle)
-            .WithMany(m => m.PrimaryExercises)
-            .HasForeignKey(epm => epm.MuscleId);
-
         modelBuilder.Entity<ExerciseSecondaryMuscleMapping>()
             .HasKey(epm => new { epm.ExerciseId, epm.MuscleId });
 
-        modelBuilder.Entity<ExerciseSecondaryMuscleMapping>()
-            .HasOne(epm => epm.Exercise)
-            .WithMany(e => e.SecondaryMuscles)
-            .HasForeignKey(epm => epm.ExerciseId);
-
-        modelBuilder.Entity<ExerciseSecondaryMuscleMapping>()
-            .HasOne(epm => epm.Muscle)
-            .WithMany(m => m.SecondaryExercises)
-            .HasForeignKey(epm => epm.MuscleId);
 
         //Indexes
         modelBuilder.Entity<UserEntity>(entity =>
@@ -111,7 +84,7 @@ public class FitTrackContext : DbContext
             entity.HasIndex(e => e.Category);
             entity.HasIndex(e => e.Mechanic);
             entity.HasIndex(e => e.Force);
-            entity.HasIndex(e => e.Level);
+            entity.HasIndex(e => e.Difficulty);
         });
 
         modelBuilder.Entity<FoodEntity>(entity =>
@@ -128,10 +101,11 @@ public class FitTrackContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<UserProfileEntity> UserProfiles { get; set; }
     public DbSet<UserPreferenceEntity> UserPreferences { get; set; }
-    public DbSet<UserWeightLogEntity> UserWeightLogs { get; set; }
-    public DbSet<UserMealEntity> UserMeals { get; set; }
+    public DbSet<WeightLogEntity> WeightLogs { get; set; }
+    public DbSet<MealEntity> Meals { get; set; }
     public DbSet<MealItemEntity> MealItems { get; set; }
-    public DbSet<UserWorkoutEntity> UserWorkouts { get; set; }
+    public DbSet<WorkoutEntity> Workouts { get; set; }
+    public DbSet<WorkoutExerciseEntity> WorkoutExercise { get; set; }
     public DbSet<WorkoutExerciseSetEntity> WorkoutExerciseSets { get; set; }
     public DbSet<WorkoutCardioExerciseEntity> WorkoutCardioExercises { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }

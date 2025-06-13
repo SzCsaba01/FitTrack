@@ -1,0 +1,114 @@
+.datepicker-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.datepicker,
+.monthpicker,
+.yearpicker {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-primary);
+  position: absolute;
+  z-index: 10;
+  border: 0.01rem solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin: 0.5rem 0rem;
+  box-shadow: var(--shadow);
+}
+
+.date-navigation {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  mat-icon {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    opacity: 0.8;
+  }
+
+  mat-icon:hover {
+    color: var(--color-text-primary);
+    opacity: 1;
+  }
+}
+
+.current-date {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 1.2rem;
+}
+
+.current-month {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+}
+
+.current-year {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-primary-hover);
+  }
+}
+
+.dates,
+.days-of-week {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.days-of-week {
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+  margin: 1rem 0rem;
+}
+
+.date-cell,
+.month-cell,
+.year-cell {
+  padding: 0.75rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+
+  &:hover:not(.disabled, .selected) {
+    background-color: var(--color-select-bg-hover);
+  }
+
+  &.today {
+    color: var(--color-danger);
+  }
+
+  &.selected {
+    background-color: var(--color-primary);
+    color: var(--color-text-btn);
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.months,
+.years {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.month-cell,
+.year-cell {
+  padding: 1rem 2rem;
+}

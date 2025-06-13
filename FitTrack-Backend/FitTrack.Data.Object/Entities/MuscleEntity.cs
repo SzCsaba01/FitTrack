@@ -14,7 +14,7 @@ public class MuscleEntity
     [MinLength(2, ErrorMessage = "Name cannot be shorter than 2 characters")]
     public required string Name { get; set; }
 
-    public ICollection<ExercisePrimaryMuscleMapping> PrimaryExercises { get; set; }
+    public ICollection<ExercisePrimaryMuscleMapping> PrimaryExerciseMappings { get; set; }
 
-    public ICollection<ExerciseSecondaryMuscleMapping> SecondaryExercises { get; set; }
+    public ICollection<ExerciseSecondaryMuscleMapping> SecondaryExerciseMappings { get; set; }
 }

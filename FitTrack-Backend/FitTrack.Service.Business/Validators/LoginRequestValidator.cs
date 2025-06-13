@@ -8,10 +8,9 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
     public LoginRequestValidator()
     {
         RuleFor(x => x.Credential)
-            .NotEmpty().WithMessage("Credential (username or email) is required");
+            .NotEmpty().WithMessage("Credential (username or email) is required!");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(6).WithMessage("Password must be at least 6 characters long");
+            .NotEmpty().WithMessage("Password is required!");
     }
 }

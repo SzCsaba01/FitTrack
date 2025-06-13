@@ -1,0 +1,116 @@
+<div class="datepicker-wrapper">
+  <input
+    class="input"
+    type="text"
+    class="input"
+    [value]="selectedDateSignal() ? (selectedDateSignal() | date: 'mediumDate') : ''"
+    readonly
+    placeholder="Select date"
+    (click)="onToggleSelectDate()"
+  />
+  @if (isSelectDateShownSignal()) {
+  <div class="datepicker">
+    <div class="date-navigation">
+      <div>
+        <mat-icon (click)="onChangeYear(-1)"
+          >keyboard_double_arrow_left</mat-icon
+        >
+        <mat-icon (click)="onChangeMonth(-1)">keyboard_arrow_left</mat-icon>
+      </div>
+      <div class="current-date">
+        <span class="current-month" (click)="onToggleSelectMonth()"
+          >{{currentMonthNameSignal()}}</span
+        >
+        <span class="current-year" (click)="onToggleSelectYear()"
+          >{{yearSignal()}}</span
+        >
+      </div>
+      <div>
+        <mat-icon (click)="onChangeMonth(1)">keyboard_arrow_right</mat-icon>
+        <mat-icon (click)="onChangeYear(1)"
+          >keyboard_double_arrow_right</mat-icon
+        >
+      </div>
+    </div>
+    <hr />
+    <div class="days-of-week">
+      @for (dayOfWeek of daysOfWeek; track $index) {
+      <span class="day-of-week">{{dayOfWeek}}</span>
+      }
+    </div>
+    <div class="dates">
+      @for (date of currentDatesSignal(); track $index) {
+      <span
+        class="date-cell"
+        [class.selected]="isDateSelected(date)"
+        [class.today]="isToday(date)"
+        [class.disabled]="isDateDisabled(date)"
+        (click)="!isDateDisabled(date) && onSelectDate(date)"
+      >
+        {{date.getDate()}}
+      </span>
+      }
+    </div>
+  </div>
+  } @if (isSelectMonthShownSignal()) {
+  <div class="monthpicker">
+    <div class="date-navigation">
+      <div>
+        <mat-icon (click)="onChangeOnlyYear(-1)"
+          >keyboard_double_arrow_left</mat-icon
+        >
+      </div>
+      <div class="current-date">
+        <span class="current-year" (click)="onToggleSelectYear()"
+          >{{yearSignal()}}</span
+        >
+      </div>
+      <div>
+        <mat-icon (click)="onChangeOnlyYear(1)"
+          >keyboard_double_arrow_right</mat-icon
+        >
+      </div>
+    </div>
+    <div class="months">
+      @for (month of months; track $index) {
+      <span
+        class="month-cell"
+        [class.selected]="isMonthSelected($index)"
+        (click)="onSelectMonth($index)"
+        >{{month}}</span
+      >
+      }
+    </div>
+  </div>
+  } @if (isSelectYearShownSignal()) {
+  <div class="yearpicker">
+    <div class="date-navigation">
+      <div>
+        <mat-icon (click)="onChangeOnlyYear(-12)"
+          >keyboard_double_arrow_left</mat-icon
+        >
+      </div>
+      <div class="current-date">
+        <span class="current-month" (click)="onToggleSelectMonth()"
+          >{{currentMonthNameSignal()}}</span
+        >
+      </div>
+      <div>
+        <mat-icon (click)="onChangeOnlyYear(12)"
+          >keyboard_double_arrow_right</mat-icon
+        >
+      </div>
+    </div>
+    <div class="years">
+      @for (year of yearsSignal(); track $index) {
+      <span
+        class="year-cell"
+        [class.selected]="isYearSelected(year)"
+        (click)="onSelectYear(year)"
+        >{{year}}</span
+      >
+      }
+    </div>
+  </div>
+  }
+</div>

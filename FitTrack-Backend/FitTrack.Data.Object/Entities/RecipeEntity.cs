@@ -9,9 +9,6 @@ public class RecipeEntity
     [Key]
     public Guid Id { get; set; }
 
-    [Required(ErrorMessage = "CategoryId is required")]
-    public Guid CategoryId { get; set; }
-
     [Required(ErrorMessage = "Name is required")]
     [MaxLength(100, ErrorMessage = "Name cannot be longer than 100 characters")]
     [MinLength(2, ErrorMessage = "Name cannot be shorter than 2 characters")]
@@ -28,9 +25,6 @@ public class RecipeEntity
     [Range(1, int.MaxValue, ErrorMessage = "Servings should be a positive number")]
     public required int Servings { get; set; }
 
-    [ForeignKey("CategoryId")]
-    public RecipeCategoryEntity Category { get; set; }
-
     public ICollection<RecipeIngredientEntity> Ingredients { get; set; }
 
     public ICollection<MealItemEntity> MealItems { get; set; }
@@ -38,4 +32,6 @@ public class RecipeEntity
     public ICollection<RecipeDirectionEntity> Directions { get; set; }
 
     public ICollection<RecipeNutritionEntity> Nutritions { get; set; }
+
+    public ICollection<RecipeCategoryMapping> CategoryMappings { get; set; }
 }

@@ -183,7 +183,7 @@ public class AuthenticationServiceTests
         var user = TestHelpers.CreateUser();
         user.Role = new RoleEntity
         {
-            Permissions = new List<RolePermissionMapping>
+            PermissionMappings = new List<RolePermissionMapping>
         {
             new RolePermissionMapping { Permission = new PermissionEntity { Name = "Permission1" } },
             new RolePermissionMapping { Permission = new PermissionEntity { Name = "Permission2" } },

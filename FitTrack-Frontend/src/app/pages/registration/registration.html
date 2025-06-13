@@ -1,0 +1,247 @@
+<div class="public-page-container">
+  <div class="card-container">
+    <div class="card">
+      <div class="card-header">
+        <h1>Create Your Account</h1>
+        <small class="centered-text">
+          Start your fitness journey today. Fill in your details to get started
+        </small>
+      </div>
+      <div class="card-content">
+        <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistration(registrationForm.value)">
+          <div class="form-fields">
+            <div class="form-field">
+              <label for="username">Username</label>
+              <input id="username" type="text" placeholder="e.g. fitguru123"
+                formControlName="username" class="input"
+                [class.input-error]="username.touched && username.invalid" />
+              @if (username.touched && username.invalid) {
+                <div>
+                  @if (username.hasError('required')) {
+                    <small class="error-message">Username is required.</small>
+                  }
+                  @if (username.hasError('minlength')) {
+                    <small class="error-message">
+                      Username must be at least {{ username.getError('minlength').requiredLength }} characters.
+                    </small>
+                  }
+                  @if (username.hasError('maxlength')) {
+                    <small class="error-message">
+                      Username must be at most {{ username.getError('maxlength').requiredLength }} characters.
+                    </small>
+                  }
+                  @if (username.hasError('pattern')) {
+                    <small class="error-message">Invalid username format.</small>
+                  }
+                </div>
+              }
+            </div>
+            <div class="form-field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="e.g. john@example.com"
+                formControlName="email" class="input"
+                [class.input-error]="email.touched && email.invalid" />
+              @if (email.touched && email.invalid) {
+                <div>
+                  @if (email.hasError('required')) {
+                    <small class="error-message">Email is required.</small>
+                  }
+                  @if (email.hasError('maxlength')) {
+                    <small class="error-message">
+                      Email must be at most {{ email.getError('maxlength').requiredLength }} characters.
+                    </small>
+                  }
+                  @if (email.hasError('email')) {
+                    <small class="error-message">Invalid email format.</small>
+                  }
+                </div>
+              }
+            </div>
+            <div class="form-field">
+              <label for="password">Password</label>
+              <input id="password" type="password" placeholder="********"
+                formControlName="password" class="input"
+                [class.input-error]="password.touched && password.invalid" />
+              @if (password.touched && password.invalid) {
+                <div>
+                  @if (password.hasError('required')) {
+                    <small class="error-message">Password is required.</small>
+                  }
+                  @if (password.hasError('minlength')) {
+                    <small class="error-message">
+                      Password must be at least {{ password.getError('minlength').requiredLength }} characters.
+                    </small>
+                  }
+                  @if (password.hasError('maxlength')) {
+                    <small class="error-message">
+                      Password must be at most {{ password.getError('maxlength').requiredLength }} characters.
+                    </small>
+                  }
+                  @if (password.hasError('pattern')) {
+                    <small class="error-message">
+                      Password must contain uppercase, lowercase, number, and symbol.
+                    </small>
+                  }
+                </div>
+              }
+            </div>
+            <div class="form-field">
+              <label for="confirmPassword">Confirm Password</label>
+              <input id="confirmPassword" type="password" placeholder="Re-enter your password"
+                formControlName="confirmPassword" class="input"
+                [class.input-error]="confirmPassword.touched && (confirmPassword.invalid || registrationForm.hasError('passwordMismatch'))" />
+              @if (confirmPassword.touched && (confirmPassword.invalid || registrationForm.hasError('passwordMismatch'))) {
+                <div>
+                  @if (confirmPassword.hasError('required')) {
+                    <small class="error-message">Confirm password is required.</small>
+                  }
+                  @if (registrationForm.hasError('passwordMismatch')) {
+                    <small class="error-message">Passwords do not match.</small>
+                  }
+                </div>
+              }
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="firstName">First Name</label>
+                <input id="firstName" type="text" placeholder="e.g. John"
+                  formControlName="firstName" class="input"
+                  [class.input-error]="firstName.touched && firstName.invalid" />
+                @if (firstName.touched && firstName.invalid) {
+                  <div>
+                    @if (firstName.hasError('required')) {
+                      <small class="error-message">First name is required.</small>
+                    }
+                    @if (firstName.hasError('minlength')) {
+                      <small class="error-message">
+                        Minimum {{ firstName.getError('minlength').requiredLength }} characters required.
+                      </small>
+                    }
+                    @if (firstName.hasError('maxlength')) {
+                      <small class="error-message">
+                        Maximum {{ firstName.getError('maxlength').requiredLength }} characters allowed.
+                      </small>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="form-field">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="text" placeholder="e.g. Doe"
+                  formControlName="lastName" class="input"
+                  [class.input-error]="lastName.touched && lastName.invalid" />
+                @if (lastName.touched && lastName.invalid) {
+                  <div>
+                    @if (lastName.hasError('required')) {
+                      <small class="error-message">Last name is required.</small>
+                    }
+                    @if (lastName.hasError('minlength')) {
+                      <small class="error-message">
+                        Minimum {{ lastName.getError('minlength').requiredLength }} characters required.
+                      </small>
+                    }
+                    @if (lastName.hasError('maxlength')) {
+                      <small class="error-message">
+                        Maximum {{ lastName.getError('maxlength').requiredLength }} characters allowed.
+                      </small>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="gender">Gender</label>
+                <app-select id="gender" [options]="genderOptions" [multiple]="true" formControlName="gender">
+                </app-select>
+                @if (gender.touched && gender.invalid) {
+                  <small class="error-message">Gender is required.</small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="dateOfBirth">Date of Birth</label>
+                <app-date-picker id="dateOfBirth" formControlName="dateOfBirth"></app-date-picker>
+                @if (dateOfBirth.touched && dateOfBirth.invalid) {
+                  <small class="error-message">Date of birth is required.</small>
+                }
+              </div>
+          </div>
+            <hr />
+            <h4>Health & System Settings</h4>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="weightKg">Weight</label>
+                <input id="weightKg" type="number" formControlName="weightKg" class="input"
+                  [class.input-error]="weight.touched && weight.invalid" />
+                @if (weight.touched && weight.invalid) {
+                  <div>
+                    @if (weight.hasError('required')) {
+                      <small class="error-message">Weight is required.</small>
+                    }
+                    @if (weight.hasError('min')) {
+                      <small class="error-message">Weight must be greater than {{ weight.getError('min').min }}.</small>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="form-field">
+                <label for="heightCm">Height</label>
+                <input id="heightCm" type="number" formControlName="heightCm" class="input"
+                  [class.input-error]="height.touched && height.invalid" />
+                @if (height.touched && height.invalid) {
+                  <div>
+                    @if (height.hasError('required')) {
+                      <small class="error-message">Height is required.</small>
+                    }
+                    @if (height.hasError('min')) {
+                      <small class="error-message">Height must be greater than {{ height.getError('min').min }}.</small>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Theme</label>
+              <div class="toggle-group">
+                <button type="button" class="btn btn-toggle"
+                  [class.active]="appTheme.value === appThemeEnum.Light"
+                  (click)="setTheme(appThemeEnum.Light)">
+                  <mat-icon>light_mode</mat-icon>Light
+                </button>
+                <button type="button" class="btn btn-toggle"
+                  [class.active]="appTheme.value === appThemeEnum.Dark"
+                  (click)="setTheme(appThemeEnum.Dark)">
+                  <mat-icon>dark_mode</mat-icon>Dark
+                </button>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Unit System</label>
+              <div class="toggle-group">
+                <button type="button" class="btn btn-toggle"
+                  [class.active]="unitSystem.value === unitSystemEnum.Metric"
+                  (click)="unitSystem.setValue(unitSystemEnum.Metric)">
+                  <mat-icon>balance</mat-icon>Metric (kg/cm)
+                </button>
+                <button type="button" class="btn btn-toggle"
+                  [class.active]="unitSystem.value === unitSystemEnum.Imperial"
+                  (click)="unitSystem.setValue(unitSystemEnum.Imperial)">
+                  <mat-icon>balance</mat-icon>Imperial (lbs/ft)
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="registrationForm.invalid">
+              Register Your Account
+            </button>
+          </div>
+        </form>
+        <small class="centered-text">
+          Already have an account? <a routerLink='/login'>Log In</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,8 +4,8 @@ using FitTrack.Data.Object.Enums;
 
 namespace FitTrack.Data.Object.Entities;
 
-[Table("UserMeals")]
-public class UserMealEntity
+[Table("Meals")]
+public class MealEntity
 {
     [Key]
     public Guid Id { get; set; }

@@ -13,9 +13,9 @@ public class ExerciseEntity
     [Required(ErrorMessage = "EquipmentId is required")]
     public Guid EquipmentId { get; set; }
 
-    [Required(ErrorMessage = "Level is required")]
-    [MaxLength(30, ErrorMessage = "Level cannot be longer than 30 characters")]
-    public LevelEnum Level { get; set; }
+    [Required(ErrorMessage = "Difficulty is required")]
+    [MaxLength(30, ErrorMessage = "Difficulty cannot be longer than 30 characters")]
+    public DifficultyEnum Difficulty { get; set; }
 
     [MaxLength(30, ErrorMessage = "Mechanic cannot be longer than 30 characters")]
     public MechanicEnum? Mechanic { get; set; }
@@ -50,4 +50,6 @@ public class ExerciseEntity
     public ICollection<ExercisePrimaryMuscleMapping> PrimaryMuscles { get; set; }
 
     public ICollection<ExerciseSecondaryMuscleMapping> SecondaryMuscles { get; set; }
+
+    public ICollection<WorkoutExerciseEntity> Workouts { get; set; }
 }

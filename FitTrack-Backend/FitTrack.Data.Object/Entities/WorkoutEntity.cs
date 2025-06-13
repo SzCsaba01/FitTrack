@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FitTrack.Data.Object.Entities;
 
-[Table("UserWorkouts")]
-public class UserWorkoutEntity
+[Table("Workouts")]
+public class WorkoutEntity
 {
     [Key]
     public Guid Id { get; set; }
@@ -19,7 +19,7 @@ public class UserWorkoutEntity
     [ForeignKey("UserId")]
     public UserEntity User { get; set; }
 
-    public ICollection<WorkoutExerciseSetEntity> WorkoutExerciseSets { get; set; }
+    public ICollection<WorkoutExerciseEntity> WorkoutExercises { get; set; }
 
     public ICollection<WorkoutCardioExerciseEntity> WorkoutCardioExercises { get; set; }
 }

@@ -1,0 +1,105 @@
+.select-wrapper {
+  width: 100%;
+  position: relative;
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.selected-options {
+  padding: 0.5rem 0.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  border: 0.01rem solid var(--color-border);
+  background-color: var(--color-bg-primary);
+  border-radius: 0.3rem;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.options-container {
+  position: absolute;
+  width: 100%;
+  max-height: 12.5rem;
+  overflow-y: auto;
+  border: 0.01rem solid var(--color-border);
+  z-index: 10;
+  box-shadow: var(--shadow);
+  border-radius: 0.3rem;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 0.5rem 0.5rem;
+      color: var(--color-text-primary);
+      background-color: var(--color-bg-primary);
+      cursor: pointer;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+
+      &:hover {
+        background-color: var(--color-select-bg-hover);
+        color: var(--color-text-primary);
+      }
+
+      &.selected {
+        background-color: var(--color-select-bg-selected);
+      }
+    }
+  }
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  .custom-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 0.1rem solid var(--color-primary);
+    border-radius: 0.3rem;
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  input[type="checkbox"]:checked + .custom-checkbox {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0.35rem;
+      top: 0.1rem;
+      width: 0.35rem;
+      height: 0.7rem;
+      border: solid var(--color-text-btn);
+      border-width: 0 0.15rem 0.15rem 0;
+      transform: rotate(45deg);
+      pointer-events: none;
+    }
+  }
+
+  input[type="checkbox"]:focus + .custom-checkbox {
+    box-shadow: 0 0 0 0.2rem rgba(var(--color-primary-focus-rgb), 0.4);
+  }
+}

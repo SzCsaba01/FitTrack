@@ -170,7 +170,7 @@ public class AuthenticationService : IAuthenticationService
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
-        foreach (var permission in user.Role.Permissions)
+        foreach (var permission in user.Role.PermissionMappings)
         {
             claims.Add(new Claim("Permission", permission.Permission.Name));
         }

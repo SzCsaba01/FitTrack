@@ -1,0 +1,89 @@
+@use "app/styles/buttons";
+@use "app/styles/cards";
+@use "app/styles/forms";
+@use "app/styles/inputs";
+@use "app/styles/public-pages";
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,600;1,400&display=swap");
+:root {
+  --font-primary: "Archivo", sans-serif;
+  --font-secondary: "Inter", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: var(--font-primary);
+  font-size: 4vw;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  height: 100%;
+  margin: 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+
+  @media (min-width: 600px) {
+    font-size: 1rem;
+  }
+}
+
+input,
+textarea,
+select,
+button,
+small,
+caption,
+label {
+  font-family: var(--font-secondary);
+  font-weight: 400;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 0.25rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-hover);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--color-primary-hover);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text-primary);
+}
+
+hr {
+  width: 100%;
+  opacity: 0.3;
+  color: var(--color-border);
+}

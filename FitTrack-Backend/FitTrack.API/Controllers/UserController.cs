@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPut("verify-registration-token")]
+    [HttpPut("verify-email-verification-token")]
     public async Task<IActionResult> VerifyEmailVerificationToken([FromQuery] string emailVerificationToken)
     {
         await _userService.VerifyEmailVerificationTokenAsync(emailVerificationToken);
@@ -38,6 +38,15 @@ public class UserController : ControllerBase
         var message = new SuccessMessageResponse("You have successfully verified your email");
 
         return Ok(message);
+    }
+
+    [AllowAnonymous]
+    [HttpPut("verify-change-password-token")]
+    public async Task<IActionResult> VerifyChangePassworToken([FromQuery] string token)
+    {
+        await _userService.VerifyChangePasswordTokenAsync(token);
+
+        return Ok();
     }
 
     [AllowAnonymous]

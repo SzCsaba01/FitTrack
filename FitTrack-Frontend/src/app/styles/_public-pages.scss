@@ -1,0 +1,22 @@
+.public-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  min-height: 100vh;
+  overflow-y: auto;
+
+  .card-container {
+    width: 100%;
+    max-width: 40rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .centered-text {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+}
