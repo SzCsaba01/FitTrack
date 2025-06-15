@@ -22,7 +22,7 @@ export class UserService {
       null,
       {
         params: {
-          emailVerificationToken: token,
+          token: token,
         },
       },
     );
@@ -31,7 +31,7 @@ export class UserService {
   public verifyChangePasswordToken(token: string) {
     return this.http.put(`${this.baseUrl}/verify-change-password-token`, null, {
       params: {
-        emailVerificationToken: token,
+        token: token,
       },
     });
   }

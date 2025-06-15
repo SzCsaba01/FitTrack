@@ -28,8 +28,8 @@ export const httpErrorInterceptor: (
     catchError((error: HttpErrorResponse) => {
       switch (error.status) {
         case HttpStatusCode.BadRequest:
-          if (error.error?.message) {
-            const errorMessage = error.error.message;
+          if (error.error?.detail) {
+            const errorMessage = error.error.detail;
             return throwError(() => ({ ...error, errorMessage }));
           }
           break;

@@ -31,9 +31,9 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPut("verify-email-verification-token")]
-    public async Task<IActionResult> VerifyEmailVerificationToken([FromQuery] string emailVerificationToken)
+    public async Task<IActionResult> VerifyEmailVerificationToken([FromQuery] string token)
     {
-        await _userService.VerifyEmailVerificationTokenAsync(emailVerificationToken);
+        await _userService.VerifyEmailVerificationTokenAsync(token);
 
         var message = new SuccessMessageResponse("You have successfully verified your email");
 
@@ -66,7 +66,7 @@ public class UserController : ControllerBase
     {
         await _userService.ChangePasswordAsync(request);
 
-        var message = new SuccessMessageResponse("You have successfully changed your password");
+        var message = new SuccessMessageResponse("You have successfully changed your password!");
 
         return Ok(message);
     }
