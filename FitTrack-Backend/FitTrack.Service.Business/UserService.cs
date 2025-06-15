@@ -174,7 +174,7 @@ public class UserService : IUserService
                 (user.EmailVerificationExpiration != null && user.EmailVerificationExpiration < DateTime.UtcNow))
         {
             _logger.LogWarning("Invalid or expired email verification token.");
-            throw new ModelNotFoundException("Url is invalid or expired!");
+            throw new ValidationException("Url is invalid or expired!");
         }
 
         user.EmailVerificationToken = null;
@@ -242,7 +242,7 @@ public class UserService : IUserService
                 (user.ChangePasswordTokenExpiration != null && user.ChangePasswordTokenExpiration < DateTime.UtcNow))
         {
             _logger.LogWarning("Invalid or expired change password token.");
-            throw new ModelNotFoundException("Change password url is invalid or expired!");
+            throw new ValidationException("Change password url is invalid or expired!");
         }
 
         _logger.LogInformation("Change password token verified for user ID: {UserId}", user.Id);
@@ -266,7 +266,7 @@ public class UserService : IUserService
                 (user.ChangePasswordTokenExpiration != null && user.ChangePasswordTokenExpiration < DateTime.UtcNow))
         {
             _logger.LogWarning("Invalid or expired change password token during password change.");
-            throw new ModelNotFoundException("Change password url is invalid or expired!");
+            throw new ValidationException("Change password url is invalid or expired!");
         }
 
         var newSalt = _encryptionService.GenerateSalt();

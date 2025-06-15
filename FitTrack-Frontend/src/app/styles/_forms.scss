@@ -39,6 +39,20 @@
   gap: 1rem;
 }
 
+.inline-error-message-container {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.inline-error-message {
+  color: var(--color-danger);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba(var(--color-danger-bg-rgb), 0.2);
+}
+
 .error-message {
   color: var(--color-danger);
 }

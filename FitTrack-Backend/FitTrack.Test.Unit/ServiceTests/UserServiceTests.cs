@@ -138,8 +138,8 @@ public class UserServiceTests
         _emailServiceMock.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
     }
 
-    [Fact(DisplayName = "VerifyEmailVerificationTokenAsync with invalid token throws ModelNotFoundException")]
-    public async Task VerifyEmailVerificationTokenAsync_InvalidToken_ThrowsModelNotFoundException()
+    [Fact(DisplayName = "VerifyEmailVerificationTokenAsync with invalid token throws ValidationException")]
+    public async Task VerifyEmailVerificationTokenAsync_InvalidToken_ThrowsValidationException()
     {
         // Arrange
         var hash = new byte[] { 2 };
@@ -147,7 +147,7 @@ public class UserServiceTests
         _userRepositoryMock.Setup(x => x.GetUserByEmailVerificationTokenAsync(hash)).ReturnsAsync((UserEntity?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ModelNotFoundException>(() => _userService.VerifyEmailVerificationTokenAsync("token"));
+        await Assert.ThrowsAsync<ValidationException>(() => _userService.VerifyEmailVerificationTokenAsync("token"));
     }
 
     [Fact(DisplayName = "VerifyEmailVerificationTokenAsync with valid token confirms email")]
@@ -202,8 +202,8 @@ public class UserServiceTests
         _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<IDbContextTransaction>()), Times.Once);
     }
 
-    [Fact(DisplayName = "VerifyChangePasswordTokenAsync with expired token throws ModelNotFoundException")]
-    public async Task VerifyChangePasswordTokenAsync_ExpiredToken_ThrowsModelNotFoundException()
+    [Fact(DisplayName = "VerifyChangePasswordTokenAsync with expired token throws ValidationException")]
+    public async Task VerifyChangePasswordTokenAsync_ExpiredToken_ThrowsValidationException()
     {
         // Arrange
         var expiredUser = TestHelpers.CreateUser();
@@ -213,7 +213,7 @@ public class UserServiceTests
         _userRepositoryMock.Setup(r => r.GetUserByChangePasswordTokenAsync(hash)).ReturnsAsync(expiredUser);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ModelNotFoundException>(() => _userService.VerifyChangePasswordTokenAsync("expiredToken"));
+        await Assert.ThrowsAsync<ValidationException>(() => _userService.VerifyChangePasswordTokenAsync("expiredToken"));
     }
 
     [Fact(DisplayName = "VerifyChangePasswordTokenAsync with valid token returns successfully")]

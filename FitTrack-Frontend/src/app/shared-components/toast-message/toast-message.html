@@ -1,0 +1,7 @@
+<div class="toast-container">
+  @for (toast of toasts(); track $index) {
+  <div class="toast" [ngClass]="toast.type" (click)="remove($index)">
+    {{ toast.message }}
+  </div>
+  }
+</div>

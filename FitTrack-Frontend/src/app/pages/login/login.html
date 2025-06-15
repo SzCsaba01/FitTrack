@@ -6,6 +6,13 @@
         <small class="centered-text">Log in to continue your fitness journey.</small>
       </div>
       <div class="card-content">
+        @if (inlineErrorMessageSignal()) {
+          <div class="inline-error-message-container">
+            <div class="inline-error-message">
+              {{inlineErrorMessageSignal()}}
+            </div>
+          </div>
+        }
         <form
           class="column-form"
           [formGroup]="loginForm"

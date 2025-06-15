@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import {
   FormBuilder,
@@ -9,11 +9,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user.service';
 import { takeUntil } from 'rxjs';
 import { ChangePasswordRequest } from '../../requests/user/change-password.request';
 import { confirmPasswordValidator } from '../../validators/confirm-password.validator';
 import { passwordFormat } from '../../formats/formats';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-change-password',
@@ -25,6 +25,7 @@ import { passwordFormat } from '../../formats/formats';
 export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
   private token = '';
   changePasswordForm: FormGroup = {} as FormGroup;
+  inlineErrorMessageSignal = signal<string | null>(null);
 
   constructor(
     private userService: UserService,
@@ -35,7 +36,7 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
     super();
   }
   ngOnInit(): void {
-    // this.verifyToken();
+    this.verifyToken();
     this.initializeForm();
   }
 
@@ -81,8 +82,15 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
     this.userService
       .changePassword(changePasswordRequest)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        this.router.navigate(['/login']);
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          if (error.errorMessage) {
+            this.inlineErrorMessageSignal.set(error.errorMessage);
+          }
+        },
       });
   }
 }

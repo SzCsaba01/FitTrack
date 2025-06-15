@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -9,7 +9,9 @@ import {
 } from '@angular/forms';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import { LoginRequest } from '../../requests/authentication/login.request';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +23,13 @@ import { RouterModule } from '@angular/router';
 export class Login extends SelfUnsubscriberBase implements OnInit {
   loginForm: FormGroup = {} as FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  inlineErrorMessageSignal = signal<string | null>(null);
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+  ) {
     super();
   }
 
@@ -45,6 +53,18 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
   }
 
   onLogin(authenticationRequest: LoginRequest) {
-    console.log(authenticationRequest);
+    this.authenticationService
+      .login(authenticationRequest)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          if (error.errorMessage) {
+            this.inlineErrorMessageSignal.set(error.errorMessage);
+          }
+        },
+      });
   }
 }

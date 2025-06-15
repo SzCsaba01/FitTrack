@@ -45,14 +45,14 @@ public class AuthenticationServiceTests
     }
 
     [Fact(DisplayName = "LoginAsync throws exception if user not found")]
-    public async Task LoginAsync_UserNotFound_ThrowsModelNotFoundException()
+    public async Task LoginAsync_UserNotFound_ThrowsValidationException()
     {
         // Arrange
         var request = TestHelpers.CreateLoginRequest();
         _userRepositoryMock.Setup(repo => repo.GetUserByUsernameOrEmailAsync(request.Credential)).ReturnsAsync((UserEntity?)null);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ModelNotFoundException>(() => _authenticationService.LoginAsync(request));
+        await Assert.ThrowsAsync<ValidationException>(() => _authenticationService.LoginAsync(request));
     }
 
     [Fact(DisplayName = "LoginAsync throws if email not confirmed")]
@@ -68,7 +68,7 @@ public class AuthenticationServiceTests
     }
 
     [Fact(DisplayName = "LoginAsync throws if password is incorrect")]
-    public async Task LoginAsync_WrongPassword_ThrowsModelNotFoundException()
+    public async Task LoginAsync_WrongPassword_ThrowsValidationException()
     {
         // Arrange
         var request = TestHelpers.CreateLoginRequest();
@@ -80,7 +80,7 @@ public class AuthenticationServiceTests
         _encryptionServiceMock.Setup(enc => enc.HashString(request.Password, user.Salt)).Returns([9, 9, 9]);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ModelNotFoundException>(() => _authenticationService.LoginAsync(request));
+        await Assert.ThrowsAsync<ValidationException>(() => _authenticationService.LoginAsync(request));
     }
 
 

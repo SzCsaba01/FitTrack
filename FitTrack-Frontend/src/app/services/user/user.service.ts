@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RegistrationRequest } from '../requests/user/registration.request';
-import { environment } from '../../environments/environment';
-import { ChangePasswordRequest } from '../requests/user/change-password.request';
+import { RegistrationRequest } from '../../requests/user/registration.request';
+import { environment } from '../../../environments/environment';
+import { ChangePasswordRequest } from '../../requests/user/change-password.request';
 
 @Injectable({
   providedIn: 'root',

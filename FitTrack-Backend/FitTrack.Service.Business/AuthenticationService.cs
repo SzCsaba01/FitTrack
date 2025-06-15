@@ -44,7 +44,7 @@ public class AuthenticationService : IAuthenticationService
         if (user == null)
         {
             _logger.LogWarning("Login failed: User not found");
-            throw new ModelNotFoundException("Invalid credentials!");
+            throw new ValidationException("Invalid credentials!");
         }
 
         if (!user.isEmailConfirmed)
@@ -58,7 +58,7 @@ public class AuthenticationService : IAuthenticationService
         if (!user.HashedPassword.SequenceEqual(hashedPassword))
         {
             _logger.LogWarning("Login failed: Invalid password for user {UserId}", user.Id);
-            throw new ModelNotFoundException("Invalid credentials");
+            throw new ValidationException("Invalid credentials");
         }
 
         var accessTokenExpiration = DateTime.UtcNow.AddMinutes(AppConstants.ACCESS_TOKEN_VALIDATION_TIME_MINUTES);
@@ -85,6 +85,11 @@ public class AuthenticationService : IAuthenticationService
     public async Task LogoutAsync()
     {
         var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+        {
+            throw new ConfigurationException();
+        }
 
         httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken);
 
@@ -122,6 +127,11 @@ public class AuthenticationService : IAuthenticationService
     public async Task RefreshTokenAsync()
     {
         var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+        {
+            throw new ConfigurationException();
+        }
 
         if (!httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken))
         {

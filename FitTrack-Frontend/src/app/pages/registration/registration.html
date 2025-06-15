@@ -8,6 +8,13 @@
         </small>
       </div>
       <div class="card-content">
+        @if (inlineErrorMessageSignal()) {
+          <div class="inline-error-message-container">
+            <div class="inline-error-message">
+              {{inlineErrorMessageSignal()}}
+            </div>
+          </div>
+        }
         <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistration(registrationForm.value)">
           <div class="form-fields">
             <div class="form-field">

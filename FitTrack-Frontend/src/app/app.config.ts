@@ -8,7 +8,12 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { initializeApp } from './app.initializer';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+} from '@angular/common/http';
+import { httpErrorInterceptor } from './helpers/interceptors/http-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
   ],
 };

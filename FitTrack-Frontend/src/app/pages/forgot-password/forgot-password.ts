@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/user/user.service';
 import {
   FormBuilder,
   FormControl,
@@ -21,6 +21,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
   forgotPasswordForm: FormGroup = {} as FormGroup;
+  inlineErrorMessageSignal = signal<string | null>('test');
 
   constructor(
     private userService: UserService,
@@ -51,8 +52,15 @@ export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
     this.userService
       .sendForgotPasswordEmail(data.email)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        this.forgotPasswordForm.reset();
+      .subscribe({
+        next: () => {
+          this.forgotPasswordForm.reset();
+        },
+        error: (error) => {
+          if (error?.errorMessage) {
+            this.inlineErrorMessageSignal = error.errorMessage;
+          }
+        },
       });
   }
 }

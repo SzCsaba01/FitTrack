@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import {
   FormBuilder,
@@ -19,8 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Select } from '../../shared-components/select/select';
 import { GENDERS } from '../../constants/genders.constant';
 import { DatePicker } from '../../shared-components/date-picker/date-picker';
-import { UserService } from '../../services/user.service';
 import { takeUntil } from 'rxjs';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-registration',
@@ -40,6 +40,8 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
   appThemeEnum = AppThemeEnum;
   unitSystemEnum = UnitSystemEnum;
   genderOptions = GENDERS;
+
+  inlineErrorMessageSignal = signal<string | null>(null);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -169,12 +171,18 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
   }
 
   onRegistration(registrationRequest: RegistrationRequest): void {
-    console.log(registrationRequest);
     this.userService
       .register(registrationRequest)
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        this.router.navigate(['/login']);
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          if (error?.errorMessage) {
+            this.inlineErrorMessageSignal = error.errorMessage;
+          }
+        },
       });
   }
 }

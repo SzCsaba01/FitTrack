@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../services/user.service';
 import { takeUntil } from 'rxjs';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-verify-email',
