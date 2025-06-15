@@ -68,9 +68,12 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<UserEntity?> GetUserByChangePasswordTokenAsync(byte[] changePasswordToken)
+    public async Task<UserEntity?> GetUserByChangePasswordTokenAsync(byte[] changePasswordToken)
     {
-        throw new NotImplementedException();
+        return await _context.Users
+            .Where(u => u.ChangePasswordToken.SequenceEqual(changePasswordToken))
+            .AsNoTracking()
+            .FirstOrDefaultAsync();
     }
 
 

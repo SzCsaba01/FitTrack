@@ -64,7 +64,9 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
   }
 
   private verifyToken(): void {
-    this.token = this.activatedRoute.snapshot.paramMap.get('token') as string;
+    this.token = this.activatedRoute.snapshot.queryParamMap.get(
+      'token',
+    ) as string;
 
     this.userService
       .verifyChangePasswordToken(this.token)

@@ -159,7 +159,7 @@
             <div class="form-row">
               <div class="form-field">
                 <label for="gender">Gender</label>
-                <app-select id="gender" [options]="genderOptions" [multiple]="true" formControlName="gender">
+                <app-select id="gender" [options]="genderOptions" formControlName="gender">
                 </app-select>
                 @if (gender.touched && gender.invalid) {
                   <small class="error-message">Gender is required.</small>

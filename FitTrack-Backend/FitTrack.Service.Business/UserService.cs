@@ -131,7 +131,7 @@ public class UserService : IUserService
         userEntity.EmailVerificationToken = hashedToken;
         userEntity.EmailVerificationExpiration = expirationDate;
 
-        var url = new Uri(new Uri(_frontendUrl), $"{AppConstants.EMAIL_VERIFICATION_SUBJECT}/{emailVerificationToken}").ToString();
+        var url = $"{_frontendUrl}{AppConstants.VERIFY_EMAIL_URL}?token={emailVerificationToken}";
 
         var transaction = await _unitOfWork.BeginTransactionAsync();
 
@@ -148,7 +148,7 @@ public class UserService : IUserService
             await _unitOfWork.SaveChangesAsync();
 
             var emailBody = _emailService.CreateRegistrationEmailBody(url, userEntity.Username);
-            await _emailService.SendEmailAsync(AppConstants.VERIFY_EMAIL_URL, userEntity.Email, emailBody);
+            await _emailService.SendEmailAsync(AppConstants.EMAIL_VERIFICATION_SUBJECT, userEntity.Email, emailBody);
 
             await _unitOfWork.CommitTransactionAsync(transaction);
 
@@ -206,7 +206,7 @@ public class UserService : IUserService
         user.ChangePasswordToken = hashedToken;
         user.ChangePasswordTokenExpiration = changePasswordTokenExpiration;
 
-        var url = new Uri(new Uri(_frontendUrl), $"{AppConstants.CHANGE_PASSWORD_URL}/{changePasswordToken}").ToString();
+        var url = new Uri(new Uri(_frontendUrl), $"{AppConstants.CHANGE_PASSWORD_URL}?token={changePasswordToken}").ToString();
 
         var emailBody = _emailService.CreateForgotPasswordEmailBody(url, user.Username);
 

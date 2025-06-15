@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
   forgotPasswordForm: FormGroup = {} as FormGroup;
-  inlineErrorMessageSignal = signal<string | null>('test');
+  inlineErrorMessageSignal = signal<string | null>(null);
 
   constructor(
     private userService: UserService,
