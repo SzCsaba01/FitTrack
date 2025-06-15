@@ -18,6 +18,7 @@ export const routes: Routes = [
         (m) => m.PublicLayout,
       ),
     children: [
+      { path: '', pathMatch: 'full', redirectTo: '/login' },
       {
         path: 'login',
         loadComponent: () => import('./pages/login/login').then((m) => m.Login),

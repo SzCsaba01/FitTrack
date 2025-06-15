@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
-  imports: [],
+  standalone: true,
+  imports: [RouterModule],
   templateUrl: './not-found.html',
-  styleUrl: './not-found.scss'
+  styleUrl: './not-found.scss',
 })
-export class NotFound {
-
-}
+export class NotFound {}

@@ -1,0 +1,30 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 8rem;
+  font-weight: 900;
+  color: var(--color-danger);
+  margin: 0;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 2rem;
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+.message {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.btn-home {
+  width: 50%;
+}

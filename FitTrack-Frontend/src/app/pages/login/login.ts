@@ -31,7 +31,7 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
 
   private initializeForm(): void {
     this.loginForm = this.formBuilder.group({
-      credential: new FormControl('', [Validators.required, Validators.email]),
+      credential: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
     });
   }
