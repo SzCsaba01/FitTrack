@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
@@ -6,6 +5,7 @@ using FitTrack.Data.Contract.Helpers.Requests;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 

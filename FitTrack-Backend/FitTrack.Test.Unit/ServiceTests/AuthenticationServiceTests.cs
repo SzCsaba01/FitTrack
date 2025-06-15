@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Service.Business;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using FitTrack.Test.Unit.Helpers;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;

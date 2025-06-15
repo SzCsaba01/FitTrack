@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Data.Object.Enums;
@@ -7,6 +6,7 @@ using FitTrack.Service.Business;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using FitTrack.Test.Unit.Helpers;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
