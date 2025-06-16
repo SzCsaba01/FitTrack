@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LoginRequest } from '../../requests/authentication/login.request';
+import { AuthenticationResponse } from '../../responses/authentication/user-authentication.response';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,11 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {}
 
-  public login(request: LoginRequest) {
-    return this.http.put(`${this.baseUrl}/login`, request);
+  public login(request: LoginRequest): Observable<AuthenticationResponse> {
+    return this.http.put<AuthenticationResponse>(
+      `${this.baseUrl}/login`,
+      request,
+    );
   }
 
   public logout() {

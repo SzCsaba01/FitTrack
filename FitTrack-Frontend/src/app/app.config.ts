@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  isDevMode,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
@@ -14,6 +15,9 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import { httpErrorInterceptor } from './helpers/interceptors/http-error.interceptor';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideState, provideStore } from '@ngrx/store';
+import { userFeature } from './store/user/user.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +26,12 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
+    provideStore(),
+    provideState(userFeature),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+    }),
   ],
 };

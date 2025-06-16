@@ -12,6 +12,9 @@ import { LoginRequest } from '../../requests/authentication/login.request';
 import { Router, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { takeUntil } from 'rxjs';
+import { AuthenticationResponse } from '../../responses/authentication/user-authentication.response';
+import { Store } from '@ngrx/store';
+import { UserActions } from '../../store/user/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +32,7 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
+    private store: Store,
   ) {
     super();
   }
@@ -57,7 +61,8 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
       .login(authenticationRequest)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: () => {
+        next: (response: AuthenticationResponse) => {
+          this.store.dispatch(UserActions.setUser(response));
           this.router.navigate(['/home']);
         },
         error: (error) => {
