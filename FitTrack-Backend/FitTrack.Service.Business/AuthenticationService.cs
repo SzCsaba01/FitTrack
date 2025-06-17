@@ -1,7 +1,9 @@
 using System.Security.Claims;
+using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
 using FitTrack.Data.Contract.Helpers.Requests;
+using FitTrack.Data.Contract.Helpers.Responses;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
@@ -19,6 +21,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly IJwtService _jwtService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<AuthenticationService> _logger;
+    private readonly IMapper _mapper;
 
     public AuthenticationService(
         IUserRepository userRepository,
@@ -26,7 +29,8 @@ public class AuthenticationService : IAuthenticationService
         IEncryptionService encryptionService,
         IJwtService jwtService,
         IHttpContextAccessor httpContextAccessor,
-        ILogger<AuthenticationService> logger)
+        ILogger<AuthenticationService> logger,
+        IMapper mapper)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
@@ -34,8 +38,39 @@ public class AuthenticationService : IAuthenticationService
         _jwtService = jwtService;
         _httpContextAccessor = httpContextAccessor;
         _logger = logger;
+        _mapper = mapper;
     }
-    public async Task LoginAsync(LoginRequest request)
+
+    public async Task<AuthenticationResponse> GetUserDataAsync()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+        {
+            throw new ConfigurationException();
+        }
+
+        httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken);
+
+        if (refreshToken == null)
+        {
+            throw new AuthenticationException();
+        }
+
+        var hashedToken = _encryptionService.HashString(refreshToken);
+        var user = await _userRepository.GetUserByRefreshTokenAsync(hashedToken);
+
+        if (user == null || user.RefreshTokenExpiration < DateTime.UtcNow)
+        {
+            throw new AuthenticationException();
+        }
+
+        var response = _mapper.Map<AuthenticationResponse>(user);
+
+        return response;
+    }
+
+    public async Task<AuthenticationResponse> LoginAsync(LoginRequest request)
     {
         _logger.LogInformation("Login attempt for: {Credential}", request.Credential);
 
@@ -70,6 +105,8 @@ public class AuthenticationService : IAuthenticationService
         var refreshToken = _encryptionService.GenerateSecureToken();
         var hashedRefreshToken = _encryptionService.HashString(refreshToken);
 
+        var response = _mapper.Map<AuthenticationResponse>(user);
+
         user.RefreshToken = hashedRefreshToken;
         user.RefreshTokenExpiration = refreshTokenExpiration;
         user.Role = null;
@@ -80,6 +117,8 @@ public class AuthenticationService : IAuthenticationService
         SetTokenCookies(accessToken, accessTokenExpiration, refreshToken, refreshTokenExpiration);
 
         _logger.LogInformation("User {UserId} successfully logged in", user.Id);
+
+        return response;
     }
 
     public async Task LogoutAsync()
@@ -98,7 +137,6 @@ public class AuthenticationService : IAuthenticationService
 
         if (String.IsNullOrEmpty(refreshToken))
         {
-            Console.WriteLine("test1");
             _logger.LogInformation("Logout completed: no refresh token found.");
             return;
         }
@@ -108,7 +146,6 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
         {
-            Console.WriteLine("test2");
             _logger.LogInformation("Logout: no user found with provided refresh token.");
             return;
         }
@@ -118,7 +155,6 @@ public class AuthenticationService : IAuthenticationService
         user.Role = null;
 
         await _userRepository.UpdateUserAsync(user);
-        Console.WriteLine("test3");
         await _unitOfWork.SaveChangesAsync();
 
         _logger.LogInformation("User {UserId} logged out successfully", user.Id);
@@ -165,7 +201,7 @@ public class AuthenticationService : IAuthenticationService
         var hashedNewRefreshToken = _encryptionService.HashString(newRefreshToken);
 
         user.RefreshTokenExpiration = refreshTokenExpiration;
-        user.RefreshToken = hashedRefreshToken;
+        user.RefreshToken = hashedNewRefreshToken;
 
         await _userRepository.UpdateUserAsync(user);
         await _unitOfWork.SaveChangesAsync();

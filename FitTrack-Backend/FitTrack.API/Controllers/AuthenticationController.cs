@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FitTrack.API.Controllers;
 
-[Route("ap/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class AuthenticationController : ControllerBase
 {
@@ -15,12 +15,20 @@ public class AuthenticationController : ControllerBase
         _authenticationService = authenticationService;
     }
 
+    [HttpGet("get-user-data")]
+    public async Task<IActionResult> GetUserData()
+    {
+        var response = await _authenticationService.GetUserDataAsync();
+
+        return Ok(response);
+    }
+
     [HttpPut("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        await _authenticationService.LoginAsync(request);
+        var response = await _authenticationService.LoginAsync(request);
 
-        return Ok();
+        return Ok(response);
     }
 
     [HttpPut("logout")]

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LoginRequest } from '../../requests/authentication/login.request';
-import { AuthenticationResponse } from '../../responses/authentication/user-authentication.response';
+import { AuthenticationResponse } from '../../responses/authentication/authentication.response';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,6 +12,12 @@ export class AuthenticationService {
   private baseUrl = `${environment.apiUrl}/Authentication`;
 
   constructor(private http: HttpClient) {}
+
+  public getUserData(): Observable<AuthenticationResponse> {
+    return this.http.get<AuthenticationResponse>(
+      `${this.baseUrl}/get-user-data`,
+    );
+  }
 
   public login(request: LoginRequest): Observable<AuthenticationResponse> {
     return this.http.put<AuthenticationResponse>(

@@ -45,6 +45,8 @@ public class UserRepository : IUserRepository
             .Include(u => u.Role)
                 .ThenInclude(u => u.PermissionMappings)
                     .ThenInclude(u => u.Permission)
+            .Include(u => u.UserPreference)
+            .Include(u => u.UserProfile)
             .AsNoTracking()
             .FirstOrDefaultAsync();
     }
@@ -56,6 +58,8 @@ public class UserRepository : IUserRepository
             .Include(u => u.Role)
                 .ThenInclude(u => u.PermissionMappings)
                     .ThenInclude(u => u.Permission)
+            .Include(u => u.UserProfile)
+            .Include(u => u.UserPreference)
             .AsNoTracking()
             .FirstOrDefaultAsync();
     }

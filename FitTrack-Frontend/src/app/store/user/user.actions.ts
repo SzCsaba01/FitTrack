@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { AuthenticationResponse } from '../../responses/authentication/user-authentication.response';
+import { AuthenticationResponse } from '../../responses/authentication/authentication.response';
 
 export const UserActions = createActionGroup({
   source: 'User',

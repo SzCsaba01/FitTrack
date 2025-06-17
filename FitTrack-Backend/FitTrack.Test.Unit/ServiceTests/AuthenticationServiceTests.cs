@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Service.Business;
-using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using FitTrack.Test.Unit.Helpers;
 using FluentValidation;
@@ -20,6 +20,7 @@ public class AuthenticationServiceTests
     private readonly Mock<IJwtService> _jwtServiceMock;
     private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
     private readonly Mock<ILogger<AuthenticationService>> _loggerMock;
+    private readonly Mock<IMapper> _mapperMock;
 
     private readonly AuthenticationService _authenticationService;
 
@@ -31,6 +32,7 @@ public class AuthenticationServiceTests
         _jwtServiceMock = new Mock<IJwtService>();
         _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _loggerMock = new Mock<ILogger<AuthenticationService>>();
+        _mapperMock = new Mock<IMapper>();
 
         var context = new DefaultHttpContext();
         _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(context);
@@ -41,7 +43,8 @@ public class AuthenticationServiceTests
             _encryptionServiceMock.Object,
             _jwtServiceMock.Object,
             _httpContextAccessorMock.Object,
-            _loggerMock.Object);
+            _loggerMock.Object,
+            _mapperMock.Object);
     }
 
     [Fact(DisplayName = "LoginAsync throws exception if user not found")]
