@@ -41,35 +41,6 @@ public class AuthenticationService : IAuthenticationService
         _mapper = mapper;
     }
 
-    public async Task<AuthenticationResponse> GetUserDataAsync()
-    {
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        if (httpContext == null)
-        {
-            throw new ConfigurationException();
-        }
-
-        httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken);
-
-        if (refreshToken == null)
-        {
-            throw new AuthenticationException();
-        }
-
-        var hashedToken = _encryptionService.HashString(refreshToken);
-        var user = await _userRepository.GetUserByRefreshTokenAsync(hashedToken);
-
-        if (user == null || user.RefreshTokenExpiration < DateTime.UtcNow)
-        {
-            throw new AuthenticationException();
-        }
-
-        var response = _mapper.Map<AuthenticationResponse>(user);
-
-        return response;
-    }
-
     public async Task<AuthenticationResponse> LoginAsync(LoginRequest request)
     {
         _logger.LogInformation("Login attempt for: {Credential}", request.Credential);
@@ -114,7 +85,7 @@ public class AuthenticationService : IAuthenticationService
         await _userRepository.UpdateUserAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
-        SetTokenCookies(accessToken, accessTokenExpiration, refreshToken, refreshTokenExpiration);
+        SetTokenCookies(accessToken, refreshTokenExpiration, refreshToken, refreshTokenExpiration);
 
         _logger.LogInformation("User {UserId} successfully logged in", user.Id);
 
@@ -206,7 +177,7 @@ public class AuthenticationService : IAuthenticationService
         await _userRepository.UpdateUserAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
-        SetTokenCookies(accessToken, accessTokenExpiration, newRefreshToken, refreshTokenExpiration);
+        SetTokenCookies(accessToken, refreshTokenExpiration, newRefreshToken, refreshTokenExpiration);
 
         _logger.LogInformation("User {UserId} successfully refreshed token", user.Id);
     }
@@ -228,18 +199,27 @@ public class AuthenticationService : IAuthenticationService
     {
         var httpContext = _httpContextAccessor.HttpContext;
 
+        if (httpContext == null)
+        {
+            throw new ConfigurationException();
+        }
+
         httpContext.Response.Cookies.Append("AccessToken", accessToken, new CookieOptions
         {
             HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
             Expires = accessTokenExpiration,
+            IsEssential = true,
+            Secure = false,
+            SameSite = SameSiteMode.Strict
         });
 
         httpContext.Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions
         {
             HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = refreshTokenExpiration
+            Expires = refreshTokenExpiration,
+            IsEssential = true,
+            Secure = false,
+            SameSite = SameSiteMode.Lax
         });
 
         _logger.LogDebug("Token cookies set: AccessToken (expires at {AccessTokenExp}), RefreshToken (expires at {RefreshTokenExp})",

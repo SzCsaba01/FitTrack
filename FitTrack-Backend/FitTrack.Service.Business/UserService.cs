@@ -2,11 +2,13 @@ using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
 using FitTrack.Data.Contract.Helpers.Requests;
+using FitTrack.Data.Contract.Helpers.Responses;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Data.Object.Enums;
 using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +25,7 @@ public class UserService : IUserService
     private readonly IUnitNormalizerService _unitNormalizerService;
     private readonly IEncryptionService _encryptionService;
     private readonly IJwtService _jwtService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
     private readonly ILogger<UserService> _logger;
 
@@ -37,19 +40,21 @@ public class UserService : IUserService
         IEmailService emailService,
         IUnitNormalizerService unitNormalizerService,
         IEncryptionService encryptionService,
-        IMapper mapper,
         IJwtService jwtService,
+        IHttpContextAccessor httpContextAccessor,
+        IMapper mapper,
         IConfiguration configuration,
         ILogger<UserService> logger)
     {
         _userRepository = userRepository;
         _userProfileRepository = userProfileRepository;
         _emailService = emailService;
-        _mapper = mapper;
         _unitOfWork = unitOfWork;
         _unitNormalizerService = unitNormalizerService;
         _userPreferenceRepository = userPreferenceRepository;
         _encryptionService = encryptionService;
+        _httpContextAccessor = httpContextAccessor;
+        _mapper = mapper;
         _logger = logger;
 
         var frontendUrl = configuration["App:FrontendBaseUrl"];
@@ -64,6 +69,36 @@ public class UserService : IUserService
         _jwtService = jwtService;
         _roleRepository = roleRepository;
     }
+
+    public async Task<AuthenticationResponse> GetUserDataAsync()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext == null)
+        {
+            throw new ConfigurationException();
+        }
+
+        httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken);
+
+        if (refreshToken == null)
+        {
+            throw new AuthenticationException();
+        }
+
+        var hashedToken = _encryptionService.HashString(refreshToken);
+        var user = await _userRepository.GetUserByRefreshTokenAsync(hashedToken);
+
+        if (user == null || user.RefreshTokenExpiration < DateTime.UtcNow)
+        {
+            throw new AuthenticationException();
+        }
+
+        var response = _mapper.Map<AuthenticationResponse>(user);
+
+        return response;
+    }
+
 
     public async Task RegisterUserAsync(RegistrationRequest request)
     {

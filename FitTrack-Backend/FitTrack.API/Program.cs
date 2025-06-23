@@ -2,6 +2,8 @@ using System.Text;
 using FitTrack.API.Infrastructure;
 using FitTrack.API.Infrastructure.Middleware;
 using FitTrack.Data.Access.Data;
+using FitTrack.Data.Contract.Helpers;
+using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Business.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -73,14 +75,30 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = issuer,
             ValidateAudience = true,
             ValidAudience = audience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
         };
         options.Events = new JwtBearerEvents
         {
             OnMessageReceived = context =>
             {
+                var path = context.HttpContext.Request.Path;
+
+                if (path.Equals(AppConstants.REFRESH_TOKEN_PATH, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Task.CompletedTask;
+                }
+
                 var accessToken = context.Request.Cookies["AccessToken"];
-                context.Token = accessToken;
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    context.Token = accessToken;
+                }
                 return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                throw new AuthenticationException("token_expired");
             }
         };
     });
@@ -96,6 +114,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Origins");
 
 app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

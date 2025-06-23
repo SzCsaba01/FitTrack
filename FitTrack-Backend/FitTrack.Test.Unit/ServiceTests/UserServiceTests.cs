@@ -3,10 +3,10 @@ using FitTrack.Data.Contract;
 using FitTrack.Data.Object.Entities;
 using FitTrack.Data.Object.Enums;
 using FitTrack.Service.Business;
-using FitTrack.Service.Business.Exceptions;
 using FitTrack.Service.Contract;
 using FitTrack.Test.Unit.Helpers;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -27,6 +27,7 @@ public class UserServiceTests
     private readonly Mock<IUnitNormalizerService> _unitNormalizerServiceMock;
     private readonly Mock<IEncryptionService> _encryptionSeriveMock;
     private readonly Mock<IJwtService> _jwtServiceMock;
+    private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<UserService>> _loggerMock;
 
@@ -42,6 +43,7 @@ public class UserServiceTests
         _emailServiceMock = new Mock<IEmailService>();
         _unitNormalizerServiceMock = new Mock<IUnitNormalizerService>();
         _encryptionSeriveMock = new Mock<IEncryptionService>();
+        _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
         _jwtServiceMock = new Mock<IJwtService>();
         _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<UserService>>();
@@ -64,8 +66,9 @@ public class UserServiceTests
             _emailServiceMock.Object,
             _unitNormalizerServiceMock.Object,
             _encryptionSeriveMock.Object,
-            _mapperMock.Object,
             _jwtServiceMock.Object,
+            _httpContextAccessorMock.Object,
+            _mapperMock.Object,
             configBuilder,
             _loggerMock.Object);
     }

@@ -15,14 +15,6 @@ public class AuthenticationController : ControllerBase
         _authenticationService = authenticationService;
     }
 
-    [HttpGet("get-user-data")]
-    public async Task<IActionResult> GetUserData()
-    {
-        var response = await _authenticationService.GetUserDataAsync();
-
-        return Ok(response);
-    }
-
     [HttpPut("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
@@ -39,7 +31,7 @@ public class AuthenticationController : ControllerBase
         return Ok();
     }
 
-    [HttpPut("refreshToken")]
+    [HttpPut("refresh-token")]
     public async Task<IActionResult> RefreshToken()
     {
         await _authenticationService.RefreshTokenAsync();

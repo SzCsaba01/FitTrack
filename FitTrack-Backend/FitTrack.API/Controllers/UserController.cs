@@ -18,6 +18,15 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
+    [HttpGet("get-user-data")]
+    public async Task<IActionResult> GetUserData()
+    {
+        var response = await _userService.GetUserDataAsync();
+
+        return Ok(response);
+    }
+
+
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> RegisterAsync([FromBody] RegistrationRequest request)

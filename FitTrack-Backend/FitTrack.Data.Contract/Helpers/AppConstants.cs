@@ -11,8 +11,11 @@ public static class AppConstants
     public const string CHANGE_PASSWORD_SUBJECT = "FitTrack - Change Password";
 
     //TOKEN
-    public const int ACCESS_TOKEN_VALIDATION_TIME_MINUTES = 30;
+    public const int ACCESS_TOKEN_VALIDATION_TIME_MINUTES = 15;
     public const int REGISTRATION_TOKEN_VALIDATION_TIME_HOURS = 24;
     public const int CHANGE_PASSWORD_TOKEN_VALIDATION_TIME_MINUTES = 30;
     public const int REFRESH_TOKEN_VALIDATION_TIME_DAYS = 7;
+
+    //API-PATH
+    public const string REFRESH_TOKEN_PATH = "/api/authentication/refresh-token";
 }

@@ -6,11 +6,11 @@ export const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'home',
   },
-  // {
-  //   path: 'home',
-  //   loadComponent: () =>
-  //     import('./layouts/main-layout/main-layout').then((m) => m.MainLayout),
-  // },
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./layouts/main-layout/main-layout').then((m) => m.MainLayout),
+  },
   {
     path: '',
     loadComponent: () =>

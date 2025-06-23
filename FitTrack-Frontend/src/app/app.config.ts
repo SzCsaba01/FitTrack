@@ -18,6 +18,7 @@ import { httpErrorInterceptor } from './helpers/interceptors/http-error.intercep
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideState, provideStore } from '@ngrx/store';
 import { userFeature } from './store/user/user.reducer';
+import { httpRequestInterceptor } from './helpers/interceptors/http-request.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +26,10 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([httpRequestInterceptor, httpErrorInterceptor]),
+    ),
     provideStore(),
     provideState(userFeature),
     provideStoreDevtools({

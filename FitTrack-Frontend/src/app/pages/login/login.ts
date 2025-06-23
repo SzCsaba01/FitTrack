@@ -12,7 +12,6 @@ import { LoginRequest } from '../../requests/authentication/login.request';
 import { Router, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { takeUntil } from 'rxjs';
-import { AuthenticationResponse } from '../../responses/authentication/authentication.response';
 import { Store } from '@ngrx/store';
 import { UserActions } from '../../store/user/user.actions';
 

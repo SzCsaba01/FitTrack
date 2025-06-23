@@ -13,12 +13,6 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {}
 
-  public getUserData(): Observable<AuthenticationResponse> {
-    return this.http.get<AuthenticationResponse>(
-      `${this.baseUrl}/get-user-data`,
-    );
-  }
-
   public login(request: LoginRequest): Observable<AuthenticationResponse> {
     return this.http.put<AuthenticationResponse>(
       `${this.baseUrl}/login`,
@@ -26,11 +20,11 @@ export class AuthenticationService {
     );
   }
 
-  public logout() {
-    return this.http.put(`${this.baseUrl}/logout`, null);
+  public logout(): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/logout`, null);
   }
 
-  public refreshToken() {
-    return this.http.put(`${this.baseUrl}/refresh-token`, null);
+  public refreshToken(): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/refresh-token`, null);
   }
 }

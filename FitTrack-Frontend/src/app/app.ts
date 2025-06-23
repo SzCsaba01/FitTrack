@@ -2,11 +2,11 @@ import { Component, OnInit, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { ToastMessage } from './shared-components/toast-message/toast-message';
 import { SelfUnsubscriberBase } from './utils/SelfUnsubscribeBase';
-import { AuthenticationService } from './services/authentication/authentication.service';
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { UserActions } from './store/user/user.actions';
 import { InitialLoader } from './shared-components/initial-loader/initial-loader';
+import { UserService } from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ export class App extends SelfUnsubscriberBase implements OnInit {
   isInitialLoaderShown = signal<boolean>(true);
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private userService: UserService,
     private router: Router,
     private store: Store,
   ) {
@@ -27,19 +27,21 @@ export class App extends SelfUnsubscriberBase implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.isInitialLoaderShown());
-    this.authenticationService
+    this.userService
       .getUserData()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        finalize(() => {
+          this.isInitialLoaderShown.set(false);
+        }),
+      )
       .subscribe({
         next: (response) => {
           this.store.dispatch(UserActions.setUser(response));
           this.router.navigate(['/home']);
-          this.isInitialLoaderShown.set(false);
         },
         error: (_) => {
           this.router.navigate(['/login']);
-          this.isInitialLoaderShown.set(false);
         },
       });
   }
