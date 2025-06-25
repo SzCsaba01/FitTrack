@@ -1,13 +1,27 @@
-<div class="private-page-container" [class.sidebar-collapsed]="isCollapsed()">
-  <div class="navbar">
+<div class="private-page-container">
+  <div class="navbar" [class.search-opened]="isSearchOpen()">
     <div class="start">
-      <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
-      <h1>FitTrack</h1>
+      @if (!isSearchOpen()) {
+        <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
+        <h1>FitTrack</h1>
+      }
     </div>
-    <div class="center"></div>
-    <div class="end"></div>
+    <div class="center">
+      @if (!isSearchOpen() && isMobile()) {
+        <mat-icon (click)="toggleSearch()">search</mat-icon>
+      } @else {
+        @if (isSearchOpen()) {
+          <mat-icon (click)="toggleSearch()">arrow_back</mat-icon>
+        }
+        <div class="search-bar">
+          <input class="input input-search" placeholder="Search" />
+          <mat-icon class="input-search-icon">search</mat-icon>
+        </div>
+      }
+    </div>
+    <div class="end">
+    </div>
   </div>
-
   <div
     class="sidebar"
     [class.open]="isSidebarOpen()"
@@ -15,27 +29,36 @@
   >
     <div class="sidebar-navigation">
       @if (isMobile()) {
-      <div class="sidebar-header">
-        <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
-        <h1>FitTrack</h1>
-      </div>
+        <div class="sidebar-header">
+          <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
+          <h1>FitTrack</h1>
+        </div>
       }
       <ul>
         <li routerLink="/home" routerLinkActive="active">
           <mat-icon>home</mat-icon>
-          @if (!isCollapsed()) { <span>Home</span> }
+          @if (!isCollapsed()) {
+            <span>Home</span>
+          }
         </li>
         <li routerLink="/workouts" routerLinkActive="active">
           <mat-icon>fitness_center</mat-icon>
-          @if (!isCollapsed()) { <span>Workouts</span> }
+          @if (!isCollapsed()) {
+            <span>Workouts</span>
+          }
         </li>
+
         <li routerLink="/meals" routerLinkActive="active">
           <mat-icon>restaurant</mat-icon>
-          @if (!isCollapsed()) { <span>Meals</span> }
+          @if (!isCollapsed()) {
+            <span>Meals</span>
+          }
         </li>
         <li routerLink="/weight" routerLinkActive="active">
           <mat-icon>monitor_weight</mat-icon>
-          @if (!isCollapsed()) { <span>Weight</span> }
+          @if (!isCollapsed()) {
+            <span>Weight</span>
+          }
         </li>
       </ul>
       <hr />
@@ -45,23 +68,27 @@
       <ul>
         <li routerLink="/search/exercises" routerLinkActive="active">
           <mat-icon>directions_run</mat-icon>
-          @if (!isCollapsed()) { <span>Exercises</span> }
+          @if (!isCollapsed()) {
+            <span>Exercises</span>
+          }
         </li>
         <li routerLink="/search/foods" routerLinkActive="active">
           <mat-icon>local_dining</mat-icon>
-          @if (!isCollapsed()) { <span>Foods</span> }
+          @if (!isCollapsed()) {
+            <span>Foods</span>
+          }
         </li>
         <li routerLink="/search/recipes" routerLinkActive="active">
           <mat-icon>menu_book</mat-icon>
-          @if (!isCollapsed()) { <span>Recipes</span> }
+          @if (!isCollapsed()) {
+            <span>Recipes</span>
+          }
         </li>
       </ul>
     </div>
   </div>
-
   @if (isSidebarOpen()) {
-  <div class="overlay" (click)="closeSidebar()"></div>
+    <div class="overlay" (click)="closeSidebar()"></div>
   }
-
   <router-outlet></router-outlet>
 </div>

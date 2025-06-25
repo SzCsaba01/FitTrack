@@ -6,6 +6,13 @@
   position: relative;
 }
 
+.mat-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
 .navbar {
   display: flex;
   align-items: center;
@@ -13,6 +20,22 @@
   padding: 0 1rem;
   z-index: 2;
   position: relative;
+  gap: 2rem;
+
+  &.search-opened {
+    gap: 0;
+  }
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 80%;
+}
+
+.center {
+  width: 100%;
+  justify-content: space-between;
 }
 
 .start,
@@ -33,7 +56,6 @@
 .sidebar {
   background-color: var(--color-bg-primary);
   height: 100%;
-  width: 15rem;
   padding: 1rem;
   position: fixed;
   left: 0;
@@ -51,7 +73,6 @@
 .sidebar-header {
   display: flex;
   gap: 1rem;
-  font-size: 1.2rem;
   font-weight: bold;
   align-items: center;
   justify-content: flex-start;
@@ -62,7 +83,7 @@
 }
 
 .sidebar.collapsed {
-  width: 4.5rem;
+  width: fit-content;
 }
 
 .sidebar-navigation {
@@ -82,7 +103,7 @@
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   cursor: pointer;
 }
 

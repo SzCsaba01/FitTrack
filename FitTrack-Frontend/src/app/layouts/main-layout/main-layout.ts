@@ -11,12 +11,13 @@ import { MOBILE_BRAKEPOINT } from '../../constants/sizes.constant';
   styleUrl: './main-layout.scss',
 })
 export class MainLayout implements OnInit {
-  private readonly screenWidth = signal(window.innerWidth);
+  private screenWidth = signal(window.innerWidth);
 
-  readonly isMobile = computed(() => this.screenWidth() < MOBILE_BRAKEPOINT);
-  readonly isSidebarOpen = signal(this.screenWidth() >= MOBILE_BRAKEPOINT);
+  isMobile = computed<boolean>(() => this.screenWidth() < MOBILE_BRAKEPOINT);
+  isSidebarOpen = signal<boolean>(this.screenWidth() >= MOBILE_BRAKEPOINT);
+  isSearchOpen = signal<boolean>(false);
 
-  readonly isCollapsed = computed(
+  isCollapsed = computed<boolean>(
     () => !this.isMobile() && !this.isSidebarOpen(),
   );
 
@@ -33,7 +34,13 @@ export class MainLayout implements OnInit {
   }
 
   toggleSidebar(): void {
-    this.isSidebarOpen.update((open) => !open);
+    this.isSidebarOpen.update((x) => !x);
+  }
+
+  toggleSearch(): void {
+    if (this.isMobile()) {
+      this.isSearchOpen.update((x) => !x);
+    }
   }
 
   closeSidebar(): void {
