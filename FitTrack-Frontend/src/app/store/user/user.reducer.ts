@@ -9,9 +9,9 @@ const initialState: UserState = {
 
 const reducer = createReducer(
   initialState,
-  on(UserActions.setUser, (state, authResponse) => ({
+  on(UserActions.setUser, (state, { userDetails }) => ({
     ...state,
-    authResponse,
+    userDetails,
     loggedIn: true,
   })),
   on(UserActions.clearUser, () => initialState),

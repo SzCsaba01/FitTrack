@@ -61,7 +61,7 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response) => {
-          this.store.dispatch(UserActions.setUser(response));
+          this.store.dispatch(UserActions.setUser({ userDetails: response }));
           this.router.navigate(['/home']);
         },
         error: (error) => {

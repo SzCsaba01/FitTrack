@@ -20,6 +20,14 @@
       }
     </div>
     <div class="end">
+      @if (!isSearchOpen()) {
+        <mat-icon>flag</mat-icon>
+        @if (userInitials()) {
+          <div class="profile-picture">
+            {{userInitials()}}
+          </div>
+        }
+      }
     </div>
   </div>
   <div

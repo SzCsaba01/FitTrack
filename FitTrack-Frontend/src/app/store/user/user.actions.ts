@@ -4,7 +4,7 @@ import { AuthenticationResponse } from '../../responses/authentication/authentic
 export const UserActions = createActionGroup({
   source: 'User',
   events: {
-    setUser: props<AuthenticationResponse>(),
+    setUser: props<{ userDetails: AuthenticationResponse }>(),
     clearUser: emptyProps(),
   },
 });

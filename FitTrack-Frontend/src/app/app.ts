@@ -37,7 +37,7 @@ export class App extends SelfUnsubscriberBase implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.store.dispatch(UserActions.setUser(response));
+          this.store.dispatch(UserActions.setUser({ userDetails: response }));
           this.router.navigate(['/home']);
         },
         error: (_) => {
