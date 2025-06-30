@@ -4,6 +4,7 @@
 @use "app/styles/inputs";
 @use "app/styles/public-pages";
 
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
 @import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,600;1,400&display=swap");
 :root {
   --font-primary: "Archivo", sans-serif;
@@ -86,4 +87,18 @@ hr {
   width: 100%;
   opacity: 0.3;
   color: var(--color-border);
+}
+
+.mat-icon {
+  width: 2rem !important ;
+  height: 2rem !important;
+  font-family: "Material Icons Outlined" !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.active .mat-icon {
+  font-family: "Material Icons" !important;
 }

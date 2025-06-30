@@ -1,6 +1,8 @@
 :root {
   --color-bg-primary: #ffffff;
+  --color-bg-primary-hover: #f5f5f5;
   --color-bg-secondary: #ffffff;
+  --color-bg-secondary-hover: #f0f0f0;
   --color-border: #e0e0e0;
 
   --color-text-primary: #121212;
@@ -44,7 +46,7 @@
   --color-select-bg-hover: #f0f0f0;
   --color-select-bg-selected: #d0d0d0;
 
-  --color-search-bg: #ffffff;
+  --color-dropdown-bg-hover: --color-search-bg: #ffffff;
 
   --shadow:
     0 0.25rem 0.625rem rgba(0, 0, 0, 0.08),

@@ -23,7 +23,6 @@ export class VerifyEmail extends SelfUnsubscriberBase implements OnInit {
     const token = this.activatedRoute.snapshot.queryParamMap.get(
       'token',
     ) as string;
-    console.log(token);
 
     this.userService
       .verifyEmailVerificationToken(token)

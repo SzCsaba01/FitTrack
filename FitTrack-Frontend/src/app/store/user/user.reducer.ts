@@ -14,6 +14,18 @@ const reducer = createReducer(
     userDetails,
     loggedIn: true,
   })),
+  on(UserActions.updateAppTheme, (state, { theme }) => ({
+    ...state,
+    userDetails: state.userDetails
+      ? { ...state.userDetails, appTheme: theme }
+      : null,
+  })),
+  on(UserActions.updateUnitSystem, (state, { unitSystem }) => ({
+    ...state,
+    userDetails: state.userDetails
+      ? { ...state.userDetails, unitSystem: unitSystem }
+      : null,
+  })),
   on(UserActions.clearUser, () => initialState),
 );
 

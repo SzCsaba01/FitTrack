@@ -23,6 +23,8 @@ public static class ServiceExtensions
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
+        services.AddScoped<IUserPreferenceService, UserPreferenceService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         services.AddScoped<IEmailService, EmailService>();

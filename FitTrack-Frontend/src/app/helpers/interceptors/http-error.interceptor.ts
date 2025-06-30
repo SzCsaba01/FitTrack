@@ -66,9 +66,6 @@ export const httpErrorInterceptor: (
         case HttpStatusCode.Forbidden:
           notificationService.showError('Access denied.');
           break;
-        case HttpStatusCode.NotFound:
-          notificationService.showError('Resource not found.');
-          break;
         case 0:
         case HttpStatusCode.InternalServerError:
         case HttpStatusCode.BadGateway:

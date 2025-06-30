@@ -156,7 +156,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
   }
 
   private getCurrentTheme(): void {
-    const currentTheme = this.themeService.getStoredTheme();
+    const currentTheme = this.themeService.getTheme();
 
     if (currentTheme == null) {
       this.appTheme.setValue(AppThemeEnum.Light);

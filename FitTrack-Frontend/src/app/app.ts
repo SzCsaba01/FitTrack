@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { UserActions } from './store/user/user.actions';
 import { InitialLoader } from './shared-components/initial-loader/initial-loader';
 import { UserService } from './services/user/user.service';
+import { ThemeService } from './services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class App extends SelfUnsubscriberBase implements OnInit {
 
   constructor(
     private userService: UserService,
+    private themeService: ThemeService,
     private router: Router,
     private store: Store,
   ) {
@@ -39,6 +41,9 @@ export class App extends SelfUnsubscriberBase implements OnInit {
         next: (response) => {
           this.store.dispatch(UserActions.setUser({ userDetails: response }));
           this.router.navigate(['/home']);
+          if (this.themeService.getTheme() != response.appTheme) {
+            this.themeService.loadTheme(response.appTheme);
+          }
         },
         error: (_) => {
           this.router.navigate(['/login']);

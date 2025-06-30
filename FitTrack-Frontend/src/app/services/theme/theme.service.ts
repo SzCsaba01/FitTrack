@@ -8,7 +8,7 @@ export class ThemeService {
   private readonly themeKey = 'app-theme';
   private themeLinkId = 'app-theme-css';
 
-  getStoredTheme(): AppThemeEnum | null {
+  private getStoredTheme(): AppThemeEnum | null {
     const storedTheme = localStorage.getItem(this.themeKey);
 
     if (storedTheme != null) {
@@ -32,7 +32,7 @@ export class ThemeService {
     return AppThemeEnum.Light;
   }
 
-  private getTheme(): AppThemeEnum {
+  getTheme(): AppThemeEnum {
     return this.getStoredTheme() ?? this.getDevicePreferredTheme();
   }
 

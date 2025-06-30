@@ -6,17 +6,19 @@ import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../store/user/user.selectors';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import { takeUntil } from 'rxjs';
+import { NavbarDropdown } from '../../shared-components/navbar-dropdown/navbar-dropdown';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, MatIconModule, RouterModule],
+  imports: [RouterOutlet, MatIconModule, RouterModule, NavbarDropdown],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
 })
 export class MainLayout extends SelfUnsubscriberBase implements OnInit {
   private screenWidth = signal(window.innerWidth);
   userInitials = signal<string | null>(null);
+  isDropdownOpen = signal<boolean>(false);
   isMobile = computed<boolean>(() => this.screenWidth() < MOBILE_BRAKEPOINT);
   isSidebarOpen = signal<boolean>(this.screenWidth() >= MOBILE_BRAKEPOINT);
   isSearchOpen = signal<boolean>(false);
@@ -65,5 +67,9 @@ export class MainLayout extends SelfUnsubscriberBase implements OnInit {
 
   closeSidebar(): void {
     this.isSidebarOpen.set(false);
+  }
+
+  onToggleDropdown(): void {
+    this.isDropdownOpen.update((x) => !x);
   }
 }

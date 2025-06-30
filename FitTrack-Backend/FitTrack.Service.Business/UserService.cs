@@ -99,7 +99,6 @@ public class UserService : IUserService
         return response;
     }
 
-
     public async Task RegisterUserAsync(RegistrationRequest request)
     {
         _logger.LogInformation("RegisterUserAsync called for username: {Username}, email: {Email}", request.Username, request.Email);

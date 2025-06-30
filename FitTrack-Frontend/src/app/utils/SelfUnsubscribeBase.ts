@@ -14,13 +14,13 @@ export abstract class SelfUnsubscriberBase implements OnDestroy {
       this.onDestroy();
     }
 
-    if (!!this.subscriptions && this.subscriptions.length > 0) {
+    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.complete();
+
+    if (this.subscriptions && this.subscriptions.length > 0) {
       for (let sub of this.subscriptions) {
         sub.unsubscribe();
       }
-
-      this.ngUnsubscribe.next(null);
-      this.ngUnsubscribe.complete();
     }
   }
 }

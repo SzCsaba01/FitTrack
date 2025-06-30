@@ -1,0 +1,66 @@
+<div class="dropdown-container">
+  @if (!isSelectThemeShown() && !isSelectUnitSystemShown()) {
+  <ul>
+    <li>
+      <div class="dropdown-item"><mat-icon>person</mat-icon>Account</div>
+    </li>
+    <li (click)="toggleSelectUnitSystem()">
+      <div class="dropdown-item">
+        <mat-icon>balance</mat-icon>
+        Unit System: {{unitSystem() !== null ? unitSystemEnum[unitSystem()!] :
+        'Unknown'}}
+      </div>
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li (click)="toggleSelectTheme()">
+      <div class="dropdown-item">
+        <mat-icon>contrast</mat-icon>
+        Theme: {{theme() !== null ? appThemeEnum[theme()!] : 'Unknown'}}
+      </div>
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </li>
+    <li>
+      <div class="dropdown-item"><mat-icon>logout</mat-icon>Logout</div>
+    </li>
+  </ul>
+  } @if (isSelectThemeShown()) {
+  <ul>
+    <li>
+      <div class="dropdown-navigation" (click)="toggleSelectTheme()">
+        <mat-icon>arrow_back</mat-icon>
+        Theme
+      </div>
+    </li>
+    <li (click)="setTheme(appThemeEnum.Light)"
+      [class.active]="theme() === appThemeEnum.Light"
+    >
+      <mat-icon>light_mode</mat-icon>Light
+    </li>
+    <li (click)="setTheme(appThemeEnum.Dark)"
+      [class.active]="theme() === appThemeEnum.Dark"
+    >
+      <mat-icon>dark_mode</mat-icon>Dark
+    </li>
+  </ul>
+  }
+  @if (isSelectUnitSystemShown()) {
+  <ul>
+    <li>
+      <div class="dropdown-navigation" (click)="toggleSelectUnitSystem()">
+        <mat-icon>arrow_back</mat-icon>
+        Unit System
+      </div>
+    </li>
+    <li (click)="setUnitSystem(unitSystemEnum.Metric)"
+      [class.active]="unitSystem() === unitSystemEnum.Metric"
+    >
+      <mat-icon>balance</mat-icon>Metric (kg/cm)
+    </li>
+    <li (click)="setUnitSystem(unitSystemEnum.Imperial)"
+      [class.active]="unitSystem() === unitSystemEnum.Imperial"
+    >
+      <mat-icon>balance</mat-icon>Imperial (lbs/ft)
+    </li>
+  </ul>
+  }
+</div>

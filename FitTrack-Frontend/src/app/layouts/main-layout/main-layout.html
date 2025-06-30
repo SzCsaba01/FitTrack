@@ -22,11 +22,17 @@
     <div class="end">
       @if (!isSearchOpen()) {
         <mat-icon>flag</mat-icon>
+        <div class="profile-picture-container">
         @if (userInitials()) {
-          <div class="profile-picture">
+          <div class="profile-picture" (click)="onToggleDropdown()">
             {{userInitials()}}
           </div>
         }
+        @if (isDropdownOpen()) {
+          <app-navbar-dropdown (onCloseDropdown)="onToggleDropdown()">
+          </app-navbar-dropdown>
+        }
+        </div>
       }
     </div>
   </div>
