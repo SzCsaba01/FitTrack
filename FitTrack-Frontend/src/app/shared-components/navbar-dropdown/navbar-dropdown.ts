@@ -79,7 +79,6 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.store.dispatch(UserActions.updateAppTheme({ theme: theme }));
-        this.themeService.loadTheme(theme);
       });
   }
 

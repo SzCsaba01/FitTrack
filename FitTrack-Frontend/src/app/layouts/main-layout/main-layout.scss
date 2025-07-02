@@ -7,6 +7,7 @@
 }
 
 .navbar {
+  background-color: var(--color-bg-primary);
   display: flex;
   align-items: center;
   height: 5rem;
@@ -14,6 +15,7 @@
   z-index: 2;
   position: relative;
   gap: 2rem;
+  transition: background-color 0.3s ease;
 
   &.search-opened {
     gap: 0;
@@ -58,7 +60,9 @@
   flex-direction: column;
   display: inline-flex;
   transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease;
   z-index: 3;
 }
 

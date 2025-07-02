@@ -17,8 +17,10 @@ import {
 import { httpErrorInterceptor } from './helpers/interceptors/http-error.interceptor';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideState, provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 import { userFeature } from './store/user/user.reducer';
 import { httpRequestInterceptor } from './helpers/interceptors/http-request.interceptor';
+import { UserEffects } from './store/user/user.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,6 +34,7 @@ export const appConfig: ApplicationConfig = {
     ),
     provideStore(),
     provideState(userFeature),
+    provideEffects(UserEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
