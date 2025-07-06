@@ -40,7 +40,6 @@ export class App extends SelfUnsubscriberBase implements OnInit {
       .subscribe({
         next: (response) => {
           this.store.dispatch(UserActions.setUser({ userDetails: response }));
-          this.router.navigate(['/home']);
           if (this.themeService.getTheme() != response.appTheme) {
             this.themeService.loadTheme(response.appTheme);
           }

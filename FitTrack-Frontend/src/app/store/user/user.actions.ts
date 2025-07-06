@@ -7,6 +7,7 @@ export const UserActions = createActionGroup({
   source: 'User',
   events: {
     setUser: props<{ userDetails: AuthenticationResponse }>(),
+    updateFirstAndLastName: props<{ firstName: string; lastName: string }>(),
     updateAppTheme: props<{ theme: AppThemeEnum }>(),
     updateUnitSystem: props<{ unitSystem: UnitSystemEnum }>(),
     clearUser: emptyProps(),

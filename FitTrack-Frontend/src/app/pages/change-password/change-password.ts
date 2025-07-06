@@ -78,7 +78,9 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
       });
   }
 
-  onChangePassword(changePasswordRequest: ChangePasswordRequest): void {
+  onChangePassword(): void {
+    const changePasswordRequest = this.changePasswordForm
+      .value as ChangePasswordRequest;
     changePasswordRequest.changePasswordToken = this.token;
 
     this.userService

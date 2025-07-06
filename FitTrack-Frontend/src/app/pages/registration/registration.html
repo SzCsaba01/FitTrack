@@ -15,7 +15,7 @@
             </div>
           </div>
         }
-        <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistration(registrationForm.value)">
+        <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistration()">
           <div class="form-fields">
             <div class="form-field">
               <label for="username">Username</label>
@@ -157,28 +157,28 @@
               </div>
             </div>
             <div class="form-row">
-              <div class="form-field">
-                <label for="gender">Gender</label>
-                <app-select id="gender" [options]="genderOptions" formControlName="gender">
-                </app-select>
-                @if (gender.touched && gender.invalid) {
-                  <small class="error-message">Gender is required.</small>
-                }
-              </div>
+                <div class="form-field">
+                  <label for="gender">Gender</label>
+                  <app-select id="gender" [options]="genderOptions" formControlName="gender">
+                  </app-select>
+                  @if (gender.touched && gender.invalid) {
+                    <small class="error-message">Gender is required.</small>
+                  }
+                </div>
 
-              <div class="form-field">
-                <label for="dateOfBirth">Date of Birth</label>
-                <app-date-picker id="dateOfBirth" formControlName="dateOfBirth"></app-date-picker>
-                @if (dateOfBirth.touched && dateOfBirth.invalid) {
-                  <small class="error-message">Date of birth is required.</small>
-                }
-              </div>
-          </div>
+                <div class="form-field">
+                  <label for="dateOfBirth">Date of Birth</label>
+                  <app-date-picker id="dateOfBirth" formControlName="dateOfBirth"></app-date-picker>
+                  @if (dateOfBirth.touched && dateOfBirth.invalid) {
+                    <small class="error-message">Date of birth is required.</small>
+                  }
+                </div>
+            </div>
             <hr />
             <h4>Health & System Settings</h4>
             <div class="form-row">
               <div class="form-field">
-                <label for="weightKg">Weight</label>
+              <label for="weight">Weight ({{'weight' | unitLabel: unitSystem.value }})</label>
                 <input id="weightKg" type="number" formControlName="weightKg" class="input"
                   [class.input-error]="weight.touched && weight.invalid" />
                 @if (weight.touched && weight.invalid) {
@@ -192,21 +192,84 @@
                   </div>
                 }
               </div>
-              <div class="form-field">
-                <label for="heightCm">Height</label>
-                <input id="heightCm" type="number" formControlName="heightCm" class="input"
-                  [class.input-error]="height.touched && height.invalid" />
-                @if (height.touched && height.invalid) {
-                  <div>
-                    @if (height.hasError('required')) {
-                      <small class="error-message">Height is required.</small>
-                    }
-                    @if (height.hasError('min')) {
-                      <small class="error-message">Height must be greater than {{ height.getError('min').min }}.</small>
+              @if (unitSystem.value === unitSystemEnum.Metric) {
+                <div class="form-field">
+                <label for="height">Height ({{'height' | unitLabel: unitSystem.value! }})</label>
+                  <input
+                    id="height"
+                    type="number"
+                    formControlName="heightCm"
+                    class="input"
+                    [class.input-error]="height.touched && height.invalid"
+                  />
+                  @if (height.touched && height.invalid) {
+                    <div>
+                      @if (height.hasError('required')) {
+                        <small class="error-message">Height is required.</small>
+                      } @if (height.hasError('min')) {
+                        <small class="error-message"
+                          >Height must be greater than {{ height.getError('min').min
+                          }}.</small
+                        >
+                      }
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="imperial-form-group">
+                  <div class="form-field">
+                    <label for="heightFt">Feet</label>
+                    <input
+                      id="heightFt"
+                      type="number"
+                      formControlName="heightFt"
+                      placeholder="ft"
+                      class="input"
+                      [class.input-error]="heightFt.touched && heightFt.invalid"
+                    />
+                    @if (heightFt.touched && heightFt.invalid) {
+                      <div>
+                        @if (heightFt.hasError('required')) {
+                          <small class="error-message">Height in feet is required.</small>
+                        } @if (heightFt.hasError('min')) {
+                          <small class="error-message"
+                            >Height in feet must be greater than {{ heightFt.getError('min').min
+                            }}.</small
+                          >
+                        }
+                      </div>
                     }
                   </div>
-                }
-              </div>
+                  <div class="form-field">
+                    <label for="heightIn">Inch</label>
+                    <input
+                      id="heightIn"
+                      type="number"
+                      formControlName="heightIn"
+                      placeholder="in"
+                      class="input"
+                      [class.input-error]="heightIn.touched && heightIn.invalid"
+                    />
+                    @if (heightIn.touched && heightIn.invalid) {
+                      <div>
+                        @if (heightIn.hasError('required')) {
+                          <small class="error-message">Height in inch is required.</small>
+                        } @if (heightIn.hasError('min')) {
+                          <small class="error-message"
+                            >Height in inch must be greater than {{ heightIn.getError('min').min
+                            }}.</small
+                          >
+                        } @if (heightIn.hasError('max')) {
+                          <small class="error-message"
+                            >Height in inch must be less than {{ heightIn.getError('max').max
+                            }}.</small
+                          >
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
             </div>
             <div class="form-field">
               <label>Theme</label>

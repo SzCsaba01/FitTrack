@@ -29,6 +29,13 @@
     border-radius: 1rem 0 0 1rem;
     cursor: pointer;
   }
+
+  &:disabled {
+    background-color: var(--color-bg-disabled);
+    border-color: var(--color-border-disabled);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
 }
 
 .input-search-icon {

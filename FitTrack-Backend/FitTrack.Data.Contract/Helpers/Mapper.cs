@@ -19,5 +19,11 @@ public class Mapper : Profile
             .ForMember(dest => dest.UnitSystem, opt => opt.MapFrom(src => src.UserPreference.UnitSystem))
             .ForMember(dest => dest.AppTheme, opt => opt.MapFrom(src => src.UserPreference.AppTheme))
             .ForMember(dest => dest.Permissions, opt => opt.MapFrom(src => src.Role.PermissionMappings.Select(x => x.Permission.Name).ToList()));
+
+        CreateMap<UserProfileEntity, UserProfileResponse>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.User.Email))
+            .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.WeightKg))
+            .ForMember(dest => dest.Height, opt => opt.MapFrom(src => src.HeightCm));
     }
 }

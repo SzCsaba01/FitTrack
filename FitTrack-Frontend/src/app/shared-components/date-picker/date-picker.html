@@ -11,7 +11,7 @@
   @if (isSelectDateShownSignal()) {
   <div class="datepicker">
     <div class="date-navigation">
-      <div>
+      <div class="date-navigation-buttons">
         <mat-icon (click)="onChangeYear(-1)"
           >keyboard_double_arrow_left</mat-icon
         >
@@ -25,7 +25,7 @@
           >{{yearSignal()}}</span
         >
       </div>
-      <div>
+      <div class="date-navigation-buttons">
         <mat-icon (click)="onChangeMonth(1)">keyboard_arrow_right</mat-icon>
         <mat-icon (click)="onChangeYear(1)"
           >keyboard_double_arrow_right</mat-icon

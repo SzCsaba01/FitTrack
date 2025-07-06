@@ -21,6 +21,7 @@ import { GENDERS } from '../../constants/genders.constant';
 import { DatePicker } from '../../shared-components/date-picker/date-picker';
 import { takeUntil } from 'rxjs';
 import { UserService } from '../../services/user/user.service';
+import { UnitLabelPipe } from '../../helpers/pipes/unit-label.pipe';
 
 @Component({
   selector: 'app-registration',
@@ -31,6 +32,7 @@ import { UserService } from '../../services/user/user.service';
     MatIconModule,
     Select,
     DatePicker,
+    UnitLabelPipe,
   ],
   templateUrl: './registration.html',
   styleUrl: './registration.scss',
@@ -40,7 +42,6 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
   appThemeEnum = AppThemeEnum;
   unitSystemEnum = UnitSystemEnum;
   genderOptions = GENDERS;
-
   inlineErrorMessageSignal = signal<string | null>(null);
 
   constructor(
@@ -54,6 +55,27 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
 
   ngOnInit(): void {
     this.initialzeForm();
+
+    this.unitSystem.valueChanges.subscribe((unit) => {
+      if (unit === UnitSystemEnum.Metric) {
+        this.height.setValidators([Validators.required, Validators.min(1)]);
+        this.heightFt.clearValidators();
+        this.heightIn.clearValidators();
+      } else {
+        this.height.clearValidators();
+        this.heightFt.setValidators([Validators.required, Validators.min(1)]);
+        this.heightIn.setValidators([
+          Validators.required,
+          Validators.min(0),
+          Validators.max(11),
+        ]);
+      }
+
+      this.height.updateValueAndValidity();
+      this.heightFt.updateValueAndValidity();
+      this.heightIn.updateValueAndValidity();
+    });
+
     this.getCurrentTheme();
   }
 
@@ -94,10 +116,9 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
           Validators.required,
           Validators.min(1),
         ]),
-        heightCm: new FormControl(null, [
-          Validators.required,
-          Validators.min(1),
-        ]),
+        heightCm: new FormControl(null),
+        heightFt: new FormControl(null),
+        heightIn: new FormControl(null),
         unitSystem: new FormControl(UnitSystemEnum.Metric, [
           Validators.required,
         ]),
@@ -147,6 +168,14 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
     return this.registrationForm.get('heightCm') as FormControl;
   }
 
+  get heightFt(): FormControl {
+    return this.registrationForm.get('heightFt') as FormControl;
+  }
+
+  get heightIn(): FormControl {
+    return this.registrationForm.get('heightIn') as FormControl;
+  }
+
   get unitSystem(): FormControl {
     return this.registrationForm.get('unitSystem') as FormControl;
   }
@@ -170,9 +199,19 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
     this.themeService.loadTheme(theme);
   }
 
-  onRegistration(registrationRequest: RegistrationRequest): void {
+  onRegistration(): void {
+    const formData = this.registrationForm.value;
+
+    const requestData: RegistrationRequest = {
+      ...formData,
+      heightCm:
+        this.unitSystem.value === UnitSystemEnum.Imperial
+          ? Number(formData.heightFt || 0) * 12 + Number(formData.heightIn || 0)
+          : Number(formData.height),
+    };
+
     this.userService
-      .register(registrationRequest)
+      .register(requestData)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: () => {

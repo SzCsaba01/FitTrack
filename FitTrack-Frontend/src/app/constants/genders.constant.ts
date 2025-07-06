@@ -1,17 +1,17 @@
-import { Gender } from '../enums/gender.enum';
+import { GenderEnum } from '../enums/gender.enum';
 import { SelectOption } from '../models/select-option.model';
 
 export const GENDERS: SelectOption[] = [
   {
-    value: Gender.Male,
-    label: Gender[Gender.Male],
+    value: GenderEnum.Male,
+    label: GenderEnum[GenderEnum.Male],
   },
   {
-    value: Gender.Female,
-    label: Gender[Gender.Female],
+    value: GenderEnum.Female,
+    label: GenderEnum[GenderEnum.Female],
   },
   {
-    value: Gender.Other,
-    label: Gender[Gender.Other],
+    value: GenderEnum.Other,
+    label: GenderEnum[GenderEnum.Other],
   },
 ];

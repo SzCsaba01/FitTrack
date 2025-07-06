@@ -48,9 +48,10 @@ export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
     return this.forgotPasswordForm.get('email') as FormControl;
   }
 
-  onSendEmail(data: { email: string }): void {
+  onSendEmail(): void {
+    const email = this.forgotPasswordForm.value.email;
     this.userService
-      .sendForgotPasswordEmail(data.email)
+      .sendForgotPasswordEmail(email)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: () => {

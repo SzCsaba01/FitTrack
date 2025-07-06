@@ -1,6 +1,6 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MOBILE_BRAKEPOINT } from '../../constants/sizes.constant';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../store/user/user.selectors';
@@ -26,7 +26,10 @@ export class MainLayout extends SelfUnsubscriberBase implements OnInit {
     () => !this.isMobile() && !this.isSidebarOpen(),
   );
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {
     super();
   }
 
@@ -71,5 +74,11 @@ export class MainLayout extends SelfUnsubscriberBase implements OnInit {
 
   onToggleDropdown(): void {
     this.isDropdownOpen.update((x) => !x);
+  }
+
+  onNavigate() {
+    if (this.isMobile() && this.isSidebarOpen()) {
+      this.isSidebarOpen.set(false);
+    }
   }
 }

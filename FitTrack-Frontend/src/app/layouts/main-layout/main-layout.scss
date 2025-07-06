@@ -6,6 +6,18 @@
   position: relative;
 }
 
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.router-content {
+  flex: 1;
+  padding: 1rem;
+  position: relative;
+}
+
 .navbar {
   background-color: var(--color-bg-primary);
   display: flex;
@@ -50,9 +62,10 @@
 
 .sidebar {
   background-color: var(--color-bg-primary);
-  height: 100%;
   padding: 0 1rem;
-  position: fixed;
+  position: absolute;
+  height: 100vh;
+  top: 0;
   left: 0;
   width: 100%;
   max-width: 15rem;
@@ -110,7 +123,7 @@
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
@@ -140,6 +153,10 @@
   .navbar {
     justify-content: space-between;
     gap: 0;
+  }
+
+  .content-wrapper {
+    flex-direction: row;
   }
 
   .sidebar {

@@ -55,7 +55,8 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
     return this.loginForm.get('password') as FormControl;
   }
 
-  onLogin(authenticationRequest: LoginRequest) {
+  onLogin() {
+    const authenticationRequest = this.loginForm.value as LoginRequest;
     this.authenticationService
       .login(authenticationRequest)
       .pipe(takeUntil(this.ngUnsubscribe))

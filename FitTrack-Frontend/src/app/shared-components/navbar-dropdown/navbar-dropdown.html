@@ -1,8 +1,8 @@
 <div class="dropdown-container">
   @if (!isSelectThemeShown() && !isSelectUnitSystemShown()) {
   <ul>
-    <li>
-      <div class="dropdown-item"><mat-icon>person</mat-icon>Account</div>
+    <li routerLink="/home/edit-profile" (click)="closeDropdown()">
+      <div class="dropdown-item"><mat-icon>manage_accounts</mat-icon>Edit Profile</div>
     </li>
     <li (click)="toggleSelectUnitSystem()">
       <div class="dropdown-item">
@@ -19,7 +19,7 @@
       </div>
       <mat-icon>keyboard_arrow_right</mat-icon>
     </li>
-    <li>
+    <li (click)="onLogout()">
       <div class="dropdown-item"><mat-icon>logout</mat-icon>Logout</div>
     </li>
   </ul>

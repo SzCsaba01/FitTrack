@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import { Store } from '@ngrx/store';
 import { AppThemeEnum } from '../../enums/app-theme.enum';
@@ -16,7 +16,7 @@ import { selectUserDetails } from '../../store/user/user.selectors';
 import { takeUntil } from 'rxjs';
 import { UserPreferenceService } from '../../services/user-preference/user-preference.service';
 import { UserActions } from '../../store/user/user.actions';
-import { ThemeService } from '../../services/theme/theme.service';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-navbar-dropdown',
@@ -35,8 +35,9 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
   unitSystemEnum = UnitSystemEnum;
 
   constructor(
+    private authenticationService: AuthenticationService,
     private userPreferenceService: UserPreferenceService,
-    private themeService: ThemeService,
+    private router: Router,
     private store: Store,
     private elementRef: ElementRef<HTMLElement>,
   ) {
@@ -74,6 +75,10 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
   }
 
   setTheme(theme: AppThemeEnum): void {
+    if (this.theme() === theme) {
+      return;
+    }
+
     this.userPreferenceService
       .updateTheme(theme)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -83,6 +88,10 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
   }
 
   setUnitSystem(unitSystem: UnitSystemEnum): void {
+    if (this.unitSystem() === unitSystem) {
+      return;
+    }
+
     this.userPreferenceService
       .updateUnitSystem(unitSystem)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -91,5 +100,18 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
           UserActions.updateUnitSystem({ unitSystem: unitSystem }),
         );
       });
+  }
+
+  onLogout(): void {
+    this.authenticationService
+      .logout()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+  }
+
+  closeDropdown(): void {
+    this.onCloseDropdown.emit();
   }
 }

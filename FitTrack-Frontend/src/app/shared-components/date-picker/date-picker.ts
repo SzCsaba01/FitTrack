@@ -111,10 +111,19 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   writeValue(value: any): void {
-    if (value instanceof Date && !isNaN(value.getTime())) {
-      this.selectedDateSignal.set(new Date(value));
-      this.yearSignal.set(value.getFullYear());
-      this.monthSignal.set(value.getMonth());
+    let date: Date | null = null;
+
+    if (typeof value === 'string') {
+      const parsedDate = new Date(value);
+      if (!isNaN(parsedDate.getTime())) {
+        date = parsedDate;
+      }
+    }
+
+    if (date) {
+      this.selectedDateSignal.set(date);
+      this.yearSignal.set(date.getFullYear());
+      this.monthSignal.set(date.getMonth());
       this.generateDates();
     } else if (value === null) {
       this.selectedDateSignal.set(null);
@@ -161,18 +170,24 @@ export class DatePicker implements ControlValueAccessor, OnInit {
     if (this.isDisabledSignal()) {
       return;
     }
+
     const selected = this.selectedDateSignal();
+
+    const newDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    );
+
     if (
       selected &&
-      selected.getDate() === date.getDate() &&
-      selected.getMonth() === date.getMonth() &&
-      selected.getFullYear() === date.getFullYear()
+      selected.getUTCDate() === newDate.getUTCDate() &&
+      selected.getUTCMonth() === newDate.getUTCMonth() &&
+      selected.getUTCFullYear() === newDate.getUTCFullYear()
     ) {
       return;
     }
 
-    this.selectedDateSignal.set(new Date(date));
-    this.onChange(date);
+    this.selectedDateSignal.set(newDate);
+    this.onChange(newDate); // emits normalized UTC date
     this.onTouched();
     this.onHideDatepicker();
   }

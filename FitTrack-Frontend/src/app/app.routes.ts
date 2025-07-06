@@ -9,46 +9,65 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () =>
-      import('./layouts/main-layout/main-layout').then((m) => m.MainLayout),
+      import('./layouts/main-layout/main-layout').then((x) => x.MainLayout),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard').then((x) => x.Dashboard),
+      },
+      {
+        path: 'edit-profile',
+        loadComponent: () =>
+          import('./pages/edit-profile/edit-profile').then(
+            (x) => x.EditProfile,
+          ),
+      },
+    ],
   },
   {
     path: '',
     loadComponent: () =>
       import('./layouts/public-layout/public-layout').then(
-        (m) => m.PublicLayout,
+        (x) => x.PublicLayout,
       ),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: '/login' },
+      { path: '', pathMatch: 'full', redirectTo: 'login' },
       {
         path: 'login',
-        loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+        loadComponent: () => import('./pages/login/login').then((x) => x.Login),
       },
       {
         path: 'registration',
         loadComponent: () =>
           import('./pages/registration/registration').then(
-            (m) => m.Registration,
+            (x) => x.Registration,
           ),
       },
       {
         path: 'forgot-password',
         loadComponent: () =>
           import('./pages/forgot-password/forgot-password').then(
-            (m) => m.ForgotPassword,
+            (x) => x.ForgotPassword,
           ),
       },
       {
         path: 'verify-email',
         loadComponent: () =>
           import('./pages/verify-email/verify-email').then(
-            (m) => m.VerifyEmail,
+            (x) => x.VerifyEmail,
           ),
       },
       {
         path: 'change-password',
         loadComponent: () =>
           import('./pages/change-password/change-password').then(
-            (m) => m.ChangePassword,
+            (x) => x.ChangePassword,
           ),
       },
     ],
@@ -56,7 +75,7 @@ export const routes: Routes = [
   {
     path: 'not-found',
     loadComponent: () =>
-      import('./pages/not-found/not-found').then((m) => m.NotFound),
+      import('./pages/not-found/not-found').then((x) => x.NotFound),
   },
   {
     path: '**',

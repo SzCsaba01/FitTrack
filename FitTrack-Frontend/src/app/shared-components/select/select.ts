@@ -59,10 +59,26 @@ export class Select implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
+    if (!this.options() || this.options().length === 0) {
+      console.log('test');
+      this.selectedOptionSignal.set(null);
+      this.selectedOptionsSignal.set([]);
+      return;
+    }
+
     if (this.multiple()) {
-      this.selectedOptionsSignal.set(Array.isArray(value) ? value : []);
+      if (Array.isArray(value)) {
+        const selectedOptions = this.options().filter((o) =>
+          value.includes(o.value),
+        );
+        this.selectedOptionsSignal.set(selectedOptions);
+      } else {
+        this.selectedOptionsSignal.set([]);
+      }
     } else {
-      this.selectedOptionSignal.set(value);
+      const selectedOption =
+        this.options().find((o) => o.value === value) ?? null;
+      this.selectedOptionSignal.set(selectedOption);
     }
   }
 
