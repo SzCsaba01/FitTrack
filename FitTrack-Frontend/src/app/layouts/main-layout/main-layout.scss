@@ -22,7 +22,7 @@
   background-color: var(--color-bg-primary);
   display: flex;
   align-items: center;
-  height: 5rem;
+  height: 10vh;
   padding: 0 1rem;
   z-index: 2;
   position: relative;
@@ -38,6 +38,10 @@
   display: flex;
   align-items: center;
   width: 80%;
+
+  ::placeholder {
+    font-size: 1rem;
+  }
 }
 
 .center {
@@ -77,6 +81,18 @@
     transform 0.3s ease,
     background-color 0.3s ease;
   z-index: 3;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  // Chrome, Safari
+  &::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+  }
+  // Firefox
+  scrollbar-width: none;
+  // IE
+  -ms-overflow-style: none;
 }
 
 .sidebar-header {
@@ -165,6 +181,21 @@
     height: auto;
     top: 0;
     z-index: 1;
+    overflow-y: auto;
+    max-height: 90vh;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+
+    &:hover {
+      scrollbar-width: auto;
+      -ms-overflow-style: auto;
+
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+      }
+    }
   }
 
   .search-bar {

@@ -49,57 +49,29 @@
             <h1>FitTrack</h1>
           </div>
         }
-        <ul>
-          <li routerLink="/home/dashboard" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>home</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Dashboard</span>
-            }
-          </li>
-          <li routerLink="/home/workouts" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>fitness_center</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Workouts</span>
-            }
-          </li>
+        @for (section of sidebarSections(); track section.title) {
+          @if (section.title) {
+            <hr />
+            <div class="sidebar-header">
+              <span>{{ section.title }}</span>
+            </div>
+          }
 
-          <li routerLink="/home/meals" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>restaurant</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Meals</span>
+          <ul>
+            @for (item of section.items; track item.route) {
+              <li
+                [routerLink]="item.route"
+                routerLinkActive="active"
+                (click)="onNavigate()"
+              >
+                <mat-icon>{{ item.icon }}</mat-icon>
+                @if (!isCollapsed()) {
+                  <span>{{ item.label }}</span>
+                }
+              </li>
             }
-          </li>
-          <li routerLink="/home/weight" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>monitor_weight</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Weight</span>
-            }
-          </li>
-        </ul>
-        <hr />
-        <div class="sidebar-header">
-          <span>Search</span>
-        </div>
-        <ul>
-          <li routerLink="/home/exercises" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>directions_run</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Exercises</span>
-            }
-          </li>
-          <li routerLink="/home/foods" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>local_dining</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Foods</span>
-            }
-          </li>
-          <li routerLink="/home/recipes" (click)="onNavigate()" routerLinkActive="active">
-            <mat-icon>menu_book</mat-icon>
-            @if (!isCollapsed()) {
-              <span>Recipes</span>
-            }
-          </li>
-        </ul>
+          </ul>
+        }
       </div>
     </div>
     <div class="router-content">
