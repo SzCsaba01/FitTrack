@@ -7,7 +7,6 @@ import { selectUserDetails } from '../../store/user/user.selectors';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
 import { takeUntil } from 'rxjs';
 import { NavbarDropdown } from '../../shared-components/navbar-dropdown/navbar-dropdown';
-import { SidebarItem } from '../../models/sidebar-item.model';
 import { SIDEBAR_SECTIONS } from '../../constants/sidebar-sections.constant';
 import { SidebarSection } from '../../models/sidebar-section.model';
 

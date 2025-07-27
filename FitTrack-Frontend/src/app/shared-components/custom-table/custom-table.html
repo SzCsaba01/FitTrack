@@ -1,0 +1,22 @@
+<table class="custom-table">
+  <thead>
+    <tr>
+      @for (col of displayedColumns(); track col) {
+      <th>{{ getColumnTemplate(col)?.header }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (row of data(); track row.id) {
+    <tr (click)="onRowClick(row)">
+      @for (col of displayedColumns(); track col) {
+      <td>
+        <ng-container
+          *ngTemplateOutlet="getColumnTemplate(col)?.template; context: { $implicit: row }"
+        ></ng-container>
+      </td>
+      }
+    </tr>
+    }
+  </tbody>
+</table>

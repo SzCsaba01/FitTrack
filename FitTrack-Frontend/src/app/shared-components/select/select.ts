@@ -60,7 +60,6 @@ export class Select implements ControlValueAccessor {
 
   writeValue(value: any): void {
     if (!this.options() || this.options().length === 0) {
-      console.log('test');
       this.selectedOptionSignal.set(null);
       this.selectedOptionsSignal.set([]);
       return;

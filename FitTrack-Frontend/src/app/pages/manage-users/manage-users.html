@@ -1,0 +1,23 @@
+<app-custom-table
+  [data]="rows"
+  [displayedColumns]="columns"
+  (rowClick)="onRowClick($event)"
+>
+  <ng-template appColumnDef="name" appColumnHeader="Name" let-data>
+    <span>{{ data.name }}</span>
+    <mat-icon>search></mat-icon>
+  </ng-template>
+
+  <ng-template appColumnDef="photo" appColumnHeader="Photo" let-data>
+    <img [src]="data.photoUrl" alt="photo" />
+  </ng-template>
+
+  <ng-template appColumnDef="action" appColumnHeader="Actions" let-data>
+    <button
+      class="btn btn-primary"
+      (click)="onEdit(data); $event.stopPropagation()"
+    >
+      Edit
+    </button>
+  </ng-template>
+</app-custom-table>

@@ -49,29 +49,31 @@
             <h1>FitTrack</h1>
           </div>
         }
-        @for (section of sidebarSections(); track section.title) {
-          @if (section.title) {
-            <hr />
-            <div class="sidebar-header">
-              <span>{{ section.title }}</span>
-            </div>
-          }
-
-          <ul>
-            @for (item of section.items; track item.route) {
-              <li
-                [routerLink]="item.route"
-                routerLinkActive="active"
-                (click)="onNavigate()"
-              >
-                <mat-icon>{{ item.icon }}</mat-icon>
-                @if (!isCollapsed()) {
-                  <span>{{ item.label }}</span>
-                }
-              </li>
+        <div class="sidebar-sections">
+          @for (section of sidebarSections(); track section.title) {
+            @if (section.title) {
+              <hr />
+              <div class="sidebar-header">
+                <span>{{ section.title }}</span>
+              </div>
             }
-          </ul>
-        }
+
+            <ul>
+              @for (item of section.items; track item.route) {
+                <li
+                  [routerLink]="item.route"
+                  routerLinkActive="active"
+                  (click)="onNavigate()"
+                >
+                  <mat-icon>{{ item.icon }}</mat-icon>
+                  @if (!isCollapsed()) {
+                    <span>{{ item.label }}</span>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
       </div>
     </div>
     <div class="router-content">

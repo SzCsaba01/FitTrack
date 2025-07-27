@@ -28,6 +28,34 @@ export const routes: Routes = [
             (x) => x.EditProfile,
           ),
       },
+      {
+        path: 'manage/users',
+        loadComponent: () =>
+          import('./pages/manage-users/manage-users').then(
+            (x) => x.ManageUsers,
+          ),
+      },
+      {
+        path: 'manage/exercises',
+        loadComponent: () =>
+          import('./pages/manage-exercises/manage-exercises').then(
+            (x) => x.ManageExercises,
+          ),
+      },
+      {
+        path: 'manage/foods',
+        loadComponent: () =>
+          import('./pages/manage-foods/manage-foods').then(
+            (x) => x.ManageFoods,
+          ),
+      },
+      {
+        path: 'manage/recipes',
+        loadComponent: () =>
+          import('./pages/manage-recipes/manage-recipes').then(
+            (x) => x.ManageRecipes,
+          ),
+      },
     ],
   },
   {
