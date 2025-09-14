@@ -107,6 +107,7 @@ export class NavbarDropdown extends SelfUnsubscriberBase implements OnInit {
       .logout()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
+        this.store.dispatch(UserActions.clearUser());
         this.router.navigate(['/login']);
       });
   }

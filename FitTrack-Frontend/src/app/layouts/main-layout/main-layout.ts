@@ -1,7 +1,6 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { MOBILE_BRAKEPOINT } from '../../constants/sizes.constant';
 import { Store } from '@ngrx/store';
 import { selectUserDetails } from '../../store/user/user.selectors';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
@@ -9,6 +8,7 @@ import { takeUntil } from 'rxjs';
 import { NavbarDropdown } from '../../shared-components/navbar-dropdown/navbar-dropdown';
 import { SIDEBAR_SECTIONS } from '../../constants/sidebar-sections.constant';
 import { SidebarSection } from '../../models/sidebar-section.model';
+import { ScreenService } from '../../services/screen/screen.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,11 +18,10 @@ import { SidebarSection } from '../../models/sidebar-section.model';
   styleUrl: './main-layout.scss',
 })
 export class MainLayout extends SelfUnsubscriberBase implements OnInit {
-  private screenWidth = signal(window.innerWidth);
   userInitials = signal<string | null>(null);
   isDropdownOpen = signal<boolean>(false);
-  isMobile = computed<boolean>(() => this.screenWidth() < MOBILE_BRAKEPOINT);
-  isSidebarOpen = signal<boolean>(this.screenWidth() >= MOBILE_BRAKEPOINT);
+  isMobile = signal<boolean>(false);
+  isSidebarOpen = signal<boolean>(false);
   isSearchOpen = signal<boolean>(false);
   isCollapsed = computed<boolean>(
     () => !this.isMobile() && !this.isSidebarOpen(),
@@ -30,8 +29,15 @@ export class MainLayout extends SelfUnsubscriberBase implements OnInit {
   sidebarSections = signal<SidebarSection[]>([]);
   userPermissions = signal<string[]>([]);
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private screenService: ScreenService,
+  ) {
     super();
+    effect(() => {
+      this.isMobile.set(this.screenService.isMobile());
+      this.isSidebarOpen.set(!this.screenService.isMobile());
+    });
   }
 
   ngOnInit(): void {
@@ -58,37 +64,27 @@ export class MainLayout extends SelfUnsubscriberBase implements OnInit {
           this.userInitials.set(null);
         }
       });
-    window.addEventListener('resize', () => {
-      const width = window.innerWidth;
-      this.screenWidth.set(width);
-      if (width >= MOBILE_BRAKEPOINT) {
-        this.isSidebarOpen.set(true);
-        this.isSearchOpen.set(false);
-      } else {
-        this.isSidebarOpen.set(false);
-      }
-    });
   }
 
-  toggleSidebar(): void {
+  onToggleSidebarClick(): void {
     this.isSidebarOpen.update((x) => !x);
   }
 
-  toggleSearch(): void {
+  onToggleSearchClick(): void {
     if (this.isMobile()) {
       this.isSearchOpen.update((x) => !x);
     }
   }
 
-  closeSidebar(): void {
+  onCloseSidebarClick(): void {
     this.isSidebarOpen.set(false);
   }
 
-  onToggleDropdown(): void {
+  onToggleDropdownClick(): void {
     this.isDropdownOpen.update((x) => !x);
   }
 
-  onNavigate() {
+  onNavigateClick() {
     if (this.isMobile() && this.isSidebarOpen()) {
       this.isSidebarOpen.set(false);
     }

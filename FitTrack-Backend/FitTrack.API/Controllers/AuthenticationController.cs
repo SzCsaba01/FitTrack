@@ -16,7 +16,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPut("login")]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> LoginAsync(LoginRequest request)
     {
         var response = await _authenticationService.LoginAsync(request);
 
@@ -24,7 +24,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPut("logout")]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> LogoutAsync()
     {
         await _authenticationService.LogoutAsync();
 
@@ -32,7 +32,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPut("refresh-token")]
-    public async Task<IActionResult> RefreshToken()
+    public async Task<IActionResult> RefreshTokenAsync()
     {
         await _authenticationService.RefreshTokenAsync();
 

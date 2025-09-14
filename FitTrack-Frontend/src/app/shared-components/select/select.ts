@@ -5,7 +5,6 @@ import {
   ElementRef,
   HostListener,
   input,
-  Signal,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -30,18 +29,18 @@ export class Select implements ControlValueAccessor {
   options = input.required<SelectOption[]>();
   placeholder = input<string>('Select...');
   multiple = input<boolean>(false);
-  selectedOptionSignal = signal<SelectOption | null>(null);
-  selectedOptionsSignal = signal<SelectOption[] | null>(null);
-  isDisabledSignal = signal<boolean>(false);
-  isDropdownOpenSignal = signal<boolean>(false);
+  selectedOption = signal<SelectOption | null>(null);
+  selectedOptions = signal<SelectOption[] | null>(null);
+  isDisabled = signal<boolean>(false);
+  isDropdownOpen = signal<boolean>(false);
   private onChange: (_: any) => void = () => {};
   private onTouched: () => void = () => {};
 
-  selectedOptionsString: Signal<string> = computed(() => {
-    if (!this.selectedOptionsSignal()) {
+  selectedOptionsString = computed(() => {
+    if (!this.selectedOptions()) {
       return '';
     }
-    return this.selectedOptionsSignal()!
+    return this.selectedOptions()!
       .map((option) => option.label)
       .join(', ');
   });
@@ -53,15 +52,15 @@ export class Select implements ControlValueAccessor {
     const clickedInside = this.elementRef.nativeElement.contains(
       event.target as Node,
     );
-    if (!clickedInside && this.isDropdownOpenSignal()) {
+    if (!clickedInside && this.isDropdownOpen()) {
       this.onCloseDropdown();
     }
   }
 
   writeValue(value: any): void {
     if (!this.options() || this.options().length === 0) {
-      this.selectedOptionSignal.set(null);
-      this.selectedOptionsSignal.set([]);
+      this.selectedOption.set(null);
+      this.selectedOptions.set([]);
       return;
     }
 
@@ -70,14 +69,14 @@ export class Select implements ControlValueAccessor {
         const selectedOptions = this.options().filter((o) =>
           value.includes(o.value),
         );
-        this.selectedOptionsSignal.set(selectedOptions);
+        this.selectedOptions.set(selectedOptions);
       } else {
-        this.selectedOptionsSignal.set([]);
+        this.selectedOptions.set([]);
       }
     } else {
       const selectedOption =
         this.options().find((o) => o.value === value) ?? null;
-      this.selectedOptionSignal.set(selectedOption);
+      this.selectedOption.set(selectedOption);
     }
   }
 
@@ -90,39 +89,39 @@ export class Select implements ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.isDisabledSignal.set(isDisabled);
+    this.isDisabled.set(isDisabled);
   }
 
   onToggleDropdown() {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
 
-    this.isDropdownOpenSignal.update((x) => !x);
+    this.isDropdownOpen.update((x) => !x);
     this.onTouched();
   }
 
   private onCloseDropdown() {
-    this.isDropdownOpenSignal.set(false);
+    this.isDropdownOpen.set(false);
   }
 
   onSingleOptionClick(option: SelectOption) {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
 
-    this.selectedOptionSignal.set(option);
+    this.selectedOption.set(option);
     this.onChange(option.value);
     this.onCloseDropdown();
     this.onTouched();
   }
 
   onMultiOptionClick(option: SelectOption) {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
 
-    this.selectedOptionsSignal.update((options) => {
+    this.selectedOptions.update((options) => {
       if (!options) {
         return options;
       }
@@ -136,14 +135,13 @@ export class Select implements ControlValueAccessor {
       return [...options, option];
     });
 
-    this.onChange(this.selectedOptionsSignal()!.map((x) => x.value));
+    this.onChange(this.selectedOptions()!.map((x) => x.value));
     this.onTouched();
   }
 
   isSelected(option: SelectOption): boolean {
     return (
-      this.selectedOptionsSignal()?.some((o) => o.value === option.value) ??
-      false
+      this.selectedOptions()?.some((o) => o.value === option.value) ?? false
     );
   }
 }

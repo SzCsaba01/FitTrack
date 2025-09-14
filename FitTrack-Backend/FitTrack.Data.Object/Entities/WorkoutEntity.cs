@@ -17,9 +17,9 @@ public class WorkoutEntity
     public DateTime EndDate { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity User { get; set; }
+    public UserEntity? User { get; set; }
 
-    public ICollection<WorkoutExerciseEntity> WorkoutExercises { get; set; }
+    public ICollection<WorkoutExerciseEntity>? WorkoutExercises { get; set; }
 
-    public ICollection<WorkoutCardioExerciseEntity> WorkoutCardioExercises { get; set; }
+    public ICollection<WorkoutCardioExerciseEntity>? WorkoutCardioExercises { get; set; }
 }

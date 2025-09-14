@@ -20,12 +20,20 @@ public static class ServiceExtensions
         services.AddScoped<IUserProfileRepository, UserProfileRepository>();
         services.AddScoped<IUserPreferenceRepository, UserPreferenceRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+        services.AddScoped<IMuscleRepository, MuscleRepository>();
+        services.AddScoped<IExerciseRepository, ExerciseRepository>();
+        services.AddScoped<IExerciseImageRepository, ExerciseImageRepository>();
+        services.AddScoped<IExerciseMuscleMappingRepository, ExerciseMuscleMappingRepository>();
+        services.AddScoped<IInstructionRepository, InstructionRepository>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<IUserPreferenceService, UserPreferenceService>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IExerciseService, ExerciseService>();
+        services.AddScoped<ICloudinaryService, CloudinaryService>();
 
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEncryptionService, EncryptionService>();
@@ -44,7 +52,8 @@ public static class ServiceExtensions
             name: "Origins",
             policy =>
             {
-                policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                // policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
 
         services.AddAuthorization();

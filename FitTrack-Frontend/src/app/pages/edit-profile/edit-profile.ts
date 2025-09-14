@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { GENDERS } from '../../constants/genders.constant';
 import { SelfUnsubscriberBase } from '../../utils/SelfUnsubscribeBase';
-import { UserProfileService } from '../../services/user-profile.service';
 import { Store } from '@ngrx/store';
 import { filter, switchMap, takeUntil, tap } from 'rxjs';
 import { UserProfileResponse } from '../../responses/user-profile/user-profile.response';
@@ -21,6 +20,7 @@ import { DatePicker } from '../../shared-components/date-picker/date-picker';
 import { UnitSystemEnum } from '../../enums/unit-system.enum';
 import { UnitLabelPipe } from '../../helpers/pipes/unit-label.pipe';
 import { UpdateUserProfileRequest } from '../../requests/user-profile/update-user-profile.request';
+import { UserProfileService } from '../../services/user-profile/user-profile.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -39,10 +39,10 @@ import { UpdateUserProfileRequest } from '../../requests/user-profile/update-use
 export class EditProfile extends SelfUnsubscriberBase implements OnInit {
   editProfileForm: FormGroup = {} as FormGroup;
   genderOptions = GENDERS;
-  userUnitSystemSignal = signal<UnitSystemEnum | null>(null);
+  userUnitSystem = signal<UnitSystemEnum | null>(null);
   unitSystem = UnitSystemEnum;
-  usernameSignal = signal<string>('');
-  emailSignal = signal<string>('');
+  username = signal<string>('');
+  email = signal<string>('');
 
   constructor(
     private userProfileService: UserProfileService,
@@ -66,9 +66,9 @@ export class EditProfile extends SelfUnsubscriberBase implements OnInit {
           (userDetails): userDetails is AuthenticationResponse => !!userDetails,
         ),
         tap((userDetails) => {
-          this.userUnitSystemSignal.set(userDetails.unitSystem);
+          this.userUnitSystem.set(userDetails.unitSystem);
 
-          if (this.userUnitSystemSignal() === UnitSystemEnum.Metric) {
+          if (this.userUnitSystem() === UnitSystemEnum.Metric) {
             this.height.setValidators([Validators.required, Validators.min(1)]);
             this.heightFt.clearValidators();
             this.heightIn.clearValidators();
@@ -120,10 +120,10 @@ export class EditProfile extends SelfUnsubscriberBase implements OnInit {
   }
 
   private patchData(userProfile: UserProfileResponse): void {
-    this.usernameSignal.set(userProfile.username);
-    this.emailSignal.set(userProfile.email);
+    this.username.set(userProfile.username);
+    this.email.set(userProfile.email);
 
-    if (this.userUnitSystemSignal() === UnitSystemEnum.Imperial) {
+    if (this.userUnitSystem() === UnitSystemEnum.Imperial) {
       const ft = Math.floor(userProfile.height / 12);
       const inch = Math.round(userProfile.height % 12);
       this.editProfileForm.patchValue({
@@ -183,13 +183,13 @@ export class EditProfile extends SelfUnsubscriberBase implements OnInit {
     const requestData: UpdateUserProfileRequest = {
       ...formData,
       height:
-        this.userUnitSystemSignal() === UnitSystemEnum.Imperial
+        this.userUnitSystem() === UnitSystemEnum.Imperial
           ? Number(formData.heightFt || 0) * 12 + Number(formData.heightIn || 0)
           : Number(formData.height),
     };
 
     this.userProfileService
-      .updateUserProfile(this.userUnitSystemSignal()!, requestData)
+      .updateUserProfile(this.userUnitSystem()!, requestData)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.editProfileForm.markAsPristine();

@@ -26,8 +26,8 @@ public class WorkoutCardioExerciseEntity
     public double? AverageHeartRate { get; set; }
 
     [ForeignKey("UserWorkoutId")]
-    public WorkoutEntity UserWorkout { get; set; }
+    public WorkoutEntity? UserWorkout { get; set; }
 
     [ForeignKey("ExerciseId")]
-    public ExerciseEntity Exercise { get; set; }
+    public ExerciseEntity? Exercise { get; set; }
 }

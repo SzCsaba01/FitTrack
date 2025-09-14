@@ -45,6 +45,6 @@ public class UserProfileRepositoryTests : RepositoryTestBase
 
         // Assert
         var updated = await context.UserProfiles.FindAsync(userProfile.Id);
-        Assert.Equal("UpdatedName", updated.FirstName);
+        Assert.Equal("UpdatedName", updated!.FirstName);
     }
 }

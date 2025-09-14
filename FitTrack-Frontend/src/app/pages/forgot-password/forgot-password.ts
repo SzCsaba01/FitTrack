@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
   forgotPasswordForm: FormGroup = {} as FormGroup;
-  inlineErrorMessageSignal = signal<string | null>(null);
+  inlineErrorMessage = signal<string | null>(null);
 
   constructor(
     private userService: UserService,
@@ -48,7 +48,7 @@ export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
     return this.forgotPasswordForm.get('email') as FormControl;
   }
 
-  onSendEmail(): void {
+  onSendEmailClick(): void {
     const email = this.forgotPasswordForm.value.email;
     this.userService
       .sendForgotPasswordEmail(email)
@@ -59,7 +59,7 @@ export class ForgotPassword extends SelfUnsubscriberBase implements OnInit {
         },
         error: (error) => {
           if (error?.errorMessage) {
-            this.inlineErrorMessageSignal = error.errorMessage;
+            this.inlineErrorMessage = error.errorMessage;
           }
         },
       });

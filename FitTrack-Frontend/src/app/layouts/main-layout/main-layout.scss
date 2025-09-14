@@ -1,4 +1,4 @@
-.private-page-container {
+.private-page-wrapper {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -22,7 +22,7 @@
   background-color: var(--color-bg-primary);
   display: flex;
   align-items: center;
-  height: 10vh;
+  min-height: 10vh;
   padding: 0 1rem;
   z-index: 10;
   position: sticky;
@@ -84,12 +84,20 @@
 }
 
 .sidebar-header {
+  height: 10vh;
   display: flex;
   gap: 1rem;
-  font-weight: bold;
+  font-weight: 600;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sidebar-section-header {
+  display: flex;
+  gap: 1rem;
+  font-weight: 600;
   align-items: center;
   justify-content: flex-start;
-  height: 10vh;
 }
 
 .sidebar.open {
@@ -101,6 +109,7 @@
 }
 
 .sidebar-sections {
+  gap: 1rem;
   height: 90vh;
   overflow-y: auto;
   display: flex;

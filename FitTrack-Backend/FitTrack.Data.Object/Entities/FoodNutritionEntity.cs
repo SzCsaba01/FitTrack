@@ -28,5 +28,5 @@ public class FoodNutritionEntity
     public bool MoreThan { get; set; }
 
     [ForeignKey("FoodId")]
-    public FoodEntity Food { get; set; }
+    public FoodEntity? Food { get; set; }
 }

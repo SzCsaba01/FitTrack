@@ -1,17 +1,17 @@
-<div class="private-page-container">
+<div class="private-page-wrapper">
   <div class="navbar" [class.search-opened]="isSearchOpen()">
     <div class="start">
       @if (!isSearchOpen()) {
-        <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
+        <label class="hamburger" (click)="onToggleSidebarClick()">&#9776;</label>
         <h1>FitTrack</h1>
       }
     </div>
     <div class="center">
       @if (!isSearchOpen() && isMobile()) {
-        <mat-icon (click)="toggleSearch()">search</mat-icon>
+        <mat-icon (click)="onToggleSearchClick()">search</mat-icon>
       } @else {
         @if (isSearchOpen()) {
-          <mat-icon (click)="toggleSearch()">arrow_back</mat-icon>
+          <mat-icon (click)="onToggleSearchClick()">arrow_back</mat-icon>
         }
         <div class="search-bar">
           <input class="input input-search" placeholder="Search" />
@@ -24,12 +24,12 @@
         <mat-icon>flag</mat-icon>
         <div class="profile-picture-container">
         @if (userInitials()) {
-          <div class="profile-picture" (click)="onToggleDropdown()">
+          <div class="profile-picture" (click)="onToggleDropdownClick()">
             {{userInitials()}}
           </div>
         }
         @if (isDropdownOpen()) {
-          <app-navbar-dropdown (onCloseDropdown)="onToggleDropdown()">
+          <app-navbar-dropdown (onCloseDropdown)="onToggleDropdownClick()">
           </app-navbar-dropdown>
         }
         </div>
@@ -45,7 +45,7 @@
       <div class="sidebar-navigation">
         @if (isMobile()) {
           <div class="sidebar-header">
-            <label class="hamburger" (click)="toggleSidebar()">&#9776;</label>
+            <label class="hamburger" (click)="onToggleSidebarClick()">&#9776;</label>
             <h1>FitTrack</h1>
           </div>
         }
@@ -53,7 +53,7 @@
           @for (section of sidebarSections(); track section.title) {
             @if (section.title) {
               <hr />
-              <div class="sidebar-header">
+              <div class="sidebar-section-header">
                 <span>{{ section.title }}</span>
               </div>
             }
@@ -63,7 +63,7 @@
                 <li
                   [routerLink]="item.route"
                   routerLinkActive="active"
-                  (click)="onNavigate()"
+                  (click)="onNavigateClick()"
                 >
                   <mat-icon>{{ item.icon }}</mat-icon>
                   @if (!isCollapsed()) {
@@ -81,6 +81,6 @@
     </div>
   </div>
   @if (isSidebarOpen()) {
-    <div class="overlay" (click)="closeSidebar()"></div>
+    <div class="overlay" (click)="onCloseSidebarClick()"></div>
   }
 </div>

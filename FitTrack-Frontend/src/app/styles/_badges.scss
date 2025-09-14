@@ -1,0 +1,16 @@
+.badge {
+  border-radius: 0.3rem;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.25rem;
+}
+
+.badge-info {
+  background-color: var(--color-info);
+  color: var(--color-text-btn) !important ;
+}
+
+.badge-danger {
+  background-color: var(--color-danger);
+  color: var(--color-text-btn) !important;
+}

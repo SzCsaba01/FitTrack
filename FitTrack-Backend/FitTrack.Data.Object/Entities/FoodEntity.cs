@@ -28,9 +28,9 @@ public class FoodEntity
     public int Calories { get; set; }
 
     [ForeignKey("CategoryId")]
-    public FoodCategoryEntity Category { get; set; }
+    public FoodCategoryEntity? Category { get; set; }
 
-    public ICollection<FoodNutritionEntity> Nutritions { get; set; }
+    public ICollection<FoodNutritionEntity>? Nutritions { get; set; }
 
-    public ICollection<MealItemEntity> MealItems { get; set; }
+    public ICollection<MealItemEntity>? MealItems { get; set; }
 }

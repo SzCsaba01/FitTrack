@@ -38,5 +38,5 @@ public class UserProfileEntity
     public double WeightKg { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity User { get; set; }
+    public UserEntity? User { get; set; }
 }

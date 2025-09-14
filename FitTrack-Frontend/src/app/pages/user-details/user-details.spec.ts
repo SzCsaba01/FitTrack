@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InitialLoader } from './initial-loader';
+import { UserDetails } from './user-details';
 
-describe('InitialLoader', () => {
-  let component: InitialLoader;
-  let fixture: ComponentFixture<InitialLoader>;
+describe('UserDetails', () => {
+  let component: UserDetails;
+  let fixture: ComponentFixture<UserDetails>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InitialLoader]
+      imports: [UserDetails]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(InitialLoader);
+    fixture = TestBed.createComponent(UserDetails);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

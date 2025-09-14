@@ -1,0 +1,105 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1>User Details</h1>
+  </div>
+
+  <div class="user-preview">
+    <app-user-card
+      class="user-profile-card"
+      [userId]="selectedUserDetails().id"
+      [profilePictureUrl]="selectedUserDetails().profilePictureUrl"
+      [registrationDate]="selectedUserDetails().registrationDate"
+      [firstName]="selectedUserDetails().firstName"
+      [lastName]="selectedUserDetails().lastName"
+      [username]="selectedUserDetails().username"
+      [email]="selectedUserDetails().email"
+      [isEmailConfirmed]="selectedUserDetails().isEmailConfirmed"
+      [role]="selectedUserDetails().role"
+    >
+    </app-user-card>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Personal And Account Details</h2>
+    </div>
+    <div class="card-content user-details">
+      <div class="detail">
+        <label>Gender</label>
+        <input
+          type="text"
+          class="input"
+          [value]="genderEnum[selectedUserDetails().gender]"
+          readonly
+        />
+      </div>
+      <div class="detail">
+        <label>Weight ({{'weight' | unitLabel: userUnitSystem()! }})</label>
+        <input
+          type="number"
+          class="input"
+          [value]="selectedUserDetails().weight"
+          readonly
+        />
+      </div>
+      @if (userUnitSystem() === unitSystem.Metric) {
+      <div class="detail">
+        <label for="height"
+          >Height ({{'height' | unitLabel: userUnitSystem()! }})</label
+        >
+        <input
+          type="number"
+          class="input"
+          [value]="selectedUserDetails().height"
+          readonly
+        />
+      </div>
+      } @else {
+      <div class="detail-group">
+        <div class="detail">
+          <label>Feet</label>
+          <input type="number" class="input" [value]="heightFt()" readonly />
+        </div>
+        <div class="detail">
+          <label>Inch</label>
+          <input type="number" class="input" [value]="heightIn()" readonly />
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  <div class="tabs-container">
+    <button
+      class="btn tab"
+      [class.active]="selectedTab() === 'overview'"
+      type="button"
+      (click)="selectTab('overview')"
+    >
+      Overview
+    </button>
+    <button
+      class="btn tab"
+      [class.active]="selectedTab() === 'workouts'"
+      type="buton"
+      (click)="selectTab('workouts')"
+    >
+      Workouts
+    </button>
+    <button
+      class="btn tab"
+      [class.active]="selectedTab() === 'meals'"
+      type="button"
+      (click)="selectTab('meals')"
+    >
+      Meals
+    </button>
+    <button
+      class="btn tab"
+      [class.active]="selectedTab() === 'weight-logs'"
+      type="button"
+      (click)="selectTab('weight-logs')"
+    >
+      Weight Logs
+    </button>
+  </div>
+</div>

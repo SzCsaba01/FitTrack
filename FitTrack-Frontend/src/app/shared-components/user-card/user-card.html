@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-content">
+    <div class="profile-picture-container">
+      <img [src]="profilePictureUrl()" alt="User profile picture" />
+    </div>
+    <div class="user-details">
+      <h3>{{ firstName() }} {{ lastName() }}</h3>
+      <div class="detail-row">
+        <label>Username:</label>
+        <span>{{ username() }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Email:</label>
+        <span>{{ email() }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Joined at:</label>
+        <span>{{ registrationDate() | date : 'd MMMM y' }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Email Confirmed:</label>
+        <span
+          class="badge"
+          [ngClass]="{'badge-info': isEmailConfirmed(), 'badge-danger': !isEmailConfirmed()}"
+          >{{ isEmailConfirmed()? 'Confirmed' : 'Not Confirmed' }}</span
+        >
+      </div>
+      <div class="detail-row">
+        <label>Role:</label>
+        <span>{{ roleEnum[role()] }}</span>
+      </div>
+      @if (isDeleteButtonShown()) {
+      <button
+        class="btn btn-danger"
+        (click)="onDeleteClick(); $event.stopPropagation()"
+      >
+        Delete
+      </button>
+      }
+    </div>
+  </div>
+</div>

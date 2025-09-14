@@ -1,151 +1,156 @@
-<div class="card-container">
+<div class="page-wrapper">
   <div class="page-header">
     <h1>Edit User Profile</h1>
   </div>
-  <div class="card">
-    <div class="card-content">
-      <form
-        class="column-form"
-        [formGroup]="editProfileForm"
-        (ngSubmit)="onEditProfile()"
-      >
-        <div class="form-fields">
-          <h2>Account</h2>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="email">Email</label>
-              <input
-                id="email"
-                type="text"
-                class="input"
-                [value]="emailSignal()"
-                disabled
-              />
-            </div>
-            <div class="form-field">
-              <label for="username">Username</label>
-              <input
-                id="username"
-                type="text"
-                class="input"
-                [value]="usernameSignal()"
-                disabled
-              />
-            </div>
-          </div>
-          <hr />
-          <h2>Personal</h2>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="firstName">First Name</label>
-              <input
-                id="firstName"
-                type="text"
-                placeholder="e.g. John"
-                formControlName="firstName"
-                class="input"
-                [class.input-error]="firstName.touched && firstName.invalid"
-              />
-              @if (firstName.touched && firstName.invalid) {
-              <div>
-                @if (firstName.hasError('required')) {
-                <small class="error-message">First name is required.</small>
-                } @if (firstName.hasError('minlength')) {
-                <small class="error-message">
-                  Minimum {{ firstName.getError('minlength').requiredLength }}
-                  characters required.
-                </small>
-                } @if (firstName.hasError('maxlength')) {
-                <small class="error-message">
-                  Maximum {{ firstName.getError('maxlength').requiredLength }}
-                  characters allowed.
-                </small>
-                }
-              </div>
-              }
-            </div>
-            <div class="form-field">
-              <label for="lastName">Last Name</label>
-              <input
-                id="lastName"
-                type="text"
-                placeholder="e.g. Doe"
-                formControlName="lastName"
-                class="input"
-                [class.input-error]="lastName.touched && lastName.invalid"
-              />
-              @if (lastName.touched && lastName.invalid) {
-              <div>
-                @if (lastName.hasError('required')) {
-                <small class="error-message">Last name is required.</small>
-                } @if (lastName.hasError('minlength')) {
-                <small class="error-message">
-                  Minimum {{ lastName.getError('minlength').requiredLength }}
-                  characters required.
-                </small>
-                } @if (lastName.hasError('maxlength')) {
-                <small class="error-message">
-                  Maximum {{ lastName.getError('maxlength').requiredLength }}
-                  characters allowed.
-                </small>
-                }
-              </div>
-              }
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="gender">Gender</label>
-              <app-select
-                id="gender"
-                [options]="genderOptions"
-                formControlName="gender"
-              >
-              </app-select>
-              @if (gender.touched && gender.invalid) {
-              <small class="error-message">Gender is required.</small>
-              }
-            </div>
-
-            <div class="form-field">
-              <label for="dateOfBirth">Date of Birth</label>
-              <app-date-picker
-                id="dateOfBirth"
-                formControlName="dateOfBirth"
-              ></app-date-picker>
-              @if (dateOfBirth.touched && dateOfBirth.invalid) {
-              <small class="error-message">Date of birth is required.</small>
-              }
-            </div>
-          </div>
-          <hr />
-          <h2>Health</h2>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="weight">Weight ({{'weight' | unitLabel: userUnitSystemSignal()! }})</label>
-              <input
-                id="weight"
-                type="number"
-                formControlName="weight"
-                class="input"
-                [class.input-error]="weight.touched && weight.invalid"
-              />
-              @if (weight.touched && weight.invalid) {
-              <div>
-                @if (weight.hasError('required')) {
-                <small class="error-message">Weight is required.</small>
-                } @if (weight.hasError('min')) {
-                <small class="error-message"
-                  >Weight must be greater than {{ weight.getError('min').min
-                  }}.</small
-                >
-                }
-              </div>
-              }
-            </div>
-            @if (userUnitSystemSignal() === unitSystem.Metric) {
+  <div class="card-container">
+    <div class="card">
+      <div class="card-content">
+        <form
+          class="column-form"
+          [formGroup]="editProfileForm"
+          (ngSubmit)="onEditProfile()"
+        >
+          <div class="form-fields">
+            <h2>Account</h2>
+            <div class="form-row">
               <div class="form-field">
-              <label for="height">Height ({{'height' | unitLabel: userUnitSystemSignal()! }})</label>
+                <label for="email">Email</label>
+                <input
+                  id="email"
+                  type="text"
+                  class="input"
+                  [value]="email()"
+                  disabled
+                />
+              </div>
+              <div class="form-field">
+                <label for="username">Username</label>
+                <input
+                  id="username"
+                  type="text"
+                  class="input"
+                  [value]="username()"
+                  disabled
+                />
+              </div>
+            </div>
+            <hr />
+            <h2>Personal</h2>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="firstName">First Name</label>
+                <input
+                  id="firstName"
+                  type="text"
+                  placeholder="e.g. John"
+                  formControlName="firstName"
+                  class="input"
+                  [class.input-error]="firstName.touched && firstName.invalid"
+                />
+                @if (firstName.touched && firstName.invalid) {
+                <div>
+                  @if (firstName.hasError('required')) {
+                  <small class="error-message">First name is required.</small>
+                  } @if (firstName.hasError('minlength')) {
+                  <small class="error-message">
+                    Minimum {{ firstName.getError('minlength').requiredLength }}
+                    characters required.
+                  </small>
+                  } @if (firstName.hasError('maxlength')) {
+                  <small class="error-message">
+                    Maximum {{ firstName.getError('maxlength').requiredLength }}
+                    characters allowed.
+                  </small>
+                  }
+                </div>
+                }
+              </div>
+              <div class="form-field">
+                <label for="lastName">Last Name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  placeholder="e.g. Doe"
+                  formControlName="lastName"
+                  class="input"
+                  [class.input-error]="lastName.touched && lastName.invalid"
+                />
+                @if (lastName.touched && lastName.invalid) {
+                <div>
+                  @if (lastName.hasError('required')) {
+                  <small class="error-message">Last name is required.</small>
+                  } @if (lastName.hasError('minlength')) {
+                  <small class="error-message">
+                    Minimum {{ lastName.getError('minlength').requiredLength }}
+                    characters required.
+                  </small>
+                  } @if (lastName.hasError('maxlength')) {
+                  <small class="error-message">
+                    Maximum {{ lastName.getError('maxlength').requiredLength }}
+                    characters allowed.
+                  </small>
+                  }
+                </div>
+                }
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="gender">Gender</label>
+                <app-select
+                  id="gender"
+                  [options]="genderOptions"
+                  formControlName="gender"
+                >
+                </app-select>
+                @if (gender.touched && gender.invalid) {
+                <small class="error-message">Gender is required.</small>
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="dateOfBirth">Date of Birth</label>
+                <app-date-picker
+                  id="dateOfBirth"
+                  formControlName="dateOfBirth"
+                ></app-date-picker>
+                @if (dateOfBirth.touched && dateOfBirth.invalid) {
+                <small class="error-message">Date of birth is required.</small>
+                }
+              </div>
+            </div>
+            <hr />
+            <h2>Health</h2>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="weight"
+                  >Weight ({{'weight' | unitLabel: userUnitSystem()! }})</label
+                >
+                <input
+                  id="weight"
+                  type="number"
+                  formControlName="weight"
+                  class="input"
+                  [class.input-error]="weight.touched && weight.invalid"
+                />
+                @if (weight.touched && weight.invalid) {
+                <div>
+                  @if (weight.hasError('required')) {
+                  <small class="error-message">Weight is required.</small>
+                  } @if (weight.hasError('min')) {
+                  <small class="error-message"
+                    >Weight must be greater than {{ weight.getError('min').min
+                    }}.</small
+                  >
+                  }
+                </div>
+                }
+              </div>
+              @if (userUnitSystem() === unitSystem.Metric) {
+              <div class="form-field">
+                <label for="height"
+                  >Height ({{'height' | unitLabel: userUnitSystem()! }})</label
+                >
                 <input
                   id="height"
                   type="number"
@@ -154,19 +159,19 @@
                   [class.input-error]="height.touched && height.invalid"
                 />
                 @if (height.touched && height.invalid) {
-                  <div>
-                    @if (height.hasError('required')) {
-                      <small class="error-message">Height is required.</small>
-                    } @if (height.hasError('min')) {
-                      <small class="error-message"
-                        >Height must be greater than {{ height.getError('min').min
-                        }}.</small
-                      >
-                    }
-                  </div>
+                <div>
+                  @if (height.hasError('required')) {
+                  <small class="error-message">Height is required.</small>
+                  } @if (height.hasError('min')) {
+                  <small class="error-message"
+                    >Height must be greater than {{ height.getError('min').min
+                    }}.</small
+                  >
+                  }
+                </div>
                 }
               </div>
-            } @else {
+              } @else {
               <div class="imperial-form-group">
                 <div class="form-field">
                   <label for="heightFt">Feet</label>
@@ -179,16 +184,18 @@
                     [class.input-error]="heightFt.touched && heightFt.invalid"
                   />
                   @if (heightFt.touched && heightFt.invalid) {
-                    <div>
-                      @if (heightFt.hasError('required')) {
-                        <small class="error-message">Height in feet is required.</small>
-                      } @if (heightFt.hasError('min')) {
-                        <small class="error-message"
-                          >Height in feet must be greater than {{ heightFt.getError('min').min
-                          }}.</small
-                        >
-                      }
-                    </div>
+                  <div>
+                    @if (heightFt.hasError('required')) {
+                    <small class="error-message"
+                      >Height in feet is required.</small
+                    >
+                    } @if (heightFt.hasError('min')) {
+                    <small class="error-message"
+                      >Height in feet must be greater than {{
+                      heightFt.getError('min').min }}.</small
+                    >
+                    }
+                  </div>
                   }
                 </div>
                 <div class="form-field">
@@ -202,32 +209,40 @@
                     [class.input-error]="heightIn.touched && heightIn.invalid"
                   />
                   @if (heightIn.touched && heightIn.invalid) {
-                    <div>
-                      @if (heightIn.hasError('required')) {
-                        <small class="error-message">Height in inch is required.</small>
-                      } @if (heightIn.hasError('min')) {
-                        <small class="error-message"
-                          >Height in inch must be greater than {{ heightIn.getError('min').min
-                          }}.</small
-                        >
-                      } @if (heightIn.hasError('max')) {
-                        <small class="error-message"
-                          >Height in inch must be less than {{ heightIn.getError('max').max
-                          }}.</small
-                        >
-                      }
-                    </div>
+                  <div>
+                    @if (heightIn.hasError('required')) {
+                    <small class="error-message"
+                      >Height in inch is required.</small
+                    >
+                    } @if (heightIn.hasError('min')) {
+                    <small class="error-message"
+                      >Height in inch must be greater than {{
+                      heightIn.getError('min').min }}.</small
+                    >
+                    } @if (heightIn.hasError('max')) {
+                    <small class="error-message"
+                      >Height in inch must be less than {{
+                      heightIn.getError('max').max }}.</small
+                    >
+                    }
+                  </div>
                   }
                 </div>
               </div>
-            }
+              }
+            </div>
           </div>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary" [disabled]="editProfileForm.invalid || editProfileForm.pristine">Edit Profile
-          </button>
-        </div>
-      </form>
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="editProfileForm.invalid || editProfileForm.pristine"
+            >
+              Edit Profile
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

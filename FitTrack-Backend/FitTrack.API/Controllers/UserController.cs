@@ -1,5 +1,7 @@
+using FitTrack.API.Infrastructure.Authorization;
 using FitTrack.Data.Contract.Helpers.Requests;
 using FitTrack.Data.Contract.Helpers.Responses;
+using FitTrack.Data.Object.Enums;
 using FitTrack.Service.Contract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +21,30 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("get-user-data")]
-    public async Task<IActionResult> GetUserData()
+    public async Task<IActionResult> GetUserDataAsync()
     {
         var response = await _userService.GetUserDataAsync();
 
         return Ok(response);
     }
 
+    [HasPermission("user:manage")]
+    [HttpPost("get-filtered-users")]
+    public async Task<IActionResult> GetFilteredUsersAsync([FromBody] GetFilteredUsersRequest request)
+    {
+        var response = await _userService.GetFilteredUsersAsync(request);
+
+        return Ok(response);
+    }
+
+    [HasPermission("user:manage")]
+    [HttpGet("get-user-details")]
+    public async Task<IActionResult> GetUserDetailsAsync([FromQuery] Guid userId, [FromQuery] UnitSystemEnum unitSystem)
+    {
+        var response = await _userService.GetUserDetailsByIdAsync(userId, unitSystem);
+
+        return Ok(response);
+    }
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -40,18 +59,18 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPut("verify-email-verification-token")]
-    public async Task<IActionResult> VerifyEmailVerificationToken([FromQuery] string token)
+    public async Task<IActionResult> VerifyEmailVerificationTokenAsync([FromQuery] string token)
     {
         await _userService.VerifyEmailVerificationTokenAsync(token);
 
-        var message = new SuccessMessageResponse("You have successfully verified your email");
+        var message = new SuccessMessageResponse("You have successfully verified your email!");
 
         return Ok(message);
     }
 
     [AllowAnonymous]
     [HttpPut("verify-change-password-token")]
-    public async Task<IActionResult> VerifyChangePassworToken([FromQuery] string token)
+    public async Task<IActionResult> VerifyChangePassworTokenAsync([FromQuery] string token)
     {
         await _userService.VerifyChangePasswordTokenAsync(token);
 
@@ -60,7 +79,7 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPut("send-forgot-password-email")]
-    public async Task<IActionResult> SendForgotPasswordEmail([FromQuery] string email)
+    public async Task<IActionResult> SendForgotPasswordEmailAsync([FromQuery] string email)
     {
         await _userService.SendForgotPasswordEmailAsync(email);
 
@@ -71,7 +90,7 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPut("change-password")]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+    public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordRequest request)
     {
         await _userService.ChangePasswordAsync(request);
 

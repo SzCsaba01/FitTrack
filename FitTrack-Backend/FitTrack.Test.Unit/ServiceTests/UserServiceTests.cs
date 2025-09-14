@@ -91,7 +91,7 @@ public class UserServiceTests
         // Arrange
         var request = TestHelpers.CreateRegistrationRequest();
         var userEntity = TestHelpers.CreateUser();
-        _userRepositoryMock.Setup(r => r.GetUserByUsernameAsync(request.Username)).ReturnsAsync((UserEntity)null);
+        _userRepositoryMock.Setup(r => r.GetUserByUsernameAsync(request.Username)).ReturnsAsync((UserEntity)null!);
         _userRepositoryMock.Setup(r => r.GetUserByEmailAsync(request.Email)).ReturnsAsync(userEntity);
 
         // Act & Assert
@@ -103,8 +103,8 @@ public class UserServiceTests
     {
         // Arrange
         var request = TestHelpers.CreateRegistrationRequest(password: "pass1", confirmPassword: "pass2");
-        _userRepositoryMock.Setup(r => r.GetUserByUsernameAsync(request.Username)).ReturnsAsync((UserEntity)null);
-        _userRepositoryMock.Setup(r => r.GetUserByEmailAsync(request.Email)).ReturnsAsync((UserEntity)null);
+        _userRepositoryMock.Setup(r => r.GetUserByUsernameAsync(request.Username)).ReturnsAsync((UserEntity)null!);
+        _userRepositoryMock.Setup(r => r.GetUserByEmailAsync(request.Email)).ReturnsAsync((UserEntity)null!);
 
         // Act & Assert
         await Assert.ThrowsAsync<ValidationException>(() => _userService.RegisterUserAsync(request));

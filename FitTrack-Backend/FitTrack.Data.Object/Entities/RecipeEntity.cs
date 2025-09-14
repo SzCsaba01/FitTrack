@@ -25,13 +25,13 @@ public class RecipeEntity
     [Range(1, int.MaxValue, ErrorMessage = "Servings should be a positive number")]
     public required int Servings { get; set; }
 
-    public ICollection<RecipeIngredientEntity> Ingredients { get; set; }
+    public ICollection<RecipeIngredientEntity>? Ingredients { get; set; }
 
-    public ICollection<MealItemEntity> MealItems { get; set; }
+    public ICollection<MealItemEntity>? MealItems { get; set; }
 
-    public ICollection<RecipeDirectionEntity> Directions { get; set; }
+    public ICollection<RecipeDirectionEntity>? Directions { get; set; }
 
-    public ICollection<RecipeNutritionEntity> Nutritions { get; set; }
+    public ICollection<RecipeNutritionEntity>? Nutritions { get; set; }
 
-    public ICollection<RecipeCategoryMapping> CategoryMappings { get; set; }
+    public ICollection<RecipeCategoryMapping>? CategoryMappings { get; set; }
 }

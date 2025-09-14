@@ -34,7 +34,7 @@ public class UserProfileService : IUserProfileService
     // TEST:
     public async Task<UserProfileResponse> GetUserProfileByUserIdAsync(Guid userId, UnitSystemEnum unitSystem)
     {
-        var userProfile = await _userProfileRepository.GetUserProfileWithUserAsyncByUserId(userId);
+        var userProfile = await _userProfileRepository.GetUserProfileWithUserAsyncByUserId(userId).ConfigureAwait(false);
 
         if (userProfile == null)
         {
@@ -45,8 +45,8 @@ public class UserProfileService : IUserProfileService
 
         if (unitSystem == UnitSystemEnum.Imperial)
         {
-            response.Weight = _unitNormalizerService.ConvertToLb(response.Weight);
-            response.Height = _unitNormalizerService.ConvertToInch(response.Height);
+            response.Weight = _unitNormalizerService.ConvertKgToLb(response.Weight);
+            response.Height = _unitNormalizerService.ConvertCmToInch(response.Height);
         }
 
         return response;
@@ -55,7 +55,7 @@ public class UserProfileService : IUserProfileService
     // TEST:
     public async Task UpdateUserProfileByUserIdAsync(Guid userId, UnitSystemEnum unitSystem, UpdateUserProfileRequest request)
     {
-        var userProfile = await _userProfileRepository.GetUserProfileByUserIdAsync(userId);
+        var userProfile = await _userProfileRepository.GetUserProfileByUserIdAsync(userId).ConfigureAwait(false);
 
         if (userProfile == null)
         {
@@ -67,8 +67,8 @@ public class UserProfileService : IUserProfileService
 
         if (unitSystem == UnitSystemEnum.Imperial)
         {
-            weight = _unitNormalizerService.ConvertToKg(request.Weight);
-            height = _unitNormalizerService.ConvertToCm(request.Height);
+            weight = _unitNormalizerService.ConvertLbToKg(request.Weight);
+            height = _unitNormalizerService.ConvertInchToCm(request.Height);
         }
 
         userProfile.HeightCm = height;
@@ -78,7 +78,7 @@ public class UserProfileService : IUserProfileService
         userProfile.Gender = request.Gender;
         userProfile.DateOfBirth = request.DateOfBirth;
 
-        await _userProfileRepository.UpdateUserProfileAsync(userProfile);
-        await _unitOfWork.SaveChangesAsync();
+        await _userProfileRepository.UpdateUserProfileAsync(userProfile).ConfigureAwait(false);
+        await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
     }
 }

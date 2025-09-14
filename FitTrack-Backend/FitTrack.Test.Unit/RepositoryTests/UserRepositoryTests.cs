@@ -102,7 +102,7 @@ public class UserRepositoryTests : RepositoryTestBase
 
         // Assert
         var updated = await context.Users.FindAsync(user.Id);
-        Assert.Equal("updatedUsername", updated.Username);
+        Assert.Equal("updatedUsername", updated!.Username);
     }
 
     [Fact(DisplayName = "DeleteUserAsync deletes user")]

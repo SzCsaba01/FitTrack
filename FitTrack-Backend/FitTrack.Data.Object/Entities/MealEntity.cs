@@ -18,7 +18,7 @@ public class MealEntity
     public MealTypeEnum Type { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity User { get; set; }
+    public UserEntity? User { get; set; }
 
-    public ICollection<MealItemEntity> MealItems { get; set; }
+    public ICollection<MealItemEntity>? MealItems { get; set; }
 }

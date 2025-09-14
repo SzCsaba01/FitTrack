@@ -13,9 +13,9 @@ public class RecipeCategoryMapping
     public Guid CategoryId { get; set; }
 
     [ForeignKey("RecipeId")]
-    public RecipeEntity Recipe { get; set; }
+    public RecipeEntity? Recipe { get; set; }
 
     [ForeignKey("CategoryId")]
-    public RecipeCategoryEntity Category { get; set; }
+    public RecipeCategoryEntity? Category { get; set; }
 }
 

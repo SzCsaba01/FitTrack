@@ -13,10 +13,10 @@ public class InstructionEntity
     public Guid ExerciseId { get; set; }
 
     [Required(ErrorMessage = "Instruction is required")]
-    [MaxLength(200, ErrorMessage = "Instruction cannot longer than 200 characters")]
+    [MaxLength(1000, ErrorMessage = "Instruction cannot longer than 200 characters")]
     [MinLength(2, ErrorMessage = "Instruction cannot be shorter than 2 characters")]
     public required string Instruction { get; set; }
 
     [ForeignKey("ExerciseId")]
-    public ExerciseEntity Exercise { get; set; }
+    public ExerciseEntity? Exercise { get; set; }
 }

@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     @for (row of data(); track row.id) {
-    <tr (click)="onRowClick(row)">
+    <tr (click)="onRowClick(row)" [class.clickable-row]="clickableRows()">
       @for (col of displayedColumns(); track col) {
       <td>
         <ng-container
@@ -20,3 +20,23 @@
     }
   </tbody>
 </table>
+<footer class="table-footer">
+  <span>Showing {{ fromNumberOfElements() }} to {{ toNumberOfElements()}} of {{totalNumberOfElements()}} results</span>
+  <div class="pages">
+    <button [disabled]="page() <= 1" class="btn table-navigation" (click)="onPageChange(page() - 1)"><mat-icon>keyboard_arrow_left</mat-icon>Previous</button>
+    @for (p of paginationRange(); let i = $index; track i) {
+      @if (p !== '...') {
+        <button
+          class="btn page-btn"
+          [class.active]="p === page()"
+          (click)="onPageChange(p)"
+        >
+          {{ p }}
+        </button>
+      } @else {
+        <span class="ellipsis">...</span>
+      }
+    }
+    <button [disabled]="page() >= totalNumberOfPages()" class="btn table-navigation" (click)="onPageChange(page() + 1)">Next<mat-icon>keyboard_arrow_right</mat-icon></button>
+  </div>
+</footer>

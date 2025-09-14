@@ -25,7 +25,7 @@ import { UserActions } from '../../store/user/user.actions';
 export class Login extends SelfUnsubscriberBase implements OnInit {
   loginForm: FormGroup = {} as FormGroup;
 
-  inlineErrorMessageSignal = signal<string | null>(null);
+  inlineErrorMessage = signal<string | null>(null);
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -55,7 +55,7 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
     return this.loginForm.get('password') as FormControl;
   }
 
-  onLogin() {
+  onLoginClick() {
     const authenticationRequest = this.loginForm.value as LoginRequest;
     this.authenticationService
       .login(authenticationRequest)
@@ -67,7 +67,7 @@ export class Login extends SelfUnsubscriberBase implements OnInit {
         },
         error: (error) => {
           if (error.errorMessage) {
-            this.inlineErrorMessageSignal.set(error.errorMessage);
+            this.inlineErrorMessage.set(error.errorMessage);
           }
         },
       });

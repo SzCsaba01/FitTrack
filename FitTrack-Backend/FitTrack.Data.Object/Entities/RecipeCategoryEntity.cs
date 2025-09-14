@@ -14,5 +14,5 @@ public class RecipeCategoryEntity
     [MinLength(2, ErrorMessage = "Name cannot be shorter than 2 characters")]
     public required string Name { get; set; }
 
-    public ICollection<RecipeCategoryMapping> RecipeMappings { get; set; }
+    public ICollection<RecipeCategoryMapping>? RecipeMappings { get; set; }
 }

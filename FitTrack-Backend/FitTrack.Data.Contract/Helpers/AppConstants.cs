@@ -18,4 +18,9 @@ public static class AppConstants
 
     //API-PATH
     public const string REFRESH_TOKEN_PATH = "/api/authentication/refresh-token";
+
+    //FILE-PATHS
+    public const string EXERCISE_IMAGES_FOLDER = "/images/exercises";
+    public const string FOOD_IMAGES_FOLDER = "/images/foods";
+    public const string RECIPES_IMAGES_FOLDER = "/images/recipes";
 }

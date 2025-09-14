@@ -1,5 +1,4 @@
 using FitTrack.Service.Business;
-using FitTrack.Service.Business.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;

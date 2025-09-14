@@ -42,7 +42,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
   appThemeEnum = AppThemeEnum;
   unitSystemEnum = UnitSystemEnum;
   genderOptions = GENDERS;
-  inlineErrorMessageSignal = signal<string | null>(null);
+  inlineErrorMessage = signal<string | null>(null);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,11 +58,11 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
 
     this.unitSystem.valueChanges.subscribe((unit) => {
       if (unit === UnitSystemEnum.Metric) {
-        this.height.setValidators([Validators.required, Validators.min(1)]);
+        this.heightCm.setValidators([Validators.required, Validators.min(1)]);
         this.heightFt.clearValidators();
         this.heightIn.clearValidators();
       } else {
-        this.height.clearValidators();
+        this.heightCm.clearValidators();
         this.heightFt.setValidators([Validators.required, Validators.min(1)]);
         this.heightIn.setValidators([
           Validators.required,
@@ -71,7 +71,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
         ]);
       }
 
-      this.height.updateValueAndValidity();
+      this.heightCm.updateValueAndValidity();
       this.heightFt.updateValueAndValidity();
       this.heightIn.updateValueAndValidity();
     });
@@ -164,7 +164,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
     return this.registrationForm.get('weightKg') as FormControl;
   }
 
-  get height(): FormControl {
+  get heightCm(): FormControl {
     return this.registrationForm.get('heightCm') as FormControl;
   }
 
@@ -199,7 +199,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
     this.themeService.loadTheme(theme);
   }
 
-  onRegistration(): void {
+  onRegistrationClick(): void {
     const formData = this.registrationForm.value;
 
     const requestData: RegistrationRequest = {
@@ -207,7 +207,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
       heightCm:
         this.unitSystem.value === UnitSystemEnum.Imperial
           ? Number(formData.heightFt || 0) * 12 + Number(formData.heightIn || 0)
-          : Number(formData.height),
+          : Number(formData.heightCm),
     };
 
     this.userService
@@ -219,7 +219,7 @@ export class Registration extends SelfUnsubscriberBase implements OnInit {
         },
         error: (error) => {
           if (error?.errorMessage) {
-            this.inlineErrorMessageSignal = error.errorMessage;
+            this.inlineErrorMessage.set(error.errorMessage);
           }
         },
       });

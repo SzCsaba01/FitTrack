@@ -22,5 +22,5 @@ public class RecipeNutritionEntity
     public NutritionUnitEnum Unit { get; set; }
 
     [ForeignKey("RecipeId")]
-    public RecipeEntity Recipe { get; set; }
+    public RecipeEntity? Recipe { get; set; }
 }

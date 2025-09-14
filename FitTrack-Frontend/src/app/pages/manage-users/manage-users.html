@@ -1,23 +1,84 @@
-<app-custom-table
-  [data]="rows"
-  [displayedColumns]="columns"
-  (rowClick)="onRowClick($event)"
->
-  <ng-template appColumnDef="name" appColumnHeader="Name" let-data>
-    <span>{{ data.name }}</span>
-    <mat-icon>search></mat-icon>
-  </ng-template>
-
-  <ng-template appColumnDef="photo" appColumnHeader="Photo" let-data>
-    <img [src]="data.photoUrl" alt="photo" />
-  </ng-template>
-
-  <ng-template appColumnDef="action" appColumnHeader="Actions" let-data>
-    <button
-      class="btn btn-primary"
-      (click)="onEdit(data); $event.stopPropagation()"
-    >
-      Edit
-    </button>
-  </ng-template>
-</app-custom-table>
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1>Manage Users</h1>
+  </div>
+  <div class="search-container">
+    <input
+      class="input input-search"
+      [value]="search()"
+      (input)="onSetSearch($event)"
+      (keyup.enter)="onSearch()"
+      placeholder="Search users..." />
+    <mat-icon (click)="onSearch()" class="input-search-icon">search</mat-icon>
+  </div>
+  @if (isMobile()) {
+    <div class="cards-container">
+    @for (user of users(); track user.id) {
+      <app-user-card
+        (click)="onUserClick(user)"
+        [isDeleteButtonShown]="true"
+        [userId]="user.id"
+        [profilePictureUrl]="user.profilePictureUrl"
+        [registrationDate]="user.registrationDate"
+        [firstName]="user.firstName"
+        [lastName]="user.lastName"
+        [username]="user.username"
+        [email]="user.email"
+        [isEmailConfirmed]="user.isEmailConfirmed"
+        [role]="user.role"
+        (deleteClick)="onDeleteClick($event)">
+      </app-user-card>
+    }
+    </div>
+  } @else {
+    <app-custom-table
+      class="users-table"
+      [clickableRows]="true"
+      [data]="users()"
+      [displayedColumns]="displayedColumns()"
+      [page]="page()"
+      [totalNumberOfPages]="totalNumberOfPages()"
+      [totalNumberOfElements]="totalNumberOfUsers()"
+      (rowClick)="onUserClick($event)"
+      (pageChange)="onPageChange($event)">
+      <ng-template appColumnDef="profilePictureUrl" appColumnHeader="Profile Picture" let-data>
+        <div class="profile-picture-container">
+          <img [src]="data.profilePictureUrl" alt="User profile picture" />
+        </div>
+      </ng-template>
+      <ng-template appColumnDef="username" appColumnHeader="Username" let-data>
+        <span>{{ data.username }}</span>
+      </ng-template>
+      <ng-template appColumnDef="registrationDate" appColumnHeader="Joined at" let-data>
+        <span>{{ data.registrationDate | date : 'd MMMM y' }}</span>
+      </ng-template>
+      <ng-template appColumnDef="firstName" appColumnHeader="First Name" let-data>
+        <span>{{ data.firstName }}</span>
+      </ng-template>
+      <ng-template appColumnDef="lastName" appColumnHeader="Last Name" let-data>
+        <span>{{ data.lastName }}</span>
+      </ng-template>
+      <ng-template appColumnDef="email" appColumnHeader="Email" let-data>
+        <span>{{ data.email }}</span>
+      </ng-template>
+      <ng-template appColumnDef="isEmailConfirmed" appColumnHeader="Email Confirmed" let-data>
+        <span
+          class="badge"
+          [ngClass]="{'badge-info': data.isEmailConfirmed, 'badge-danger': !data.isEmailConfirmed}"
+          >{{ data.isEmailConfirmed ? 'Confirmed' : 'Not Confirmed' }}</span
+        >
+      </ng-template>
+      <ng-template appColumnDef="role" appColumnHeader="Role" let-data>
+        <span>{{ roleEnum[data.role] }}</span>
+      </ng-template>
+      <ng-template appColumnDef="action" appColumnHeader="Actions" let-data>
+        <button
+          class="btn btn-danger"
+          (click)="onDeleteClick(data.id); $event.stopPropagation()"
+        >
+          Delete
+        </button>
+      </ng-template>
+    </app-custom-table>
+  }
+</div>

@@ -25,7 +25,7 @@ import { UserService } from '../../services/user/user.service';
 export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
   private token = '';
   changePasswordForm: FormGroup = {} as FormGroup;
-  inlineErrorMessageSignal = signal<string | null>(null);
+  inlineErrorMessage = signal<string | null>(null);
 
   constructor(
     private userService: UserService,
@@ -78,7 +78,7 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
       });
   }
 
-  onChangePassword(): void {
+  onChangePasswordClick(): void {
     const changePasswordRequest = this.changePasswordForm
       .value as ChangePasswordRequest;
     changePasswordRequest.changePasswordToken = this.token;
@@ -92,7 +92,7 @@ export class ChangePassword extends SelfUnsubscriberBase implements OnInit {
         },
         error: (error) => {
           if (error.errorMessage) {
-            this.inlineErrorMessageSignal.set(error.errorMessage);
+            this.inlineErrorMessage.set(error.errorMessage);
           }
         },
       });

@@ -98,7 +98,7 @@ public class AuthenticationServiceTests
         // Mock Request.Cookies to contain the refresh token
         var requestCookiesMock = new Mock<IRequestCookieCollection>();
         string outVal = token;
-        requestCookiesMock.Setup(c => c.TryGetValue("RefreshToken", out outVal)).Returns(true);
+        requestCookiesMock.Setup(c => c.TryGetValue("RefreshToken", out outVal!)).Returns(true);
 
         // Mock Response.Cookies to verify delete calls
         var responseCookiesMock = new Mock<IResponseCookies>();
@@ -142,7 +142,7 @@ public class AuthenticationServiceTests
         // Mock Request.Cookies to return the refresh token
         var requestCookiesMock = new Mock<IRequestCookieCollection>();
         string outVal = token;
-        requestCookiesMock.Setup(c => c.TryGetValue("RefreshToken", out outVal)).Returns(true);
+        requestCookiesMock.Setup(c => c.TryGetValue("RefreshToken", out outVal!)).Returns(true);
 
         // Mock Response.Cookies to verify append calls
         var responseCookiesMock = new Mock<IResponseCookies>();

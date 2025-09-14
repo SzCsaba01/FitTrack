@@ -48,15 +48,15 @@ public class UserEntity
     public Guid RoleId { get; set; }
 
     [ForeignKey("RoleId")]
-    public RoleEntity Role { get; set; }
+    public RoleEntity? Role { get; set; }
 
-    public UserProfileEntity UserProfile { get; set; }
+    public UserProfileEntity? UserProfile { get; set; }
 
-    public UserPreferenceEntity UserPreference { get; set; }
+    public UserPreferenceEntity? UserPreference { get; set; }
 
-    public ICollection<MealEntity> Meals { get; set; }
+    public ICollection<MealEntity>? Meals { get; set; }
 
-    public ICollection<WeightLogEntity> WeightLogs { get; set; }
+    public ICollection<WeightLogEntity>? WeightLogs { get; set; }
 
-    public ICollection<WorkoutEntity> Workouts { get; set; }
+    public ICollection<WorkoutEntity>? Workouts { get; set; }
 }

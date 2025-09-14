@@ -13,7 +13,7 @@ public class RoleEntity
     [MaxLength(30, ErrorMessage = "RoleName cannot be longer than 30 characters")]
     public RoleEnum RoleName { get; set; }
 
-    public ICollection<RolePermissionMapping> PermissionMappings { get; set; }
+    public ICollection<RolePermissionMapping>? PermissionMappings { get; set; }
 
-    public ICollection<UserEntity> Users { get; set; }
+    public ICollection<UserEntity>? Users { get; set; }
 }

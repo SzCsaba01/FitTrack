@@ -14,5 +14,5 @@ public class IngredientUnitEntity
     [MinLength(2, ErrorMessage = "Name cannot be shorter than 2 characters")]
     public required string Name { get; set; }
 
-    public ICollection<RecipeIngredientEntity> RecipeIngredients { get; set; }
+    public ICollection<RecipeIngredientEntity>? RecipeIngredients { get; set; }
 }

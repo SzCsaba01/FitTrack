@@ -22,7 +22,7 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpGet("get-user-profile")]
-    public async Task<IActionResult> GetUserProfile([FromQuery] UnitSystemEnum unitSystem)
+    public async Task<IActionResult> GetUserProfileAsync([FromQuery] UnitSystemEnum unitSystem)
     {
         var userId = _currentUserService.GetCurrentUserId();
 
@@ -31,7 +31,7 @@ public class UserProfileController : ControllerBase
         return Ok(response);
     }
     [HttpPut("update-user-profile")]
-    public async Task<IActionResult> UpdateUserProfile([FromQuery] UnitSystemEnum unitSystem, [FromBody] UpdateUserProfileRequest request)
+    public async Task<IActionResult> UpdateUserProfileAsync([FromQuery] UnitSystemEnum unitSystem, [FromBody] UpdateUserProfileRequest request)
     {
         var userId = _currentUserService.GetCurrentUserId();
 

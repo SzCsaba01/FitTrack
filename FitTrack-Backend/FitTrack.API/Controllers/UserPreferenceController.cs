@@ -20,7 +20,7 @@ public class UserPreferenceController : ControllerBase
     }
 
     [HttpPut("update-app-theme")]
-    public async Task<IActionResult> UpdateAppTheme([FromQuery] AppThemeEnum newTheme)
+    public async Task<IActionResult> UpdateAppThemeAsync([FromQuery] AppThemeEnum newTheme)
     {
         var userId = _currentUserService.GetCurrentUserId();
 
@@ -30,7 +30,7 @@ public class UserPreferenceController : ControllerBase
     }
 
     [HttpPut("update-unit-system")]
-    public async Task<IActionResult> UpdateUnitSystem([FromQuery] UnitSystemEnum newUnitSystem)
+    public async Task<IActionResult> UpdateUnitSystemAsync([FromQuery] UnitSystemEnum newUnitSystem)
     {
         var userId = _currentUserService.GetCurrentUserId();
 

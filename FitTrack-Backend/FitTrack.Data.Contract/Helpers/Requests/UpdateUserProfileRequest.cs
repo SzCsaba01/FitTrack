@@ -3,9 +3,9 @@ using FitTrack.Data.Object.Enums;
 namespace FitTrack.Data.Contract.Helpers.Requests;
 public class UpdateUserProfileRequest
 {
-    public string FirstName { get; set; }
+    public required string FirstName { get; set; }
 
-    public string LastName { get; set; }
+    public required string LastName { get; set; }
 
     public DateTime DateOfBirth { get; set; }
 

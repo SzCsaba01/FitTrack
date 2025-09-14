@@ -13,5 +13,5 @@ public class PermissionEntity
     [MaxLength(100, ErrorMessage = "Name cannot contain more than 100 characters")]
     public required string Name { get; set; }
 
-    public ICollection<RolePermissionMapping> RoleMappings { get; set; }
+    public ICollection<RolePermissionMapping>? RoleMappings { get; set; }
 }

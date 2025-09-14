@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { UserProfileResponse } from '../responses/user-profile/user-profile.response';
+import { environment } from '../../../environments/environment';
+import { UnitSystemEnum } from '../../enums/unit-system.enum';
+import { UserProfileResponse } from '../../responses/user-profile/user-profile.response';
 import { Observable } from 'rxjs';
-import { UnitSystemEnum } from '../enums/unit-system.enum';
-import { UpdateUserProfileRequest } from '../requests/user-profile/update-user-profile.request';
-
+import { UpdateUserProfileRequest } from '../../requests/user-profile/update-user-profile.request';
 @Injectable({
   providedIn: 'root',
 })

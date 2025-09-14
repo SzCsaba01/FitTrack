@@ -1,4 +1,4 @@
-<div class="public-page-container">
+<div class="public-page-wrapper">
   <div class="card-container">
     <div class="card">
       <div class="card-header">
@@ -8,14 +8,14 @@
         </small>
       </div>
       <div class="card-content">
-        @if (inlineErrorMessageSignal()) {
+        @if (inlineErrorMessage()) {
           <div class="inline-error-message-container">
             <div class="inline-error-message">
-              {{inlineErrorMessageSignal()}}
+              {{inlineErrorMessage()}}
             </div>
           </div>
         }
-        <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistration()">
+        <form class="column-form" [formGroup]="registrationForm" (ngSubmit)="onRegistrationClick()">
           <div class="form-fields">
             <div class="form-field">
               <label for="username">Username</label>
@@ -194,21 +194,21 @@
               </div>
               @if (unitSystem.value === unitSystemEnum.Metric) {
                 <div class="form-field">
-                <label for="height">Height ({{'height' | unitLabel: unitSystem.value! }})</label>
+                <label for="heightCm">Height ({{'height' | unitLabel: unitSystem.value! }})</label>
                   <input
-                    id="height"
+                    id="heightCm"
                     type="number"
                     formControlName="heightCm"
                     class="input"
-                    [class.input-error]="height.touched && height.invalid"
+                    [class.input-error]="heightCm.touched && heightCm.invalid"
                   />
-                  @if (height.touched && height.invalid) {
+                  @if (heightCm.touched && heightCm.invalid) {
                     <div>
-                      @if (height.hasError('required')) {
+                      @if (heightCm.hasError('required')) {
                         <small class="error-message">Height is required.</small>
-                      } @if (height.hasError('min')) {
+                      } @if (heightCm.hasError('min')) {
                         <small class="error-message"
-                          >Height must be greater than {{ height.getError('min').min
+                          >Height must be greater than {{ heightCm.getError('min').min
                           }}.</small
                         >
                       }

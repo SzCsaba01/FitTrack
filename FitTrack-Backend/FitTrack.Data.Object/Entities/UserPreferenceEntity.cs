@@ -20,5 +20,5 @@ public class UserPreferenceEntity
     public AppThemeEnum AppTheme { get; set; }
 
     [ForeignKey("UserId")]
-    public UserEntity User { get; set; }
+    public UserEntity? User { get; set; }
 }

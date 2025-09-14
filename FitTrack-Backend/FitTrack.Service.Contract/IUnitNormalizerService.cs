@@ -2,8 +2,8 @@ namespace FitTrack.Service.Contract;
 
 public interface IUnitNormalizerService
 {
-    public double ConvertToKg(double lb);
-    public double ConvertToLb(double kg);
-    public double ConvertToCm(double inch);
-    public double ConvertToInch(double cm);
+    public double ConvertLbToKg(double lb);
+    public double ConvertKgToLb(double kg);
+    public double ConvertInchToCm(double inch);
+    public double ConvertCmToInch(double cm);
 }

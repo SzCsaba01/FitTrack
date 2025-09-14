@@ -6,7 +6,6 @@
   border-radius: 0.3rem;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: border-color 0.2s ease;
 
   &::placeholder {
     color: var(--color-text-secondary);
@@ -27,7 +26,6 @@
   &.input-search {
     background-color: var(--color-search-bg);
     border-radius: 1rem 0 0 1rem;
-    cursor: pointer;
   }
 
   &:disabled {

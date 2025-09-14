@@ -9,6 +9,8 @@ public static class TestHelpers
     //Requests
     public static RegistrationRequest CreateRegistrationRequest(
             string? username = null,
+            string firstName = "test",
+            string lastName = "test",
             string? email = null,
             string? password = null,
             string? confirmPassword = null,
@@ -19,6 +21,8 @@ public static class TestHelpers
         return new RegistrationRequest
         {
             Username = username ?? "testuser",
+            FirstName = firstName,
+            LastName = lastName,
             Email = email ?? "testuser@example.com",
             Password = password ?? "P@ssw0rd!",
             ConfirmPassword = confirmPassword ?? "P@ssw0rd!",

@@ -24,7 +24,7 @@ import { UserEffects } from './store/user/user.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAppInitializer(initializeApp),
+    provideAppInitializer(initializeApp()),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),

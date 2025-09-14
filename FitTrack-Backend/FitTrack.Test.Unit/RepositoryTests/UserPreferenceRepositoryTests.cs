@@ -48,6 +48,6 @@ public class UserPreferenceRepositoryTests : RepositoryTestBase
 
         // Assert
         var updated = await context.UserPreferences.FindAsync(userPreference.Id);
-        Assert.Equal(AppThemeEnum.Dark, updated.AppTheme);
+        Assert.Equal(AppThemeEnum.Dark, updated!.AppTheme);
     }
 }

@@ -13,8 +13,8 @@ public class RolePermissionMapping
     public Guid PermissionId { get; set; }
 
     [ForeignKey("RoleId")]
-    public RoleEntity Role { get; set; }
+    public RoleEntity? Role { get; set; }
 
     [ForeignKey("PermissionId")]
-    public PermissionEntity Permission { get; set; }
+    public PermissionEntity? Permission { get; set; }
 }

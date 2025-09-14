@@ -3,9 +3,8 @@
 @use "app/styles/forms";
 @use "app/styles/inputs";
 @use "app/styles/public-pages";
+@use "app/styles/badges";
 
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined");
-@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,600;1,400&display=swap");
 :root {
   --font-primary: "Archivo", sans-serif;
   --font-secondary: "Inter", sans-serif;
@@ -29,7 +28,7 @@ body {
     background-color 0.3s ease,
     color 0.3s ease;
 
-  @media (min-width: 360px) {
+  @media (min-width: 400px) {
     font-size: 1rem;
   }
 }

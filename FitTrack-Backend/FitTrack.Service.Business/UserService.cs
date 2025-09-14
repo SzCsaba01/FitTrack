@@ -1,6 +1,7 @@
 using AutoMapper;
 using FitTrack.Data.Contract;
 using FitTrack.Data.Contract.Helpers;
+using FitTrack.Data.Contract.Helpers.DTOs;
 using FitTrack.Data.Contract.Helpers.Requests;
 using FitTrack.Data.Contract.Helpers.Responses;
 using FitTrack.Data.Object.Entities;
@@ -87,7 +88,7 @@ public class UserService : IUserService
         }
 
         var hashedToken = _encryptionService.HashString(refreshToken);
-        var user = await _userRepository.GetUserByRefreshTokenAsync(hashedToken);
+        var user = await _userRepository.GetUserByRefreshTokenAsync(hashedToken).ConfigureAwait(false);
 
         if (user == null || user.RefreshTokenExpiration < DateTime.UtcNow)
         {
@@ -98,6 +99,49 @@ public class UserService : IUserService
 
         return response;
     }
+
+    // TEST:
+    public async Task<GetFilteredUsersResponse> GetFilteredUsersAsync(GetFilteredUsersRequest request)
+    {
+        if (!String.IsNullOrWhiteSpace(request.Search))
+        {
+            request.Search = request.Search.ToLower();
+        }
+
+        var response = new GetFilteredUsersResponse();
+        var (users, totalNumberOfUsers) = await _userRepository.GetFilteredUsersAsync(request).ConfigureAwait(false);
+
+        response = new GetFilteredUsersResponse
+        {
+            Users = _mapper.Map<List<FilteredUserDto>>(users),
+            TotalNumberOfUsers = totalNumberOfUsers,
+            TotalNumberOfPages = (int)Math.Ceiling((double)totalNumberOfUsers / request.PageSize),
+        };
+
+        return response;
+    }
+
+    // TEST:
+    public async Task<GetUserDetailsResponse> GetUserDetailsByIdAsync(Guid userId, UnitSystemEnum unitSystem)
+    {
+        var user = await _userRepository.GetUserWithDetailsByIdAsync(userId).ConfigureAwait(false);
+
+        if (user == null)
+        {
+            throw new ValidationException("User not found!");
+        }
+
+        var response = _mapper.Map<GetUserDetailsResponse>(user);
+
+        if (unitSystem == UnitSystemEnum.Imperial)
+        {
+            response.Weight = _unitNormalizerService.ConvertKgToLb(response.Weight);
+            response.Height = _unitNormalizerService.ConvertCmToInch(response.Height);
+        }
+
+        return response;
+    }
+
 
     public async Task RegisterUserAsync(RegistrationRequest request)
     {
@@ -127,12 +171,12 @@ public class UserService : IUserService
 
         if (request.UnitSystem == UnitSystemEnum.Imperial)
         {
-            request.WeightKg = _unitNormalizerService.ConvertToKg(request.WeightKg);
-            request.HeightCm = _unitNormalizerService.ConvertToCm(request.HeightCm);
+            request.WeightKg = _unitNormalizerService.ConvertLbToKg(request.WeightKg);
+            request.HeightCm = _unitNormalizerService.ConvertInchToCm(request.HeightCm);
             _logger.LogInformation("Converted imperial units to metric for user: {Username}", request.Username);
         }
 
-        var userRole = await _roleRepository.GetRoleByNameAsync(RoleEnum.User);
+        var userRole = await _roleRepository.GetRoleByNameAsync(RoleEnum.User).ConfigureAwait(false);
 
         if (userRole == null)
         {
@@ -167,31 +211,31 @@ public class UserService : IUserService
 
         var url = $"{_frontendUrl}{AppConstants.VERIFY_EMAIL_URL}?token={emailVerificationToken}";
 
-        var transaction = await _unitOfWork.BeginTransactionAsync();
+        var transaction = await _unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
 
         try
         {
-            await _userRepository.CreateUserAsync(userEntity);
+            await _userRepository.CreateUserAsync(userEntity).ConfigureAwait(false);
 
             userProfile.UserId = userEntity.Id;
             userPreference.UserId = userEntity.Id;
 
-            await _userProfileRepository.CreateUserProfileAsync(userProfile);
-            await _userPreferenceRepository.CreateUserPreferenceAsync(userPreference);
+            await _userProfileRepository.CreateUserProfileAsync(userProfile).ConfigureAwait(false);
+            await _userPreferenceRepository.CreateUserPreferenceAsync(userPreference).ConfigureAwait(false);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
             var emailBody = _emailService.CreateRegistrationEmailBody(url, userEntity.Username);
-            await _emailService.SendEmailAsync(AppConstants.EMAIL_VERIFICATION_SUBJECT, userEntity.Email, emailBody);
+            // await _emailService.SendEmailAsync(AppConstants.EMAIL_VERIFICATION_SUBJECT, userEntity.Email, emailBody).ConfigureAwait(false);
 
-            await _unitOfWork.CommitTransactionAsync(transaction);
+            await _unitOfWork.CommitTransactionAsync(transaction).ConfigureAwait(false);
 
             _logger.LogInformation("User registered successfully: {Username}, email verification email sent.", userEntity.Username);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error occurred during user registration for username: {Username}", request.Username);
-            await transaction.RollbackAsync();
+            await transaction.RollbackAsync().ConfigureAwait(false);
             throw;
         }
     }
@@ -202,7 +246,7 @@ public class UserService : IUserService
 
         var hashedToken = _encryptionService.HashString(emailVerificationToken);
 
-        var user = await _userRepository.GetUserByEmailVerificationTokenAsync(hashedToken);
+        var user = await _userRepository.GetUserByEmailVerificationTokenAsync(hashedToken).ConfigureAwait(false);
 
         if (user == null ||
                 (user.EmailVerificationExpiration != null && user.EmailVerificationExpiration < DateTime.UtcNow))
@@ -215,8 +259,8 @@ public class UserService : IUserService
         user.EmailVerificationExpiration = null;
         user.isEmailConfirmed = true;
 
-        await _userRepository.UpdateUserAsync(user);
-        await _unitOfWork.SaveChangesAsync();
+        await _userRepository.UpdateUserAsync(user).ConfigureAwait(false);
+        await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
         _logger.LogInformation("Email verified successfully for user ID: {UserId}", user.Id);
     }
@@ -225,7 +269,7 @@ public class UserService : IUserService
     {
         _logger.LogInformation("SendForgotPasswordEmailAsync called for email: {Email}", email);
 
-        var user = await _userRepository.GetUserByEmailAsync(email);
+        var user = await _userRepository.GetUserByEmailAsync(email).ConfigureAwait(false);
 
         if (user == null)
         {
@@ -244,23 +288,23 @@ public class UserService : IUserService
 
         var emailBody = _emailService.CreateForgotPasswordEmailBody(url, user.Username);
 
-        var transaction = await _unitOfWork.BeginTransactionAsync();
+        var transaction = await _unitOfWork.BeginTransactionAsync().ConfigureAwait(false);
         try
         {
-            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.UpdateUserAsync(user).ConfigureAwait(false);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
-            await _emailService.SendEmailAsync(AppConstants.CHANGE_PASSWORD_SUBJECT, user.Email, emailBody);
+            await _emailService.SendEmailAsync(AppConstants.CHANGE_PASSWORD_SUBJECT, user.Email, emailBody).ConfigureAwait(false);
 
-            await _unitOfWork.CommitTransactionAsync(transaction);
+            await _unitOfWork.CommitTransactionAsync(transaction).ConfigureAwait(false);
 
             _logger.LogInformation("Forgot password email sent to user: {Username}", user.Username);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error sending forgot password email to user: {Username}", user.Username);
-            await _unitOfWork.RollbackTransactionAsync(transaction);
+            await _unitOfWork.RollbackTransactionAsync(transaction).ConfigureAwait(false);
             throw;
         }
     }
@@ -270,7 +314,7 @@ public class UserService : IUserService
         _logger.LogInformation("Verifying change password token.");
 
         var hashedToken = _encryptionService.HashString(changePasswordToken);
-        var user = await _userRepository.GetUserByChangePasswordTokenAsync(hashedToken);
+        var user = await _userRepository.GetUserByChangePasswordTokenAsync(hashedToken).ConfigureAwait(false);
 
         if (user == null ||
                 (user.ChangePasswordTokenExpiration != null && user.ChangePasswordTokenExpiration < DateTime.UtcNow))
@@ -294,7 +338,7 @@ public class UserService : IUserService
 
         var hashedToken = _encryptionService.HashString(changePasswordRequest.ChangePasswordToken);
 
-        var user = await _userRepository.GetUserByChangePasswordTokenAsync(hashedToken);
+        var user = await _userRepository.GetUserByChangePasswordTokenAsync(hashedToken).ConfigureAwait(false);
 
         if (user == null ||
                 (user.ChangePasswordTokenExpiration != null && user.ChangePasswordTokenExpiration < DateTime.UtcNow))
@@ -311,8 +355,8 @@ public class UserService : IUserService
         user.ChangePasswordTokenExpiration = null;
         user.ChangePasswordToken = null;
 
-        await _userRepository.UpdateUserAsync(user);
-        await _unitOfWork.SaveChangesAsync();
+        await _userRepository.UpdateUserAsync(user).ConfigureAwait(false);
+        await _unitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
         _logger.LogInformation("Password changed successfully for user ID: {UserId}", user.Id);
     }

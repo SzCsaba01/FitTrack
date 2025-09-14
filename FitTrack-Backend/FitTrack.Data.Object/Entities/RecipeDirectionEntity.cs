@@ -18,5 +18,5 @@ public class RecipeDirectionEntity
     public required string Direction { get; set; }
 
     [ForeignKey("RecipeId")]
-    public RecipeEntity Recipe { get; set; }
+    public RecipeEntity? Recipe { get; set; }
 }

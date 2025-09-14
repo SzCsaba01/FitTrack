@@ -29,26 +29,26 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class DatePicker implements ControlValueAccessor, OnInit {
   todayDate: Date = new Date();
-  yearSignal = signal<number>(this.todayDate.getFullYear());
-  monthSignal = signal<number>(this.todayDate.getMonth());
-  selectedDateSignal = signal<Date | null>(null);
-  currentDatesSignal = signal<Date[]>([]);
-  currentMonthNameSignal = signal<string>('');
-  isSelectDateShownSignal = signal<boolean>(false);
-  isSelectMonthShownSignal = signal<boolean>(false);
-  isSelectYearShownSignal = signal<boolean>(false);
-  isDisabledSignal = signal<boolean>(false);
+  year = signal<number>(this.todayDate.getFullYear());
+  month = signal<number>(this.todayDate.getMonth());
+  selectedDate = signal<Date | null>(null);
+  currentDates = signal<Date[]>([]);
+  currentMonthName = signal<string>('');
+  isSelectDateShown = signal<boolean>(false);
+  isSelectMonthShown = signal<boolean>(false);
+  isSelectYearShown = signal<boolean>(false);
+  isDisabled = signal<boolean>(false);
   daysOfWeek: string[] = [];
   months: string[] = [];
   private onChange: (_: any) => void = () => {};
   private onTouched: () => void = () => {};
 
-  yearsSignal = computed(() => {
-    if (!this.yearSignal()) {
+  years = computed(() => {
+    if (!this.year()) {
       return [];
     }
     const years: number[] = [];
-    for (let i = this.yearSignal() - 6; i <= this.yearSignal() + 5; i++) {
+    for (let i = this.year() - 6; i <= this.year() + 5; i++) {
       years.push(i);
     }
     return years;
@@ -66,9 +66,9 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   onDocumentClick(event: MouseEvent) {
     if (
       !this.elementRef.nativeElement.contains(event.target as Node) &&
-      (this.isSelectYearShownSignal() ||
-        this.isSelectMonthShownSignal() ||
-        this.isSelectDateShownSignal())
+      (this.isSelectYearShown() ||
+        this.isSelectMonthShown() ||
+        this.isSelectDateShown())
     ) {
       this.onHideDatepicker();
     }
@@ -90,13 +90,13 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   private generateDates(): void {
-    const y = this.yearSignal();
-    const m = this.monthSignal();
+    const y = this.year();
+    const m = this.month();
     const firstDayOfMonth = new Date(y, m, 1);
     const startDay = firstDayOfMonth.getDay();
     const startDate = new Date(y, m, 1 - startDay);
 
-    this.currentMonthNameSignal.set(
+    this.currentMonthName.set(
       firstDayOfMonth.toLocaleString('default', { month: 'long' }),
     );
 
@@ -107,7 +107,7 @@ export class DatePicker implements ControlValueAccessor, OnInit {
       current.setDate(current.getDate() + 1);
     }
 
-    this.currentDatesSignal.set(dates);
+    this.currentDates.set(dates);
   }
 
   writeValue(value: any): void {
@@ -121,12 +121,12 @@ export class DatePicker implements ControlValueAccessor, OnInit {
     }
 
     if (date) {
-      this.selectedDateSignal.set(date);
-      this.yearSignal.set(date.getFullYear());
-      this.monthSignal.set(date.getMonth());
+      this.selectedDate.set(date);
+      this.year.set(date.getFullYear());
+      this.month.set(date.getMonth());
       this.generateDates();
     } else if (value === null) {
-      this.selectedDateSignal.set(null);
+      this.selectedDate.set(null);
     }
   }
 
@@ -139,39 +139,39 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.isDisabledSignal.set(isDisabled);
+    this.isDisabled.set(isDisabled);
   }
 
   onToggleSelectDate(): void {
-    this.isSelectYearShownSignal.set(false);
-    this.isSelectMonthShownSignal.set(false);
-    this.isSelectDateShownSignal.update((x) => !x);
+    this.isSelectYearShown.set(false);
+    this.isSelectMonthShown.set(false);
+    this.isSelectDateShown.update((x) => !x);
   }
 
   onToggleSelectMonth(): void {
-    this.isSelectDateShownSignal.set(false);
-    this.isSelectYearShownSignal.set(false);
-    this.isSelectMonthShownSignal.update((x) => !x);
+    this.isSelectDateShown.set(false);
+    this.isSelectYearShown.set(false);
+    this.isSelectMonthShown.update((x) => !x);
   }
 
   onToggleSelectYear(): void {
-    this.isSelectMonthShownSignal.set(false);
-    this.isSelectDateShownSignal.set(false);
-    this.isSelectYearShownSignal.update((x) => !x);
+    this.isSelectMonthShown.set(false);
+    this.isSelectDateShown.set(false);
+    this.isSelectYearShown.update((x) => !x);
   }
 
   onHideDatepicker(): void {
-    this.isSelectDateShownSignal.set(false);
-    this.isSelectYearShownSignal.set(false);
-    this.isSelectMonthShownSignal.set(false);
+    this.isSelectDateShown.set(false);
+    this.isSelectYearShown.set(false);
+    this.isSelectMonthShown.set(false);
   }
 
   onSelectDate(date: Date): void {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
 
-    const selected = this.selectedDateSignal();
+    const selected = this.selectedDate();
 
     const newDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
@@ -186,25 +186,25 @@ export class DatePicker implements ControlValueAccessor, OnInit {
       return;
     }
 
-    this.selectedDateSignal.set(newDate);
+    this.selectedDate.set(newDate);
     this.onChange(newDate); // emits normalized UTC date
     this.onTouched();
     this.onHideDatepicker();
   }
 
   onSelectMonth(month: number): void {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
-    this.monthSignal.set(month);
-    const existing = this.selectedDateSignal();
+    this.month.set(month);
+    const existing = this.selectedDate();
     if (existing) {
       const newDate = new Date(
         existing.getFullYear(),
         month,
         existing.getDate(),
       );
-      this.selectedDateSignal.set(newDate);
+      this.selectedDate.set(newDate);
       this.onChange(newDate);
       this.onTouched();
     }
@@ -213,14 +213,14 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   onSelectYear(year: number): void {
-    if (this.isDisabledSignal()) {
+    if (this.isDisabled()) {
       return;
     }
-    this.yearSignal.set(year);
-    const existing = this.selectedDateSignal();
+    this.year.set(year);
+    const existing = this.selectedDate();
     if (existing) {
       const newDate = new Date(year, existing.getMonth(), existing.getDate());
-      this.selectedDateSignal.set(newDate);
+      this.selectedDate.set(newDate);
       this.onChange(newDate);
       this.onTouched();
     }
@@ -229,7 +229,7 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   isDateSelected(date: Date): boolean {
-    const selected = this.selectedDateSignal();
+    const selected = this.selectedDate();
     return (
       selected !== null &&
       selected.getDate() === date.getDate() &&
@@ -239,11 +239,11 @@ export class DatePicker implements ControlValueAccessor, OnInit {
   }
 
   isMonthSelected(month: number): boolean {
-    return this.selectedDateSignal()?.getMonth() === month;
+    return this.selectedDate()?.getMonth() === month;
   }
 
   isYearSelected(year: number): boolean {
-    return this.selectedDateSignal()?.getFullYear() === year;
+    return this.selectedDate()?.getFullYear() === year;
   }
 
   isToday(date: Date): boolean {
@@ -256,32 +256,31 @@ export class DatePicker implements ControlValueAccessor, OnInit {
 
   isDateDisabled(date: Date): boolean {
     return (
-      this.yearSignal() !== date.getFullYear() ||
-      this.monthSignal() !== date.getMonth()
+      this.year() !== date.getFullYear() || this.month() !== date.getMonth()
     );
   }
 
   onChangeMonth(direction: number): void {
-    const m = this.monthSignal();
-    const y = this.yearSignal();
+    const m = this.month();
+    const y = this.year();
 
     if (direction > 0) {
-      this.monthSignal.set(m === 11 ? 0 : m + 1);
-      if (m === 11) this.yearSignal.set(y + 1);
+      this.month.set(m === 11 ? 0 : m + 1);
+      if (m === 11) this.year.set(y + 1);
     } else {
-      this.monthSignal.set(m === 0 ? 11 : m - 1);
-      if (m === 0) this.yearSignal.set(y - 1);
+      this.month.set(m === 0 ? 11 : m - 1);
+      if (m === 0) this.year.set(y - 1);
     }
 
     this.generateDates();
   }
 
   onChangeYear(direction: number): void {
-    this.yearSignal.update((y) => y + direction);
+    this.year.update((y) => y + direction);
     this.generateDates();
   }
 
   onChangeOnlyYear(direction: number): void {
-    this.yearSignal.update((y) => y + direction);
+    this.year.update((y) => y + direction);
   }
 }

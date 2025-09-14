@@ -96,6 +96,16 @@ public class FitTrackContext : DbContext
         {
             entity.HasIndex(r => r.Name).IsUnique();
         });
+
+        modelBuilder.Entity<EquipmentEntity>(entity =>
+        {
+            entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<MuscleEntity>(entity =>
+        {
+            entity.HasIndex(m => m.Name).IsUnique();
+        });
     }
 
     public DbSet<UserEntity> Users { get; set; }
@@ -112,6 +122,7 @@ public class FitTrackContext : DbContext
     public DbSet<PermissionEntity> Permissions { get; set; }
     public DbSet<RolePermissionMapping> RolePermissionMappings { get; set; }
     public DbSet<ExerciseEntity> Exercises { get; set; }
+    public DbSet<ExerciseImageEntity> ExerciseImages { get; set; }
     public DbSet<ExercisePrimaryMuscleMapping> ExercisePrimaryMuscleMappings { get; set; }
     public DbSet<ExerciseSecondaryMuscleMapping> ExerciseSecondaryMuscleMappings { get; set; }
     public DbSet<EquipmentEntity> Equipments { get; set; }

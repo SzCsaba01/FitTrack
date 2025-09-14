@@ -13,8 +13,8 @@ public class ExercisePrimaryMuscleMapping
     public Guid MuscleId { get; set; }
 
     [ForeignKey("ExerciseId")]
-    public ExerciseEntity Exercise { get; set; }
+    public ExerciseEntity? Exercise { get; set; }
 
     [ForeignKey("MuscleId")]
-    public MuscleEntity Muscle { get; set; }
+    public MuscleEntity? Muscle { get; set; }
 }

@@ -28,19 +28,19 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
       },
       {
         label: 'Exercises',
-        icon: 'edit_note',
+        icon: 'directions_run',
         route: '/home/manage/exercises',
         permission: 'exercise:manage',
       },
       {
         label: 'Foods',
-        icon: 'kitchen',
+        icon: 'local_dining',
         route: '/home/manage/foods',
         permission: 'food:manage',
       },
       {
         label: 'Recipes',
-        icon: 'article',
+        icon: 'menu_book',
         route: '/home/manage/recipes',
         permission: 'recipe:manage',
       },

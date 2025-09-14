@@ -19,7 +19,7 @@ public class UnitNormalizerServiceTests
     public void ConvertToCm_ValidInches_ReturnsExpectedCm(double inch, double expectedCm)
     {
         // Act
-        var result = _unitNormalizerService.ConvertToCm(inch);
+        var result = _unitNormalizerService.ConvertInchToCm(inch);
 
         // Assert
         Assert.Equal(expectedCm, result, precision: 2);
@@ -33,7 +33,7 @@ public class UnitNormalizerServiceTests
     public void ConvertToKg_ValidPounds_ReturnsExpectedKg(double lb, double expectedKg)
     {
         // Act
-        var result = _unitNormalizerService.ConvertToKg(lb);
+        var result = _unitNormalizerService.ConvertLbToKg(lb);
 
         // Assert
         Assert.Equal(expectedKg, result, precision: 2);
