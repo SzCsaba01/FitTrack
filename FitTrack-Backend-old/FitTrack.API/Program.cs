@@ -14,13 +14,15 @@ using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, config) =>
-{
-    config
-        .WriteTo.Console()
-        .WriteTo.File("logs/app-log.txt", rollingInterval: RollingInterval.Day)
-        .Enrich.FromLogContext();
-});
+builder.Host.UseSerilog(
+    (context, config) =>
+    {
+        config
+            .WriteTo.Console()
+            .WriteTo.File("logs/app-log.txt", rollingInterval: RollingInterval.Day)
+            .Enrich.FromLogContext();
+    }
+);
 
 builder.Services.AddDbContext<FitTrackContext>(options =>
 {
@@ -37,18 +39,22 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Description = "Standard Authorization header using the Bearer scheme",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
+    options.AddSecurityDefinition(
+        "oauth2",
+        new OpenApiSecurityScheme
+        {
+            Description = "Standard Authorization header using the Bearer scheme",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Type = SecuritySchemeType.ApiKey,
+        }
+    );
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddCookie(x =>
     {
         x.Cookie.Name = "AccessToken";
@@ -59,12 +65,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         var issuer = builder.Configuration["Jwt:Issuer"];
         var audience = builder.Configuration["Jwt:Audience"];
 
-        if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) ||
-                string.IsNullOrEmpty(audience))
+        if (
+            string.IsNullOrEmpty(key)
+            || string.IsNullOrEmpty(issuer)
+            || string.IsNullOrEmpty(audience)
+        )
         {
             throw new Exception("JWT is not configured correctly!");
         }
-        var keyBytes = Encoding.UTF8.GetBytes(key); options.SaveToken = true;
+        var keyBytes = Encoding.UTF8.GetBytes(key);
+        options.SaveToken = true;
 
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
@@ -76,7 +86,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidAudience = audience,
             ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
+            ClockSkew = TimeSpan.Zero,
         };
         options.Events = new JwtBearerEvents
         {
@@ -84,7 +94,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var path = context.HttpContext.Request.Path;
 
-                if (path.Equals(AppConstants.REFRESH_TOKEN_PATH, StringComparison.OrdinalIgnoreCase))
+                if (
+                    path.Equals(AppConstants.REFRESH_TOKEN_PATH, StringComparison.OrdinalIgnoreCase)
+                )
                 {
                     return Task.CompletedTask;
                 }
@@ -99,7 +111,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             OnAuthenticationFailed = context =>
             {
                 throw new AuthenticationException("token_expired");
-            }
+            },
         };
     });
 

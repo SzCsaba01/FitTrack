@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FitTrack.Domain\FitTrack.Domain.csproj" />
-    <ProjectReference Include="..\FitTrack.Common\FitTrack.Common.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
